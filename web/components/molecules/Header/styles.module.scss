@@ -1,0 +1,51 @@
+.header {
+  width: 100%;
+  height: fit-content;
+  padding: 0 30px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  background-color: #0084ff;
+
+  .linkButton {
+    transition-duration: 0.2s;
+
+    width: fit-content;
+    height: 60px;
+
+    padding: 0 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    position: relative;
+
+    color: #ffffff;
+    font-size: 1.6rem;
+    font-weight: 500;
+
+  }
+  .linkButton:hover {
+    background-color: #349dff;
+  }
+
+}
+
+@media (max-width: 337px) {
+  .header {
+    padding: 0 0;
+
+    .linkWrap {
+      width: 100%;
+
+      .linkButton {
+        width: 100%;
+      }
+    }
+  }
+}

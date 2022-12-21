@@ -1,0 +1,65 @@
+.baselayout {
+  width: 100%;
+  min-height: 100vh;
+  height: fit-content;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  .layoutBox {
+    width: 100%;
+    max-width: 800px;
+    height: fit-content;
+
+    padding: 0 0 20px 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .composeNote {
+    transition-duration: 0.2s;
+    
+    width: 100px;
+    height: 40px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    background-color: #ffffff;
+    border: 2px solid #0084ff;
+    border-radius: 100px;
+
+    cursor: pointer;
+
+    position: fixed;
+    left: calc(100% - 111px);
+    top: calc(100% - 51px);
+    z-index: 8;
+
+    .composeNoteIcon {
+      transition-duration: 0.1s;
+
+      color: #0084ff;
+    }
+  }
+  .composeNote:hover {
+    background-color: #0084ff;
+
+    .composeNoteIcon {
+      color: #ffffff;
+    }
+  }
+
+  @media (max-width: 810px) {
+    .layoutBox {    
+      padding: 0 10px 20px 10px;
+    }
+  }
+}

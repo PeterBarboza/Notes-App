@@ -1,0 +1,52 @@
+.modalRadioInput {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 5px;
+
+  .inputDisplayName {
+    width: 100%;
+    height: fit-content;
+
+    text-align: start;
+    font-size: 1.4rem;
+    font-weight: 500;
+  }
+
+  .inputBox {
+    width: 100%;
+    height: fit-content;
+
+    padding: 0 0 0 10px;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+
+    label {
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+    
+    .radioInput {
+      width: 15px;
+      height: 15px;
+  
+      cursor: pointer;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      border: 1px solid #b8b8b8;
+      border-radius: 2px;
+  
+      background-color: #f7f7f7;
+    }
+  }
+}

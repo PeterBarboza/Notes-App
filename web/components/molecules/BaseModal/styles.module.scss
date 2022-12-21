@@ -1,0 +1,33 @@
+.modalContainer {
+  padding: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal {
+  width: 100%;
+  max-width: 650px;
+
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+
+  border-radius: 5px;
+
+  font-family: "Roboto", sans-serif;
+
+  color: #616161;
+  input, textarea {
+    color: #616161;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+}
