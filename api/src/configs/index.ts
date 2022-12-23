@@ -1,13 +1,14 @@
-import { DataSourceOptions } from "typeorm";
-import "dotenv/config";
+import { DataSourceOptions } from "typeorm"
+import "dotenv/config"
 
-import { TYPE_ORM_MODELS } from "../repositories/typeorm/models"
+import { TYPE_ORM_MODELS } from "../infrastructure/repositories/typeorm/models"
 
 const migrationsRelativePath = "infrastructure/respositories/typeorm/migrations/*.{ts,js}"
 
 export const CONFIG = {
   port: process.env.PORT || 3333,
   serverHost: process.env.SERVER_HOST!,
+  passwordHashSalt: process.env.PASSWORD_HASH_SALT!,
   typeorm: {
     dataSourceOptions: {
       type: "mysql",

@@ -1,5 +1,5 @@
 import { AppDataSource } from "./dataSource"
-import { apiMainLogger } from "../../app"
+import { apiMainLogger } from "../../../app"
 
 export class Database {
   async getDatabase() {

@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express"
 
-import { apiMainLogger } from "../app";
+import { apiMainLogger } from "../../app"
 
 export function requestsLog(req: Request, res: Response, next: NextFunction): void {
   const {

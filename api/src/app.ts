@@ -1,7 +1,7 @@
-import express from "express";
-import log from "debug";
+import express from "express"
+import log from "debug"
 
-import { requestsLog } from "./middlewares/requestsLog";
+import { requestsLog } from "./infrastructure/middlewares/requestsLog"
 
 const apiMainLogger = log("api:main")
 

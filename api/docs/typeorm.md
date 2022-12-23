@@ -1,3 +1,5 @@
-<!-- Generate mihration files -->
+### Generate migration
 
-yarn run migration:generate ./src/repositories/typeorm/migrations/[MIGRATION_NAME]
+```bash
+yarn run migration:generate src/repositories/typeorm/migrations/{{MIGRATION_NAME}}
+```
