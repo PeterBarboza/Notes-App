@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, UpdateDateColumn } from "typeorm"
 
-import { Note } from "domain/entities/Note"
+import { Note } from "../../../../domain/entities/Note"
 import { UserModel } from "./UserModel"
 
 @Entity("note")
@@ -8,7 +8,7 @@ export class NoteModel implements Note {
   @Column({ type: "varchar", primary: true })
   id?: string
 
-  @Column({ type: "varchar" })
+  @Column({ type: "varchar", unique: true })
   noteSlug?: string
 
   @Column({ type: "varchar" })

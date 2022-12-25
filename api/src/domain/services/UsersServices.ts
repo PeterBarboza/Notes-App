@@ -3,13 +3,13 @@ import { v4 as uuid } from "uuid"
 
 import { CONFIG } from "../../configs"
 
-import { User } from "domain/entities/User"
-import { IRepository } from "domain/interface/IRepository"
+import { User } from "../entities/User"
 
+//TODO: Criar interface do repositrório de usuário
 export class UserServices {
-  private repository: IRepository<User>
+  private repository: any
 
-  constructor(repository: IRepository<User>) {
+  constructor(repository: any) {
     this.repository = repository
   }
 

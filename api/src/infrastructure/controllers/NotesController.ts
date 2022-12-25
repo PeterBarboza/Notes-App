@@ -1,6 +1,5 @@
 import { Request, Response } from "express"
 
-import { Note } from "domain/entities/Note"
 import { NoteServices } from "../../domain/services/NotesServices"
 
 export class NotesController {
@@ -10,8 +9,12 @@ export class NotesController {
     this.services = services
   }
 
+  //TODO: Consertar a tipagem dessas variáveis
   async getMany(req: Request, res: Response): Promise<Response> {
-    const response = await this.services.getMany()
+    const { limit, skip } = req.query.pagination as any
+    const filters = req.query.filters as any
+
+    const response = await this.services.getMany({ limit, skip, filters })
 
     return res.json(response)
   }

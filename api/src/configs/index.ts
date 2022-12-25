@@ -3,7 +3,7 @@ import "dotenv/config"
 
 import { TYPE_ORM_MODELS } from "../infrastructure/repositories/typeorm/models"
 
-const migrationsRelativePath = "infrastructure/respositories/typeorm/migrations/*.{ts,js}"
+const migrationsRelativePath = "infrastructure/repositories/typeorm/migrations/*.{ts,js}"
 
 export const CONFIG = {
   port: process.env.PORT || 3333,

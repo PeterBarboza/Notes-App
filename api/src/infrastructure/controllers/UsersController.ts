@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
 
-import { User } from "domain/entities/User"
-import { UserServices } from "domain/services/UsersServices"
+import { UserServices } from "../../domain/services/UsersServices"
 
 export class UsersController {
   services: UserServices

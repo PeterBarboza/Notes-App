@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm"
-import 'reflect-metadata'
+import "reflect-metadata"
 
 import { CONFIG } from "../../../configs"
 

@@ -1,5 +1,5 @@
 ### Generate migration
 
 ```bash
-yarn run migration:generate src/repositories/typeorm/migrations/{{MIGRATION_NAME}}
+yarn run migration:generate src/infrastructure/repositories/typeorm/migrations/{{MIGRATION_NAME}}
 ```

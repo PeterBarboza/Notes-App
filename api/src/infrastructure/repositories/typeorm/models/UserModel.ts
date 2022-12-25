@@ -1,10 +1,10 @@
 import { Column, CreateDateColumn, Entity, OneToMany, UpdateDateColumn } from "typeorm"
 
-import { User } from "domain/entities/User"
+import { User } from "../../../../domain/entities/User"
 import { NoteModel } from "./NoteModel"
 
 
-@Entity("note")
+@Entity("user")
 export class UserModel implements User {
   @Column({ type: "varchar", primary: true })
   id?: string
@@ -12,7 +12,7 @@ export class UserModel implements User {
   @Column({ type: "varchar", unique: true })
   username?: string
 
-  @Column({ type: "varchar" })
+  @Column({ type: "varchar", unique: true })
   email!: string
 
   @Column({ type: "varchar" })
