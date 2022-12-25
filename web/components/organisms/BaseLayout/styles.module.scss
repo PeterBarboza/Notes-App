@@ -13,7 +13,7 @@
     max-width: 800px;
     height: fit-content;
 
-    padding: 0 0 20px 0;
+    padding: 10px 0;
 
     display: flex;
     flex-direction: column;
@@ -41,7 +41,7 @@
     position: fixed;
     left: calc(100% - 111px);
     top: calc(100% - 51px);
-    z-index: 8;
+    z-index: 11;
 
     .composeNoteIcon {
       transition-duration: 0.1s;
@@ -59,7 +59,7 @@
 
   @media (max-width: 810px) {
     .layoutBox {    
-      padding: 0 10px 20px 10px;
+      padding: 10px;
     }
   }
 }

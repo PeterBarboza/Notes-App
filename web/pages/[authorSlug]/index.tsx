@@ -5,7 +5,6 @@ import { NotesService } from "../../services/api/notes"
 
 import { Note } from "../../interface"
 import { GetManyResponse } from "../../services/api/interface"
-import { SearchBar } from "../../components/atoms/SearchBar"
 
 const notesService = new NotesService()
 
@@ -26,10 +25,8 @@ export default function({ authorSlug }: any) {
   }, [])
 
   return (
-    <>
-      <NotesBoard
-        notes={notes?.results || []}
-      />
-    </>
+    <NotesBoard
+      notes={notes?.results || []}
+    />
   )
 }

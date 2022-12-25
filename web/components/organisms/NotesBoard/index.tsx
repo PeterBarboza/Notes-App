@@ -1,4 +1,3 @@
-import { SearchBar } from "../../atoms/SearchBar"
 import { NoteCard } from "../../molecules/NoteCard"
 import { NotesBox } from "../../molecules/NotesBox"
 
@@ -13,7 +12,6 @@ type props = {
 export function NotesBoard({ notes }: props) {
   return (
     <main className={styles.notesBoard}>
-      <SearchBar placeholder="Pesquisar por notas públicas" />
       <NotesBox>
         {notes.map(note => {
           return (

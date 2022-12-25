@@ -1,51 +1,222 @@
 .header {
   width: 100%;
-  height: fit-content;
-  padding: 0 30px;
+  height: 60px;
+  padding: 0 20px;
 
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
 
   background-color: #0084ff;
 
-  .linkButton {
-    transition-duration: 0.2s;
+  position: relative;
 
+  .logo {
     width: fit-content;
-    height: 60px;
+    height: 100%;
 
     padding: 0 10px;
 
     display: flex;
     justify-content: center;
     align-items: center;
+
+    font-size: 2rem;
+    font-weight: 700;
     text-align: center;
-
-    position: relative;
-
     color: #ffffff;
-    font-size: 1.6rem;
-    font-weight: 500;
 
-  }
-  .linkButton:hover {
-    background-color: #349dff;
+    cursor: pointer;
   }
 
-}
+  .searchBarBox {
+    width: 100%;
+    max-width: 800px;
+    height: 100%;
 
-@media (max-width: 337px) {
-  .header {
-    padding: 0 0;
+    margin: auto;
 
-    .linkWrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    background-color: #0084ff;
+
+    .inputBox {
       width: 100%;
+      height: 100%;
 
-      .linkButton {
-        width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+
+      .arrowLeft {
+        cursor: pointer;
       }
     }
   }
+
+  .searchBarBoxBigScreen {
+    width: 100%;
+    max-width: 600px;
+    height: 100%;
+
+    display: none;
+
+    @media (min-width: 800px) {
+      display: block;
+    }
+  }
+
+  .headerEnd {
+    width: fit-content;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    
+    .magnifying {
+      cursor: pointer;
+      justify-self: flex-end;
+
+      display: block;
+
+      @media (min-width: 800px) {
+        display: none;
+      }
+    }
+  
+    .profile {
+      cursor: pointer;
+    }
+  }
+}
+
+.sideBarBackgroundShadow {
+  width: 100%;
+  height: 100%;
+
+  background-color: #00000075;
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 13;
+
+  display: none;
+  cursor: pointer;
+}
+
+.sideBar {
+  transition-duration: 0.2s;
+  min-width: fit-content;
+  width: 100%;
+  @media (min-width: 450px) {
+    width: 300px;
+  }
+
+  height: 100%;
+
+  overflow: hidden;
+
+  position: fixed;
+  top: 0;
+  right: -450px;
+  bottom: 0;
+  z-index: 14;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  background-color: #ffffff;
+
+  .sideBarHeader {
+    width: 100%;
+    height: 60px;
+
+    padding: 10px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: #0084ff;
+
+    .arrowLeft {
+      cursor: pointer;
+    }
+
+    .sideBarHeaderEnd {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+
+      p {
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: #ffffff;
+      }
+    }
+  }
+
+  .sideBarOptionsBox {
+    width: 100%;
+    height: fit-content;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    list-style: none;
+
+    .optionLinkWrap {
+      width: 100%;
+      height: 60px;
+
+      li {
+        transition-duration: 0.2s;
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 5px;
+
+        padding: 0 0 0 10px;
+
+        font-size: 1.4rem;
+        color: #616161;
+        background-color: #ffffff;
+      }
+      li:hover {
+        filter: brightness(90%);
+      }
+    }
+  }
+}
+
+.visibleBackgroundShadow {
+  display: block;
+}
+.visibleSideBar {
+  right: 0;
 }
