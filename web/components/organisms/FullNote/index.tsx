@@ -13,7 +13,6 @@ export function FullNote({
   privacyStatus, 
   createdAt, 
   updatedAt, 
-  authorSlug, 
   noteSlug
 }: Note) {
   const lastUpdate = format(new Date(updatedAt || createdAt), "dd/MM/yyyy - hh:mm")
@@ -22,7 +21,7 @@ export function FullNote({
     <main className={styles.fullNote}>
       <h1>{title}</h1>
       <p className={styles.author}>
-        Escrito por: <Link href={`/${authorSlug}`}><span>{author}</span></Link>
+        Escrito por: <Link href={`/${author.username}`}><span>{author.username}</span></Link>
       </p>
       <p className={styles.lastUpdate}>Última atualização - {lastUpdate}</p>
       <p className={styles.content}>

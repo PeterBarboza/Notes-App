@@ -7,8 +7,9 @@
       "content": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo, corrupti!",
       "createdAt": "2022-12-20T21:00:09.382Z",
       "updatedAt": "2022-12-20T21:00:09.382Z",
-      "author": "autor 1",
-      "authorSlug": "author-1",
+      "author": {
+        "username": "Usuário1"
+      },
       "privacyStatus": "public"
     },
     {
@@ -18,8 +19,9 @@
       "content": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. In necessitatibus fuga esse soluta fugiat? Molestiae perspiciatis laborum veritatis molestias officia magnam aperiam, dolores fugit assumenda consequatur saepe quae atque laboriosam, adipisci et ipsum blanditiis labore harum ullam suscipit. Dicta provident natus pariatur et neque sint dolore in praesentium architecto? Optio obcaecati repellat rerum aliquid nobis vero commodi, accusamus tempore suscipit laborum cum et, cupiditate aliquam molestiae dolor quia officiis odio? Quos temporibus ipsa ullam sunt nihil aspernatur error corporis, at culpa eveniet recusandae nisi cupiditate, sequi sed quas quam consequuntur iusto quibusdam impedit quod, dicta odio! Eveniet vero nesciunt iure.",
       "createdAt": "2022-12-20T21:00:09.382Z",
       "updatedAt": "2022-12-20T21:00:09.382Z",
-      "author": "autor 2",
-      "authorSlug": "author-2",
+      "author": {
+        "username": "Usuário1"
+      },
       "privacyStatus": "private"
     },
     {
@@ -29,8 +31,9 @@
       "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus, accusamus ipsum. Labore a voluptatum amet hic odit, ex aliquam voluptate sapiente totam natus obcaecati tenetur aspernatur dolorem quos odio dolore nobis, quasi quibusdam fugiat sequi nulla expedita veritatis. Nobis, alias vel. Commodi sit, ipsum est suscipit vitae architecto soluta tenetur!",
       "createdAt": "2022-12-20T21:00:09.382Z",
       "updatedAt": "2022-12-20T21:00:09.382Z",
-      "author": "autor 3",
-      "authorSlug": "author-3",
+      "author": {
+        "username": "Usuário1"
+      },
       "privacyStatus": "public"
     },
     {
@@ -40,8 +43,9 @@
       "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus, accusamus ipsum. Labore a voluptatum amet hic odit, ex aliquam voluptate sapiente totam natus obcaecati tenetur aspernatur dolorem quos odio dolore nobis, quasi quibusdam fugiat sequi nulla expedita veritatis. Nobis, alias vel. Commodi sit, ipsum est suscipit vitae architecto soluta tenetur!",
       "createdAt": "2022-12-20T21:00:09.382Z",
       "updatedAt": "2022-12-20T21:00:09.382Z",
-      "author": "autor 4",
-      "authorSlug": "author-4",
+      "author": {
+        "username": "Usuário1"
+      },
       "privacyStatus": "public"
     }
   ],

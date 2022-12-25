@@ -11,7 +11,7 @@ type paginationParams = {
 }
 type getOneParams = {
   noteSlug: string
-  authorSlug: string
+  username: string
 }
 type searchParams = {
   paginationParams: paginationParams
@@ -47,20 +47,20 @@ export class NotesService {
   }
 
   async getMany(paginationParams?: paginationParams): Promise<GetManyResponse<Note>> {
-    return notesMock
+    return notesMock as any
   }
 
-  async getOne({ noteSlug, authorSlug }: getOneParams): Promise<GetOneResponse<Note>> {
+  async getOne({ noteSlug, username }: getOneParams): Promise<GetOneResponse<Note>> {
     const note = notesMock.results.find((note) => {
-      return (note.noteSlug === noteSlug) && (note.authorSlug === authorSlug)
+      return (note.noteSlug === noteSlug) && (note.author.username === username)
     })
 
-    return note || null
+    return note as any || null
   }
 
-  async getManyByAuthor(authorSlug: string): Promise<GetManyResponse<Note>> {
+  async getManyByAuthor(username: string): Promise<GetManyResponse<Note>> {
     const notes = notesMock.results.map((note) => {
-      if(note.authorSlug === authorSlug) {
+      if(note.author.username === username) {
         return note
       }
       return

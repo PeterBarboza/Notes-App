@@ -5,7 +5,16 @@ export interface Note {
   content: string
   createdAt: string
   updatedAt: string
-  author: string
-  authorSlug: string
+  author: User
   privacyStatus: string
+}
+
+export interface User {
+  id: string
+  username: string
+  email: string
+  password: string
+  createdAt: Date
+  updatedAt: Date
+  notes: Note[]
 }

@@ -16,7 +16,6 @@ export function NoteCard({
   privacyStatus, 
   createdAt, 
   updatedAt, 
-  authorSlug, 
   noteSlug
 }: Note) {
   const lastUpdate = format(new Date(updatedAt || createdAt), "dd/MM/yyyy - hh:mm")
@@ -35,14 +34,14 @@ export function NoteCard({
   }, [])
 
   return (
-    <Link href={`/${authorSlug}/${noteSlug}`} className={styles.linkWrap}>
-      <article className={styles.noteCard} title={`${title} - ${author}`}>
+    <Link href={`/${author.username}/${noteSlug}`} className={styles.linkWrap}>
+      <article className={styles.noteCard} title={`${title} - ${author.username}`}>
         <div className={styles.cardHeading}>
           {PrivacyIcon(privacyStatus)}
           <h2>{title}</h2>
         </div>
 
-        <p className={styles.author}>{author}</p>
+        <p className={styles.author}>{author.username}</p>
 
         <p className={styles.lastUpdate}>Última atualização | {lastUpdate}</p>
 

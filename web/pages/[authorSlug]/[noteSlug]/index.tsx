@@ -12,17 +12,17 @@ const notesService = new NotesService()
 
 export async function getServerSideProps(context: any) {
   const slugs = {
-    authorSlug: context.query.authorSlug,
+    username: context.query.username,
     noteSlug: context.query.noteSlug
   }
   return { props: { ...slugs } }
 }
 
-export default function({ authorSlug, noteSlug }: any) {
+export default function({ username, noteSlug }: any) {
   const [note, setNote] = useState<GetOneResponse<Note>>()
 
   const getNote = useCallback(async () => {
-    const note = await notesService.getOne({ noteSlug, authorSlug })
+    const note = await notesService.getOne({ noteSlug, username })
 
     setNote(note)
   }, [])

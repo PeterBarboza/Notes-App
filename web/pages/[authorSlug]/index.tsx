@@ -10,15 +10,15 @@ const notesService = new NotesService()
 
 export async function getServerSideProps(context: any) {
   const slugs = {
-    authorSlug: context.query.authorSlug,
+    username: context.query.username,
   }
   return { props: { ...slugs } }
 }
 
-export default function({ authorSlug }: any) {
+export default function({ username }: any) {
   const [notes, setNotes] = useState<GetManyResponse<Note>>()
 
-  const getNotes = useCallback(async () => await notesService.getManyByAuthor(authorSlug), [])
+  const getNotes = useCallback(async () => await notesService.getManyByAuthor(username), [])
 
   useEffect(() => {
     ;(async () => setNotes(await getNotes()))()

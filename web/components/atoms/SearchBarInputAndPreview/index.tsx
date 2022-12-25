@@ -54,14 +54,11 @@ export function SearchBarInputAndPreview({
               notes.map((note) => {
                 return (
                   <Link 
-                    href={`/${note.authorSlug}/${note.noteSlug}`}
+                    href={`/${note.author.username}/${note.noteSlug}`}
                     className={styles.liLinkWrap}
+                    key={`note-searchbar-preview-link-${note.id}`}
                   >
-                    <li
-                      key={`note-searchbar-preview-${note.id}`}
-                    >
-                      {note.title} - {note.author}
-                    </li>
+                    <li>{`${note.title} - ${note.author}`}</li>
                   </Link>
                 )
               })
