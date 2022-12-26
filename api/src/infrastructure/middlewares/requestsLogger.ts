@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express"
 
 import { apiMainLogger } from "../../app"
 
-export function requestsLog(req: Request, res: Response, next: NextFunction): void {
+export function requestsLogger(req: Request, res: Response, next: NextFunction): void {
   const {
     method,
     protocol,

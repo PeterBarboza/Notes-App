@@ -1,7 +1,7 @@
 import { Database } from "../repositories/typeorm/database"
 import { NotesRepository } from "../repositories/NotesRepository"
 import { NoteServices } from "../../domain/services/NotesServices"
-import { NotesController } from "../controllers/NotesController"
+import { NotesController } from "../controllers/notes"
 
 export class NotesControllerFactory {
   handle() {

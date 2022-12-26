@@ -64,7 +64,12 @@ export class NotesRepository extends TypeORMBaseRepository implements INotesRepo
     const [results, total] = await repository.findAndCount({
       where: {
         ...selectedFilters
-      }
+      },
+      skip: skip,
+      take: limit,
+      order: {
+        updatedAt: -1,
+      },
     })
 
     return {

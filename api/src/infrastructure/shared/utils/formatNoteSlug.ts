@@ -1,4 +1,4 @@
-export function createNoteSlug(title: string): string {
+export function formatNoteSlug(title: string): string {
   const wordsArray = title.trim().toLowerCase().split(" ")
 
   const noteSlug = wordsArray

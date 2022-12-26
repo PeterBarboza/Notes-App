@@ -9,5 +9,3 @@ export function generateRandomNumber(): number {
 
   return number
 }
-
-console.log(generateRandomNumber())

@@ -1,18 +1,23 @@
 import express from "express"
-import log from "debug"
+import logger from "debug"
 
-import { requestsLog } from "./infrastructure/middlewares/requestsLog"
 import { router } from "./infrastructure/routes"
+import { requestsLogger } from "./infrastructure/middlewares/requestsLogger"
+import { errorHandler } from "./infrastructure/middlewares/errorHandler"
+import { routeNotFound } from "./infrastructure/middlewares/routeNotFound"
 
-const apiMainLogger = log("api:main")
+const apiMainLogger = logger("api:main")
 
 const app = express()
 
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+
+app.use(requestsLogger)
 
 app.use(router)
 
-app.use(requestsLog)
+app.use(errorHandler)
+app.use(routeNotFound)
 
 export { app, apiMainLogger }

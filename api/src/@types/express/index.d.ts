@@ -15,8 +15,11 @@ export interface Pagination {
   skip?: string | number
 }
 
+export interface Filters extends ParsedQs {}
+
 export interface query extends ParsedQs {
   pagination?: Pagination
+  filters?: Filters
 }
 
 declare module 'express' {
