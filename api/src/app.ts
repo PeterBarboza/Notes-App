@@ -10,10 +10,10 @@ const apiMainLogger = logger("api:main")
 
 const app = express()
 
+app.use(requestsLogger)
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-
-app.use(requestsLogger)
 
 app.use(router)
 
