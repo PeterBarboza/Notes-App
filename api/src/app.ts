@@ -17,7 +17,7 @@ app.use(requestsLogger)
 
 app.use(router)
 
-app.use(errorHandler)
 app.use(routeNotFound)
+app.use(errorHandler)
 
 export { app, apiMainLogger }

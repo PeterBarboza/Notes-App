@@ -1,30 +1,30 @@
 import { Router } from "express"
 
-import { NotesControllerFactory } from "../factories/NotesControllerFactory"
+import { UsersControllerFactory } from "../factories/UsersControllerFactory"
 import { paginationMiddleware } from "../middlewares/pagination"
 
-export const notesRouter = Router()
+export const usersRouter = Router()
 
-const notesController = new NotesControllerFactory().handle()
+const notesController = new UsersControllerFactory().handle()
 
-notesRouter.get(
+usersRouter.get(
   "/",
   paginationMiddleware,
   notesController.getMany.bind(notesController)
 )
-notesRouter.get(
-  "/:noteSlug",
+usersRouter.get(
+  "/:username",
   notesController.getOne.bind(notesController)
 )
-notesRouter.post(
+usersRouter.post(
   "/",
   notesController.create.bind(notesController)
 )
-notesRouter.patch(
+usersRouter.patch(
   "/:id",
   notesController.updateOne.bind(notesController)
 )
-notesRouter.delete(
+usersRouter.delete(
   "/:id",
   notesController.deleteOne.bind(notesController)
 )

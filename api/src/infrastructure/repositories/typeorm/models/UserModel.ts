@@ -10,12 +10,12 @@ export class UserModel implements User {
   id?: string
 
   @Column({ type: "varchar", unique: true })
-  username?: string
+  username!: string
 
   @Column({ type: "varchar", unique: true })
   email!: string
 
-  @Column({ type: "varchar" })
+  @Column({ type: "varchar", select: false })
   password!: string
 
   @CreateDateColumn()

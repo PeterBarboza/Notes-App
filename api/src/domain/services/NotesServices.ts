@@ -27,9 +27,7 @@ export class NoteServices {
   async getOne(noteSlug: string): Promise<Note> {
     const note = await this.repository.getOneBySlug(noteSlug)
 
-    if(!note) {
-      throw new NotFoundError({ entityName: "Note" })
-    }
+    if(!note) throw new NotFoundError({ entityName: "Note" })
 
     return note
   }
@@ -51,11 +49,11 @@ export class NoteServices {
 
   async updateOne(id: string, entity: Partial<Note>): Promise<updateOneResponse> {
     const note = await this.repository.getOneById(id)
+
+    if(!note) throw new NotFoundError({ entityName: "Note" })
+
     const hasTitleChanges = entity.title && !(entity.title === note.title) ? true : false
 
-    if(!note) {
-      throw new NotFoundError({ entityName: "Note" })
-    }
     if(hasTitleChanges) {
       const noteSlug = await hasEqualSlug({
         slugToVerify: formatNoteSlug(entity.title!),
@@ -64,9 +62,7 @@ export class NoteServices {
 
       const { updatedCount } = await this.repository.updateOne(id, { ...entity, noteSlug })
 
-      if(updatedCount < 1) {
-        throw new GenericError({ message: "Note not affected" })
-      }
+      if(updatedCount < 1) throw new GenericError({ message: "Note not affected" })
 
       return {
         updatedCount
@@ -91,9 +87,7 @@ export class NoteServices {
   async deleteOne(id: string): Promise<deleteOneResponse> {
     const hasEntity = await this.repository.getOneById(id)
 
-    if(!hasEntity) {
-      throw new NotFoundError({ entityName: "Note" })
-    }
+    if(!hasEntity) throw new NotFoundError({ entityName: "Note" })
 
     const { deletedCount } = await this.repository.deleteOne(id)
 

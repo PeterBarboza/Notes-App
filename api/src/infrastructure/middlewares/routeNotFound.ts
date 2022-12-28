@@ -1,10 +1,15 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 
-export function routeNotFound(req: Request, res: Response): Response {
-  const { originalUrl } = req
+import { AppError } from "../../errors"
+
+export function routeNotFound(req: Request, res: Response, next: NextFunction): Response | void {
+  const path = req?.originalUrl
+
+  //If has no path, the req object is an error from @ExceptionsWrapper() decorator
+  if(!path) return next(req)
 
   const response = {
-    message: `The path ${originalUrl} was not found in this server.`
+    message: `The path ${path} was not found in this server.`
   }
 
   return res.status(404).json(response)

@@ -1,9 +1,5 @@
 import { ValidationError as ClassValidatorError } from "class-validator"
 
-type errorReturn = {
-  status: number
-  message: string
-}
 type validationErrorReturn = {
   status: number
   errors: ClassValidatorError[]
@@ -12,11 +8,6 @@ type genericErrorReturn = {
   status: number
   message: string
 }
-type ammountAffectedErrorReturn = {
-  status: number
-  message: string
-}
-
 
 export type notFoundErrorConstructor = {
   entityName: string
@@ -35,11 +26,25 @@ export type unauthorizedErrorConstructor = {
   entityName: string
   substituteMessage?: string
 }
+export type emailAlreadyInUseErrorConstructor = {
+  substituteMessage?: string
+}
+export type usernameAlreadyInUseErrorConstructor = {
+  substituteMessage?: string
+}
 
-export type AppError = NotFoundError | UnauthorizedError | Error
+export type AppError = 
+  NotFoundError |
+  ValidationError |
+  GenericError |
+  AmmountAffectedError |
+  UnauthorizedError |
+  UsernameAlreadyInUseError |
+  EmailAlreadyInUseError |
+  Error
 
 export class NotFoundError {
-  error: errorReturn
+  error: genericErrorReturn
 
   constructor({
     entityName,
@@ -93,12 +98,34 @@ export class AmmountAffectedError {
 }
 
 export class UnauthorizedError {
-  error: errorReturn
+  error: genericErrorReturn
 
   constructor({ substituteMessage }: unauthorizedErrorConstructor) {
     this.error = {
       status: 401,
       message: substituteMessage ? substituteMessage : `Unauthorized action`
+    }
+  }
+}
+
+export class UsernameAlreadyInUseError {
+  error: genericErrorReturn
+
+  constructor({ substituteMessage }: usernameAlreadyInUseErrorConstructor) {
+    this.error = {
+      status: 400,
+      message: substituteMessage ? substituteMessage : `Username already in use`
+    }
+  }
+}
+
+export class EmailAlreadyInUseError {
+  error: genericErrorReturn
+
+  constructor({ substituteMessage }: emailAlreadyInUseErrorConstructor) {
+    this.error = {
+      status: 400,
+      message: substituteMessage ? substituteMessage : `Email already in use`
     }
   }
 }

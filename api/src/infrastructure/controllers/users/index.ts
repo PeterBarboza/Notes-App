@@ -2,16 +2,16 @@ import { Request, Response } from "express"
 import { plainToInstance } from "class-transformer"
 import { validate } from "class-validator"
 
-import { NoteServices } from "../../../domain/services/NotesServices"
-import { CreateNoteDTO } from "./dto/CreateNoteDTO"
-import { UpdateNoteDTO } from "./dto/UpdateNoteDTO"
-import { ValidationError } from "../../../errors"
+import { UserServices } from "../../../domain/services/UsersServices"
+import { CreateUserDTO } from "./dto/CreateUserDTO"
+import { UpdateUserDTO } from "./dto/UpdateUserDTO"
+import { UnauthorizedError, ValidationError } from "../../../errors"
 import { ExceptionsWrapper } from "../../middlewares/errorHandler"
 
-export class NotesController {
-  services: NoteServices
+export class UsersController {
+  services: UserServices
 
-  constructor(services: NoteServices) {
+  constructor(services: UserServices) {
     this.services = services
   }
 
@@ -35,16 +35,16 @@ export class NotesController {
 
   @ExceptionsWrapper()
   async getOne(req: Request, res: Response): Promise<Response> {
-    const { noteSlug } = req.params
+    const { username } = req.params
 
-    const response = await this.services.getOne(noteSlug)
+    const response = await this.services.getOne(username)
 
     return res.json(response)
   }
 
   @ExceptionsWrapper()
   async create(req: Request, res: Response): Promise<Response> {
-    const entity = plainToInstance(CreateNoteDTO, req.body)
+    const entity = plainToInstance(CreateUserDTO, req.body)
     
     const errors = await validate(entity)
     if (errors.length > 0) throw new ValidationError(errors)
@@ -57,10 +57,19 @@ export class NotesController {
   @ExceptionsWrapper()
   async updateOne(req: Request, res: Response): Promise<Response> {
     const { id } = req.params
-    const entity = plainToInstance(UpdateNoteDTO, req.body)
+    const entity = plainToInstance(UpdateUserDTO, req.body)
     
     const errors = await validate(entity)
     if (errors.length > 0) throw new ValidationError(errors)
+
+    if(entity.newPassword || entity.oldPassword) {
+      if(!entity.newPassword || !entity.oldPassword) {
+        throw new UnauthorizedError({ 
+          entityName: "User", 
+          substituteMessage: "You need to set your old and new passoword to update your password" 
+        })
+      }
+    }
 
     const { updatedCount } = await this.services.updateOne(id, entity)
 
