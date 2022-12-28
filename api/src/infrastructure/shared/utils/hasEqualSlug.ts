@@ -17,7 +17,7 @@ export async function hasEqualSlug({
     return slugToVerify
   }
 
-  const newSlug = `${initialSlug}-${generateRandomNumber}`
+  const newSlug = `${initialSlug}-${generateRandomNumber()}`
 
   return await hasEqualSlug({
     slugToVerify: newSlug, 
