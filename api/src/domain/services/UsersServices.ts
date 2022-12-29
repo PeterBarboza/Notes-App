@@ -1,5 +1,6 @@
 import { hash, compareSync } from "bcryptjs"
 import { v4 as uuid } from "uuid"
+import { sign } from "jsonwebtoken"
 
 import { User } from "../entities/User"
 import { isValidPassword } from "../../infrastructure/shared/utils/isValidPassword"
@@ -8,6 +9,7 @@ import { AmmountAffectedError,
   UnauthorizedError,
   GenericError
 } from "../../errors"
+import { CONFIG } from "../../configs"
 
 import { 
   deleteOneResponse, 
@@ -16,6 +18,7 @@ import {
   IUsersRepository, 
   updateOneResponse
  } from "../../infrastructure/shared/interface"
+import { isValidUsername } from "../../infrastructure/shared/utils/isValidUsername"
 
 type updateUserParams = {
   username: string
@@ -28,14 +31,14 @@ type updatePasswordParams = {
   newPassword: string
   oldPassword: string
 }
+type authUserparams = {
+  email: string
+  password: string
+}
 
 //TODO: Adicionar filtro na função getOneByusername() para conseguir trazer
 //uma nota específica através de seu slug junto do usuário.
-
-//TODO: Separar os fluxos de atualizar usuário e mudar senha em dois fluxo separados
-
-//TODO: Criar validação para o nome dos usuários (Permitir apenas, letras, números e
-//alguns caracteres especias que não atrapalhem nas URLs)
+//PROVALVEMENTE vou fazer o lance acima através dos serviços de notas
 export class UserServices {
   private repository: IUsersRepository<User>
 
@@ -57,6 +60,12 @@ export class UserServices {
 
   async create(entity: User): Promise<User> {
     const { password } = entity
+
+    if(!isValidUsername(entity.username)) {
+      throw new GenericError({
+        message: "Invalid username. Username must have at least 2 characteres length and 2 letters. You can use uppercase and lowercase letters, numbers and the following special characters: [\"hifen(-)\", \"underline(_)\", \"dot(.)\"]"
+      })
+    }
 
     const isUsernameAlreadyInUse = await this.repository.getOneByUsername(entity.username)
     if(isUsernameAlreadyInUse) throw new GenericError({ message: "Email already in use" })
@@ -85,6 +94,12 @@ export class UserServices {
     const user = await this.repository.getOneById(id)
     if(!user) throw new NotFoundError({ entityName: "User" })
     
+    if(!isValidUsername(entity.username)) {
+      throw new GenericError({
+        message: "Invalid username. Username must have at least 2 characteres length and 2 letters. You can use uppercase and lowercase letters, numbers and the following special characters: [\"hifen(-)\", \"underline(_)\", \"dot(.)\"]"
+      })
+    }
+
     const hasEqual = await this.repository.getOneByUsername(entity.username)
     if(hasEqual) throw new GenericError({ message: "Username already in use" })
 
@@ -107,10 +122,9 @@ export class UserServices {
     const user = await this.repository.getOneByIdWithPassword(id)
     if(!user) throw new NotFoundError({ entityName: "User" })
     
-    const isPasswordCorrect = compareSync(entity.password!, user.password)
-    if(!isPasswordCorrect) {
+    const passwordMatch = compareSync(entity.password!, user.password)
+    if(!passwordMatch) {
       throw new UnauthorizedError({ 
-        entityName: "User", 
         substituteMessage: "Incorrect password" 
       })
     }
@@ -141,10 +155,9 @@ export class UserServices {
     const user = await this.repository.getOneByIdWithPassword(id)
     if(!user) throw new NotFoundError({ entityName: "User" })
     
-    const isPasswordCorrect = compareSync(entity.oldPassword!, user.password)
-    if(!isPasswordCorrect) {
+    const passwordMatch = compareSync(entity.oldPassword!, user.password)
+    if(!passwordMatch) {
       throw new UnauthorizedError({ 
-        entityName: "User", 
         substituteMessage: "Incorrect password" 
       })
     }
@@ -195,5 +208,20 @@ export class UserServices {
     return {
       deletedCount
     }
+  }
+
+  async authUser({ email, password }: authUserparams) {
+    const user = await this.repository.getOneByEmailWithPassword(email)
+    if(!user) throw new UnauthorizedError({ substituteMessage: "Email or password incorrect" })
+
+    const passwordMatch = compareSync(password, user.password)
+    if(!passwordMatch) throw new UnauthorizedError({ substituteMessage: "Email or password incorrect" })
+
+    const token = sign({}, CONFIG.jwtSecret, {
+      subject: user.id,
+      expiresIn: "20s"
+    })
+
+    return { token }
   }
 }

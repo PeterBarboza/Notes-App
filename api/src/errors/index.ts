@@ -23,7 +23,6 @@ type ammountAffectedErrorConstructor = {
   substituteMessage?: string
 }
 export type unauthorizedErrorConstructor = {
-  entityName: string
   substituteMessage?: string
 }
 export type emailAlreadyInUseErrorConstructor = {

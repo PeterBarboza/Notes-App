@@ -36,3 +36,7 @@ usersRouter.delete(
   "/:id",
   notesController.deleteOne.bind(notesController)
 )
+usersRouter.post(
+  "/auth",
+  notesController.authUser.bind(notesController)
+)

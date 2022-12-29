@@ -9,6 +9,7 @@ import { UnauthorizedError, ValidationError } from "../../../errors"
 import { ExceptionsWrapper } from "../../middlewares/errorHandler"
 import { UpdateEmailDTO } from "./dto/UpdateEmailDTO"
 import { UpdatePasswordDTO } from "./dto/UpdatePasswordDTO"
+import { AuthUserDTO } from "./dto/AuthUserDTO"
 
 export class UsersController {
   services: UserServices
@@ -66,7 +67,7 @@ export class UsersController {
 
     const { updatedCount } = await this.services.updateOne(id, entity)
 
-    return res.status(200).json({ updatedCount })
+    return res.json({ updatedCount })
   }
 
   @ExceptionsWrapper()
@@ -79,7 +80,7 @@ export class UsersController {
 
     const { updatedCount } = await this.services.updateEmail(id, entity)
 
-    return res.status(200).json({ updatedCount })
+    return res.json({ updatedCount })
   }
   
   @ExceptionsWrapper()
@@ -92,7 +93,7 @@ export class UsersController {
 
     const { updatedCount } = await this.services.updatePassword(id, entity)
 
-    return res.status(200).json({ updatedCount })
+    return res.json({ updatedCount })
   }
   
   @ExceptionsWrapper()
@@ -101,6 +102,18 @@ export class UsersController {
 
     const { deletedCount } = await this.services.deleteOne(id)
 
-    return res.status(200).json({ deletedCount })
+    return res.json({ deletedCount })
+  }
+
+  @ExceptionsWrapper()
+  async authUser(req: Request, res: Response): Promise<Response> {
+    const logInData = plainToInstance(AuthUserDTO, req.body)
+
+    const errors = await validate(logInData)
+    if (errors.length > 0) throw new ValidationError(errors)
+
+    const result = await this.services.authUser({ email: logInData.email, password: logInData.password })
+
+    return res.json(result)
   }
 }

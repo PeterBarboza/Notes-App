@@ -9,8 +9,6 @@ type isValidPasswordOptionsParam = {
   }
 }
 
-const regexValidator = /[a-z0-1!@#$%&*()\-_=+§`´\[\]{}^~º,<.>:;?°\'"\\]/gi
-
 export function isValidPassword(password: string, options?: isValidPasswordOptionsParam): boolean {
   const defaultRequiredOptions = {
     numbers: true,
@@ -27,10 +25,12 @@ export function isValidPassword(password: string, options?: isValidPasswordOptio
   const upperCaseValidator = /[A-Z]/
   const specialCharsValidator = /[!@#$%&*()\-_=+§`´\[\]{}^~º,<.>:;?°\'"\\]/
   
-  if(password.length < minLenght) {
+  const parsedPassword = password.trim()
+
+  if(parsedPassword.length < minLenght) {
     return false
   }
-  if(maxLenght && (password.length > maxLenght)) {
+  if(maxLenght && (parsedPassword.length > maxLenght)) {
     return false
   }
 
@@ -39,17 +39,17 @@ export function isValidPassword(password: string, options?: isValidPasswordOptio
   let numbers = 0
   let specialChars = 0
 
-  for(let i = 0; i < password.length; i++) {
-    if(required.lowerCase && lowerCaseValidator.test(password[i])) {
+  for(let i = 0; i < parsedPassword.length; i++) {
+    if(required.lowerCase && lowerCaseValidator.test(parsedPassword[i])) {
       lowerCase++
     }
-    if(required.upperCase && upperCaseValidator.test(password[i])) {
+    if(required.upperCase && upperCaseValidator.test(parsedPassword[i])) {
       upperCase++
     }
-    if(required.numbers && numbersValidator.test(password[i])) {
+    if(required.numbers && numbersValidator.test(parsedPassword[i])) {
       numbers++
     }
-    if(required.specialChars && specialCharsValidator.test(password[i])) {
+    if(required.specialChars && specialCharsValidator.test(parsedPassword[i])) {
       specialChars++
     }
   }

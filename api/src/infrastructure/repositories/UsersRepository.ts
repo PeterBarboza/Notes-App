@@ -100,6 +100,26 @@ export class UsersRepository extends TypeORMBaseRepository implements IUsersRepo
     return result!
   }
 
+  async getOneByEmailWithPassword(email: string): Promise<UserModel> {
+    const database = await this.database.getDatabase()
+    const repository = database.getRepository(UserModel)
+
+    const result = await repository
+      .createQueryBuilder("user")
+      .select("user.email", "email")
+      // .select("user.id", "id")
+      .addSelect("user.id")
+      .addSelect("user.email")
+      .addSelect("user.username")
+      .addSelect("user.password")
+      .addSelect("user.createdAt")
+      .addSelect("user.updatedAt")
+      .where("email = :email", { email: email })
+      .getOne()
+
+    return result!
+  }
+
   async create(data: UserModel): Promise<UserModel> {
     const database = await this.database.getDatabase()
     const repository = database.getRepository(UserModel)
