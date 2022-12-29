@@ -1,13 +1,12 @@
 import { hash, compareSync } from "bcryptjs"
 import { v4 as uuid } from "uuid"
 
-import { CONFIG } from "../../configs"
 import { User } from "../entities/User"
+import { isValidPassword } from "../../infrastructure/shared/utils/isValidPassword"
 import { AmmountAffectedError,
-  EmailAlreadyInUseError,
   NotFoundError,
-  UsernameAlreadyInUseError,
-  UnauthorizedError
+  UnauthorizedError,
+  GenericError
 } from "../../errors"
 
 import { 
@@ -17,13 +16,17 @@ import {
   IUsersRepository, 
   updateOneResponse
  } from "../../infrastructure/shared/interface"
-import { pick } from "lodash"
 
 type updateUserParams = {
-  username?: string
-  email?: string
-  newPassword?: string
-  oldPassword?: string
+  username: string
+}
+type updateEmailParams = {
+  email: string
+  password: string
+}
+type updatePasswordParams = {
+  newPassword: string
+  oldPassword: string
 }
 
 //TODO: Adicionar filtro na função getOneByusername() para conseguir trazer
@@ -56,11 +59,17 @@ export class UserServices {
     const { password } = entity
 
     const isUsernameAlreadyInUse = await this.repository.getOneByUsername(entity.username)
-    if(isUsernameAlreadyInUse) throw new UsernameAlreadyInUseError({})
+    if(isUsernameAlreadyInUse) throw new GenericError({ message: "Email already in use" })
 
     const isEmailAlreadyInUse = await this.repository.getOneByEmail(entity.email)
-    if(isEmailAlreadyInUse) throw new EmailAlreadyInUseError({})
+    if(isEmailAlreadyInUse) throw new GenericError({ message: "Username already in use" })
     
+    if(!isValidPassword(entity.password)) {
+      throw new GenericError({
+        message: "Invalid password. Password must have at least 8 characteres length, 1 special character, 1 uppercase letter and 1 lower case letter"
+      })
+    }
+
     const parsedPassword = await hash(password, 10)
 
     const parsedEntity: User = {
@@ -73,52 +82,87 @@ export class UserServices {
   }
 
   async updateOne(id: string, entity: updateUserParams): Promise<updateOneResponse> {
-    const user = await this.repository.getOneByIdWithPassword(id)
-
+    const user = await this.repository.getOneById(id)
     if(!user) throw new NotFoundError({ entityName: "User" })
     
-    const passwordUpdateFlux = !!(entity.newPassword && entity.oldPassword)
+    const hasEqual = await this.repository.getOneByUsername(entity.username)
+    if(hasEqual) throw new GenericError({ message: "Username already in use" })
 
-    if(passwordUpdateFlux) {
-      const isPasswordCorrect = compareSync(entity.oldPassword!, user.password)
+    const { updatedCount } = await this.repository.updateOne(id, { username: entity.username })
 
-      if(!isPasswordCorrect) {
-        throw new UnauthorizedError({ 
-          entityName: "User", 
-          substituteMessage: "Incorrect password" 
-        })
-      }
+    if(updatedCount != 1) {
+      throw new AmmountAffectedError({ 
+        entityName: "User",
+        shouldBeAffect: 1,
+        wasAffected: updatedCount,
+      })
+    }
 
-      const updateData: Partial<User> = pick(entity, [
-        "username",
-        "email",
-      ])
+    return {
+      updatedCount
+    }
+  }
 
-      const parsedPassword = await hash(entity.newPassword!, 10)
-
-      Object.assign(updateData, { password: parsedPassword })
-
-      const { updatedCount } = await this.repository.updateOne(id, updateData)
-
-      if(updatedCount != 1) {
-        throw new AmmountAffectedError({ 
-          entityName: "User",
-          shouldBeAffect: 1,
-          wasAffected: updatedCount,
-        })
-      }
-
-      return {
-        updatedCount
-      }
+  async updateEmail(id: string, entity: updateEmailParams): Promise<updateOneResponse> {
+    const user = await this.repository.getOneByIdWithPassword(id)
+    if(!user) throw new NotFoundError({ entityName: "User" })
+    
+    const isPasswordCorrect = compareSync(entity.password!, user.password)
+    if(!isPasswordCorrect) {
+      throw new UnauthorizedError({ 
+        entityName: "User", 
+        substituteMessage: "Incorrect password" 
+      })
     }
     
-    const updateData: Partial<User> = pick(entity, [
-      "username",
-      "email",
-    ])
+    if(user.email === entity.email) {
+      throw new GenericError({ message: "The new and old emails are equal" })
+    }
 
-    const { updatedCount } = await this.repository.updateOne(id, updateData)
+    const hasEqual = await this.repository.getOneByEmail(entity.email)
+    if(hasEqual) throw new GenericError({ message: "Email already in use" })
+
+    const { updatedCount } = await this.repository.updateOne(id, { email: entity.email })
+
+    if(updatedCount != 1) {
+      throw new AmmountAffectedError({ 
+        entityName: "User",
+        shouldBeAffect: 1,
+        wasAffected: updatedCount,
+      })
+    }
+
+    return {
+      updatedCount
+    }
+  }
+
+  async updatePassword(id: string, entity: updatePasswordParams): Promise<updateOneResponse> {
+    const user = await this.repository.getOneByIdWithPassword(id)
+    if(!user) throw new NotFoundError({ entityName: "User" })
+    
+    const isPasswordCorrect = compareSync(entity.oldPassword!, user.password)
+    if(!isPasswordCorrect) {
+      throw new UnauthorizedError({ 
+        entityName: "User", 
+        substituteMessage: "Incorrect password" 
+      })
+    }
+    if(entity.newPassword === entity.oldPassword) {
+      throw new GenericError({ 
+        message: "The new and old passwords are equal"
+      })
+    }
+
+    if(!isValidPassword(entity.newPassword)) {
+      throw new GenericError({
+        message: "Invalid password. Password must have at least 8 characteres length, 1 special character, 1 uppercase letter and 1 lower case letter"
+      })
+    }
+
+    const parsedPassword = await hash(entity.newPassword, 10)
+
+    const { updatedCount } = await this.repository.updateOne(id, { password: parsedPassword })
 
     if(updatedCount != 1) {
       throw new AmmountAffectedError({ 

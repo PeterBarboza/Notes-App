@@ -7,6 +7,8 @@ import { CreateUserDTO } from "./dto/CreateUserDTO"
 import { UpdateUserDTO } from "./dto/UpdateUserDTO"
 import { UnauthorizedError, ValidationError } from "../../../errors"
 import { ExceptionsWrapper } from "../../middlewares/errorHandler"
+import { UpdateEmailDTO } from "./dto/UpdateEmailDTO"
+import { UpdatePasswordDTO } from "./dto/UpdatePasswordDTO"
 
 export class UsersController {
   services: UserServices
@@ -58,24 +60,41 @@ export class UsersController {
   async updateOne(req: Request, res: Response): Promise<Response> {
     const { id } = req.params
     const entity = plainToInstance(UpdateUserDTO, req.body)
-    
+
     const errors = await validate(entity)
     if (errors.length > 0) throw new ValidationError(errors)
-
-    if(entity.newPassword || entity.oldPassword) {
-      if(!entity.newPassword || !entity.oldPassword) {
-        throw new UnauthorizedError({ 
-          entityName: "User", 
-          substituteMessage: "You need to set your old and new passoword to update your password" 
-        })
-      }
-    }
 
     const { updatedCount } = await this.services.updateOne(id, entity)
 
     return res.status(200).json({ updatedCount })
   }
 
+  @ExceptionsWrapper()
+  async updateEmail(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params
+    const entity = plainToInstance(UpdateEmailDTO, req.body)
+
+    const errors = await validate(entity)
+    if (errors.length > 0) throw new ValidationError(errors)
+
+    const { updatedCount } = await this.services.updateEmail(id, entity)
+
+    return res.status(200).json({ updatedCount })
+  }
+  
+  @ExceptionsWrapper()
+  async updatePassword(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params
+    const entity = plainToInstance(UpdatePasswordDTO, req.body)
+
+    const errors = await validate(entity)
+    if (errors.length > 0) throw new ValidationError(errors)
+
+    const { updatedCount } = await this.services.updatePassword(id, entity)
+
+    return res.status(200).json({ updatedCount })
+  }
+  
   @ExceptionsWrapper()
   async deleteOne(req: Request, res: Response): Promise<Response> {
     const { id } = req.params

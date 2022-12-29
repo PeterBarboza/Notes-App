@@ -39,8 +39,6 @@ export type AppError =
   GenericError |
   AmmountAffectedError |
   UnauthorizedError |
-  UsernameAlreadyInUseError |
-  EmailAlreadyInUseError |
   Error
 
 export class NotFoundError {
@@ -104,28 +102,6 @@ export class UnauthorizedError {
     this.error = {
       status: 401,
       message: substituteMessage ? substituteMessage : `Unauthorized action`
-    }
-  }
-}
-
-export class UsernameAlreadyInUseError {
-  error: genericErrorReturn
-
-  constructor({ substituteMessage }: usernameAlreadyInUseErrorConstructor) {
-    this.error = {
-      status: 400,
-      message: substituteMessage ? substituteMessage : `Username already in use`
-    }
-  }
-}
-
-export class EmailAlreadyInUseError {
-  error: genericErrorReturn
-
-  constructor({ substituteMessage }: emailAlreadyInUseErrorConstructor) {
-    this.error = {
-      status: 400,
-      message: substituteMessage ? substituteMessage : `Email already in use`
     }
   }
 }

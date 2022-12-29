@@ -88,7 +88,12 @@ export class UsersRepository extends TypeORMBaseRepository implements IUsersRepo
     const result = await repository
       .createQueryBuilder("user")
       .select("user.id", "id")
+      .addSelect("user.id")
+      .addSelect("user.email")
+      .addSelect("user.username")
       .addSelect("user.password")
+      .addSelect("user.createdAt")
+      .addSelect("user.updatedAt")
       .where("id = :id", { id: id })
       .getOne()
 

@@ -1,38 +1,69 @@
-export function isValidPassword(password: string): boolean {
-  const upperCaseLetters = /[A-Z]/
-  const lowerCaseLetters = /[a-z]/
-  const numbers = /[0-9]/
-  const specialChars = /[!|@|#|$|%|^|&|*|(|)|-|_]/
+type isValidPasswordOptionsParam = {
+  minLenght?: number
+  maxLenght?: number
+  required?: {
+    numbers?: boolean
+    lowerCase?: boolean
+    upperCase?: boolean
+    specialChars?: boolean
+  }
+}
 
-  let upperCase = false
-  let lowerCase = false
-  let hasNumber = false
-  let hasSpecialChars = false
+const regexValidator = /[a-z0-1!@#$%&*()\-_=+§`´\[\]{}^~º,<.>:;?°\'"\\]/gi
+
+export function isValidPassword(password: string, options?: isValidPasswordOptionsParam): boolean {
+  const defaultRequiredOptions = {
+    numbers: true,
+    lowerCase: true,
+    upperCase: true,
+    specialChars: true
+  }
+  const minLenght = options?.minLenght || 8
+  const maxLenght = options?.maxLenght || undefined
+  const required = options?.required || defaultRequiredOptions
+
+  const numbersValidator = /[0-1]/
+  const lowerCaseValidator = /[a-z]/
+  const upperCaseValidator = /[A-Z]/
+  const specialCharsValidator = /[!@#$%&*()\-_=+§`´\[\]{}^~º,<.>:;?°\'"\\]/
+  
+  if(password.length < minLenght) {
+    return false
+  }
+  if(maxLenght && (password.length > maxLenght)) {
+    return false
+  }
+
+  let lowerCase = 0
+  let upperCase = 0
+  let numbers = 0
+  let specialChars = 0
 
   for(let i = 0; i < password.length; i++) {
-    if(upperCaseLetters.test(password[i])) {
-      upperCase = true
+    if(required.lowerCase && lowerCaseValidator.test(password[i])) {
+      lowerCase++
     }
-    if(lowerCaseLetters.test(password[i])) {
-      lowerCase = true
+    if(required.upperCase && upperCaseValidator.test(password[i])) {
+      upperCase++
     }
-    if(numbers.test(password[i])) {
-      hasNumber = true
+    if(required.numbers && numbersValidator.test(password[i])) {
+      numbers++
     }
-    if(specialChars.test(password[i])) {
-      hasSpecialChars = true
+    if(required.specialChars && specialCharsValidator.test(password[i])) {
+      specialChars++
     }
   }
 
-  if(upperCase) {
-    if(lowerCase) {
-      if(hasNumber) {
-        if(hasSpecialChars) {
-          return true
-        }
-      }
-    }
+  const hasLowerCase = required.lowerCase ? (lowerCase > 0) : true
+  const hasUpperCase = required.upperCase ? (upperCase > 0) : true
+  const hasNumbers = required.numbers ? (numbers > 0) : true
+  const hasSpecialChars = required.specialChars ? (specialChars > 0) : true
+
+  const isValid = (hasLowerCase && hasUpperCase) && (hasNumbers && hasSpecialChars)
+
+  if(isValid) {
+    return true
   }
-  
+
   return false
 }

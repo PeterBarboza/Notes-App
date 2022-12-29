@@ -1,8 +1,10 @@
+import { DataSource } from "typeorm"
+
 import { AppDataSource } from "./dataSource"
 import { apiMainLogger } from "../../../app"
 
 export class Database {
-  async getDatabase() {
+  async getDatabase(): Promise<DataSource> {
     try {
       if(!AppDataSource.isInitialized) {
         const dataSource = await AppDataSource.initialize()
@@ -13,7 +15,7 @@ export class Database {
       }
     } catch (error) {
       apiMainLogger("Connection to database failed")
-      apiMainLogger(JSON.stringify(error, null, 2))
+      apiMainLogger(error)
     }
 
     return AppDataSource

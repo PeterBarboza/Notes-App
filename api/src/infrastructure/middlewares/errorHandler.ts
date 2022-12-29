@@ -7,8 +7,6 @@ import {
   ValidationError,
   AmmountAffectedError,
   GenericError,
-  UsernameAlreadyInUseError,
-  EmailAlreadyInUseError,
   AppError
 } from "../../errors"
 
@@ -40,12 +38,6 @@ export function errorHandler(
     return res.status(err.error.status).json({ message: err.error.message })
   }
   if (err instanceof GenericError) {
-    return res.status(err.error.status).json({ message: err.error.message })
-  }
-  if (err instanceof UsernameAlreadyInUseError) {
-    return res.status(err.error.status).json({ message: err.error.message })
-  }
-  if (err instanceof EmailAlreadyInUseError) {
     return res.status(err.error.status).json({ message: err.error.message })
   }
 

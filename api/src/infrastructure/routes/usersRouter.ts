@@ -24,6 +24,14 @@ usersRouter.patch(
   "/:id",
   notesController.updateOne.bind(notesController)
 )
+usersRouter.patch(
+  "/:id/email",
+  notesController.updateEmail.bind(notesController)
+)
+usersRouter.patch(
+  "/:id/password",
+  notesController.updatePassword.bind(notesController)
+)
 usersRouter.delete(
   "/:id",
   notesController.deleteOne.bind(notesController)
