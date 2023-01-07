@@ -17,10 +17,10 @@ export function isValidPassword(password: string, options?: isValidPasswordOptio
     specialChars: true
   }
   const minLenght = options?.minLenght || 8
-  const maxLenght = options?.maxLenght || undefined
+  const maxLenght = options?.maxLenght || 255
   const required = options?.required || defaultRequiredOptions
 
-  const numbersValidator = /[0-1]/
+  const numbersValidator = /[0-9]/
   const lowerCaseValidator = /[a-z]/
   const upperCaseValidator = /[A-Z]/
   const specialCharsValidator = /[!@#$%&*()\-_=+§`´\[\]{}^~º,<.>:;?°\'"\\]/
