@@ -24,8 +24,16 @@ export class NoteServices {
     return await this.repository.getMany(options)
   }
 
-  async getOne(noteSlug: string): Promise<Note> {
+  async getOneBySlug(noteSlug: string): Promise<Note> {
     const note = await this.repository.getOneBySlug(noteSlug)
+
+    if(!note) throw new NotFoundError({ entityName: "Note" })
+
+    return note
+  }
+
+  async getOneById(id: string): Promise<Note> {
+    const note = await this.repository.getOneById(id)
 
     if(!note) throw new NotFoundError({ entityName: "Note" })
 

@@ -209,19 +209,4 @@ export class UserServices {
       deletedCount
     }
   }
-
-  async authUser({ email, password }: authUserparams) {
-    const user = await this.repository.getOneByEmailWithPassword(email)
-    if(!user) throw new UnauthorizedError({ substituteMessage: "Email or password incorrect" })
-
-    const passwordMatch = compareSync(password, user.password)
-    if(!passwordMatch) throw new UnauthorizedError({ substituteMessage: "Email or password incorrect" })
-
-    const token = sign({}, CONFIG.jwtSecret, {
-      subject: user.id,
-      expiresIn: "20s"
-    })
-
-    return { token }
-  }
 }

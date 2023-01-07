@@ -9,7 +9,7 @@ import { UnauthorizedError, ValidationError } from "../../../errors"
 import { ExceptionsWrapper } from "../../middlewares/errorHandler"
 import { UpdateEmailDTO } from "./dto/UpdateEmailDTO"
 import { UpdatePasswordDTO } from "./dto/UpdatePasswordDTO"
-import { AuthUserDTO } from "./dto/AuthUserDTO"
+import { EnsureAuthenticated } from "../../middlewares/ensureAuthenticated"
 
 export class UsersController {
   services: UserServices
@@ -57,6 +57,7 @@ export class UsersController {
     return res.json(response)
   }
 
+  @EnsureAuthenticated()
   @ExceptionsWrapper()
   async updateOne(req: Request, res: Response): Promise<Response> {
     const { id } = req.params
@@ -65,24 +66,32 @@ export class UsersController {
     const errors = await validate(entity)
     if (errors.length > 0) throw new ValidationError(errors)
 
+    const isAValidOperation = req.userdata?.id && (req.userdata?.id === id)
+    if(!isAValidOperation) throw new UnauthorizedError({})
+
     const { updatedCount } = await this.services.updateOne(id, entity)
 
     return res.json({ updatedCount })
   }
 
+  @EnsureAuthenticated()
   @ExceptionsWrapper()
   async updateEmail(req: Request, res: Response): Promise<Response> {
     const { id } = req.params
     const entity = plainToInstance(UpdateEmailDTO, req.body)
-
+    
     const errors = await validate(entity)
     if (errors.length > 0) throw new ValidationError(errors)
+
+    const isAValidOperation = req.userdata?.id && (req.userdata?.id === id)
+    if(!isAValidOperation) throw new UnauthorizedError({})
 
     const { updatedCount } = await this.services.updateEmail(id, entity)
 
     return res.json({ updatedCount })
   }
   
+  @EnsureAuthenticated()
   @ExceptionsWrapper()
   async updatePassword(req: Request, res: Response): Promise<Response> {
     const { id } = req.params
@@ -91,29 +100,24 @@ export class UsersController {
     const errors = await validate(entity)
     if (errors.length > 0) throw new ValidationError(errors)
 
+    const isAValidOperation = req.userdata?.id && (req.userdata?.id === id)
+    if(!isAValidOperation) throw new UnauthorizedError({})
+
     const { updatedCount } = await this.services.updatePassword(id, entity)
 
     return res.json({ updatedCount })
   }
   
+  @EnsureAuthenticated()
   @ExceptionsWrapper()
   async deleteOne(req: Request, res: Response): Promise<Response> {
     const { id } = req.params
 
+    const isAValidOperation = req.userdata?.id && (req.userdata?.id === id)
+    if(!isAValidOperation) throw new UnauthorizedError({})
+
     const { deletedCount } = await this.services.deleteOne(id)
 
     return res.json({ deletedCount })
-  }
-
-  @ExceptionsWrapper()
-  async authUser(req: Request, res: Response): Promise<Response> {
-    const logInData = plainToInstance(AuthUserDTO, req.body)
-
-    const errors = await validate(logInData)
-    if (errors.length > 0) throw new ValidationError(errors)
-
-    const result = await this.services.authUser({ email: logInData.email, password: logInData.password })
-
-    return res.json(result)
   }
 }

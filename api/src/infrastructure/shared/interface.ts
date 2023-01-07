@@ -20,7 +20,9 @@ export type deleteOneResponse = {
 }
 
 export interface ITokenPayload {
-  username: string
+  sub: string
+  iat: number
+  exp: number
 }
 
 export interface INotesRepository<Entity> {

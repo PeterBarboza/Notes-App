@@ -8,7 +8,8 @@ const migrationsRelativePath = "infrastructure/repositories/typeorm/migrations/*
 export const CONFIG = {
   port: process.env.PORT || 3333,
   serverHost: process.env.SERVER_HOST!,
-  jwtSecret: process.env.JWT_SECRET!,
+  accessTokenSecret: process.env.ACCESS_TOKEN_SECRET!,
+  refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET!,
   typeorm: {
     dataSourceOptions: {
       type: "mysql",

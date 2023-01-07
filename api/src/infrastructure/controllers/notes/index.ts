@@ -5,8 +5,9 @@ import { validate } from "class-validator"
 import { NoteServices } from "../../../domain/services/NotesServices"
 import { CreateNoteDTO } from "./dto/CreateNoteDTO"
 import { UpdateNoteDTO } from "./dto/UpdateNoteDTO"
-import { ValidationError } from "../../../errors"
+import { UnauthorizedError, ValidationError } from "../../../errors"
 import { ExceptionsWrapper } from "../../middlewares/errorHandler"
+import { EnsureAuthenticated } from "../../middlewares/ensureAuthenticated"
 
 export class NotesController {
   services: NoteServices
@@ -37,11 +38,12 @@ export class NotesController {
   async getOne(req: Request, res: Response): Promise<Response> {
     const { noteSlug } = req.params
 
-    const response = await this.services.getOne(noteSlug)
+    const response = await this.services.getOneBySlug(noteSlug)
 
     return res.json(response)
   }
 
+  @EnsureAuthenticated()
   @ExceptionsWrapper()
   async create(req: Request, res: Response): Promise<Response> {
     const entity = plainToInstance(CreateNoteDTO, req.body)
@@ -49,11 +51,17 @@ export class NotesController {
     const errors = await validate(entity)
     if (errors.length > 0) throw new ValidationError(errors)
 
+    const isAValidOperation = 
+      !!req.userdata?.id && !!(req.userdata?.id === entity.author as unknown as string)
+
+    if(!isAValidOperation) throw new UnauthorizedError({})
+
     const response = await this.services.create(entity)
 
     return res.json(response)
   }
 
+  @EnsureAuthenticated()
   @ExceptionsWrapper()
   async updateOne(req: Request, res: Response): Promise<Response> {
     const { id } = req.params
@@ -62,14 +70,27 @@ export class NotesController {
     const errors = await validate(entity)
     if (errors.length > 0) throw new ValidationError(errors)
 
+    const isAValidOperation = 
+      !!req.userdata?.id && !!(req.userdata?.id === entity.author as unknown as string)
+
+    if(!isAValidOperation) throw new UnauthorizedError({})
+
     const { updatedCount } = await this.services.updateOne(id, entity)
 
     return res.status(200).json({ updatedCount })
   }
 
+  @EnsureAuthenticated()
   @ExceptionsWrapper()
   async deleteOne(req: Request, res: Response): Promise<Response> {
     const { id } = req.params
+
+    const noteToBeDeleted = await this.services.getOneById(id)
+
+    const isAValidOperation = 
+      !!req.userdata?.id && !!(req.userdata?.id === noteToBeDeleted?.author?.id as unknown as string)
+
+    if(!isAValidOperation) throw new UnauthorizedError({})
 
     const { deletedCount } = await this.services.deleteOne(id)
 

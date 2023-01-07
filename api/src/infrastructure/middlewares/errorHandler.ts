@@ -7,7 +7,8 @@ import {
   ValidationError,
   AmmountAffectedError,
   GenericError,
-  AppError
+  AppError,
+  ExpiredTokenError
 } from "../../errors"
 
 export function errorHandler(
@@ -33,6 +34,12 @@ export function errorHandler(
   }
   if (err instanceof UnauthorizedError) {
     return res.status(err.error.status).json({ message: err.error.message })
+  }
+  if (err instanceof ExpiredTokenError) {
+    return res.status(err.error.status).json({ 
+      message: err.error.message,
+      requestNewToken: err.error.requestNewToken
+    })
   }
   if (err instanceof AmmountAffectedError) {
     return res.status(err.error.status).json({ message: err.error.message })

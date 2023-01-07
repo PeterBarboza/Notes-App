@@ -22,8 +22,13 @@ export interface query extends ParsedQs {
   filters?: Filters
 }
 
+export interface userData {
+  id?: string
+}
+
 declare module 'express' {
   export interface Request extends express.Request {
     query: query
+    userdata?: userData
   }
 }

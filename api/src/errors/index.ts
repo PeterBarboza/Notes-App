@@ -8,6 +8,11 @@ type genericErrorReturn = {
   status: number
   message: string
 }
+type expiredTokenErrorReturn = {
+  status: number
+  message: string
+  requestNewToken: boolean
+}
 
 export type notFoundErrorConstructor = {
   entityName: string
@@ -30,6 +35,10 @@ export type emailAlreadyInUseErrorConstructor = {
 }
 export type usernameAlreadyInUseErrorConstructor = {
   substituteMessage?: string
+}
+export type expiredTokenErrorConstructor = {
+  substituteMessage?: string
+  requestNewToken: boolean
 }
 
 export type AppError = 
@@ -100,7 +109,19 @@ export class UnauthorizedError {
   constructor({ substituteMessage }: unauthorizedErrorConstructor) {
     this.error = {
       status: 401,
-      message: substituteMessage ? substituteMessage : `Unauthorized action`
+      message: substituteMessage ? substituteMessage : "Unauthorized action"
+    }
+  }
+}
+
+export class ExpiredTokenError {
+  error: expiredTokenErrorReturn
+
+  constructor({ substituteMessage, requestNewToken }: expiredTokenErrorConstructor) {
+    this.error = {
+      status: 401,
+      message: substituteMessage ? substituteMessage : "Token expired",
+      requestNewToken: requestNewToken
     }
   }
 }
