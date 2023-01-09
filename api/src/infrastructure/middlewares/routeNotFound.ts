@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response } from "express"
 
 import { AppError } from "../../errors"
+import { isError } from "../shared/utils/isError"
 
 export function routeNotFound(req: Request, res: Response, next: NextFunction): Response | void {
   const path = req?.originalUrl
 
-  //If has no path, the req object is an error from @ExceptionsWrapper() decorator
-  if(!path) return next(req)
+  //If true, it's an error catched from @ExceptionsWrapper() decorator
+  if(isError(req)) return next(req)
 
   const response = {
     message: `The path ${path} was not found in this server.`

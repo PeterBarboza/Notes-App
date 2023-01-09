@@ -47,6 +47,7 @@ export type AppError =
   GenericError |
   AmmountAffectedError |
   UnauthorizedError |
+  ExpiredTokenError |
   Error
 
 export class NotFoundError {
