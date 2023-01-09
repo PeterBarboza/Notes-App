@@ -1,0 +1,217 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Notes App API",
+    "description": "Full Notes App documentation",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Pedro Barboza",
+      "email": "pedro.barboza.dev@gmail.com",
+      "url": "https://pedrobarboza.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333/api/v1", 
+      "description": "Develop environment of the full application"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "summary": "Return a list of users",
+        "description": "",
+        "parameters": [
+          {
+            "name": "filters",
+            "in": "query",
+            "required": false,
+            "description": "It's possible to filter users by their data as in a simple `where` operation, use the `qs` lib sintax for this, like:`filters[username]=jonh_doe01`. You can set more filters by adding other filters objects with other brackets values corresponding to users data public fields and separating the filters using `&` between them. If you need to execute a search operation, use the `[GET]/users/search` functionality listed bellow.",
+            "schema": {
+              "readOnly": true
+            }
+          },
+          {
+            "name": "pagination[skip]",
+            "in": "query",
+            "required": false,
+            "description": "Set the ammount of users to skipon the request.",
+            "schema": {
+              "type": "string",
+              "example": "0"
+            }
+          },
+          {
+            "name": "pagination[limit]",
+            "in": "query",
+            "required": false,
+            "description": "Set the users limit to be taken on the request.",
+            "schema": {
+              "type": "string",
+              "example": "10"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON array with the users public data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "limit": {
+                          "type": "integer",
+                          "example": 10
+                        },
+                        "skip": {
+                          "type": "integer",
+                          "example": 0
+                        }
+                      }
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "f1218770-2543-4398-bac7-4993b3631a5e"
+                          },
+                          "username": {
+                            "type": "string",
+                            "example": "Carlos Bonfim"
+                          },
+                          "email": {
+                            "type": "string",
+                            "example": "carlos.bonfim@email.com"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2023-01-09T03:46:22.669Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "example": "2023-01-09T03:46:22.669Z"
+                          }
+                        }
+                      }             
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An message throwed when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{username}": {
+      "get": {
+        "summary": "Return the user selected",
+        "description": "",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "username",
+            "required": true,
+            "description": "The selected user username.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON with the user public data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "f1218770-2543-4398-bac7-4993b3631a5e"
+                    },
+                    "username": {
+                      "type": "string",
+                      "example": "Carlos Bonfim"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "carlos.bonfim@email.com"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2023-01-09T03:46:22.669Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2023-01-09T03:46:22.669Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Thrown when there is no user with that username",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An message throwed when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "error500": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "default": "Internal server error"
+          }
+        }
+      }
+    }
+  }
+}

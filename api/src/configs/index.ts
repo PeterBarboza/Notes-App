@@ -8,6 +8,7 @@ const migrationsRelativePath = "infrastructure/repositories/typeorm/migrations/*
 export const CONFIG = {
   port: process.env.PORT || 3333,
   serverHost: process.env.SERVER_HOST!,
+  environment: process.env.NODE_ENV || "develop",
   accessTokenSecret: process.env.ACCESS_TOKEN_SECRET!,
   refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET!,
   typeorm: {
