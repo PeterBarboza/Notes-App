@@ -16,10 +16,221 @@
       "description": "Develop environment of the full application"
     }
   ],
+  "tags": [
+    {
+      "name": "auth"
+    },
+    {
+      "name": "users"
+    },
+    {
+      "name": "notes"
+    }
+  ],
   "paths": {
+    "/auth": {
+      "post": {
+        "summary": "Auth a user by email and password returning access token and refresh token",
+        "tags": ["auth"],
+        "security": [],
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "default": "jonh_strong@email.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "default": "!Ab12345"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A JSON object with the access token and refresh token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "default": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZW1haWwiOiJqb2huX3N0cm9uZ0BlbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjJ9.m9QWi1MajowIR3JOx0KbuSXjinR8JYfiq0AqGuzKBvs"
+                    },
+                    "refreshToken": {
+                      "type": "string",
+                      "default": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZW1haWwiOiJqb2huX3N0cm9uZ0BlbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjJ9.jmHEiQwmBdLjE81_ZqDL09Qp3DjnXYtEkQIcZg6EbQk"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "These exceptions are thrown when some invalid data is sent",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Validation error": {
+                    "description": "A JSON object with an errors array containing the objects with them. Each object receive the property that is invalid with an string array explaining why it's invalid",
+                    "value": {
+                      "errors": [
+                        {
+                          "email": [
+                            "email should not be empty",
+                            "email must be an email"
+                          ]
+                        },
+                        {
+                          "password": [
+                            "password should not be empty",
+                            "password must be an string"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "These exceptions are thrown when wrong login data are sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Email or password incorrect"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An message thrown when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/rt": {
+      "post": {
+        "summary": "Auth a user by email and password returning access token and refresh token",
+        "tags": ["auth"],
+        "security": [],
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "refreshToken": {
+                    "type": "string",
+                    "default": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZW1haWwiOiJqb2huX3N0cm9uZ0BlbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjJ9.jmHEiQwmBdLjE81_ZqDL09Qp3DjnXYtEkQIcZg6EbQk"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A JSON object with the access token and refresh token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "default": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZW1haWwiOiJqb2huX3N0cm9uZ0BlbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjJ9.m9QWi1MajowIR3JOx0KbuSXjinR8JYfiq0AqGuzKBvs"
+                    },
+                    "refreshToken": {
+                      "type": "string",
+                      "default": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZW1haWwiOiJqb2huX3N0cm9uZ0BlbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjJ9.jmHEiQwmBdLjE81_ZqDL09Qp3DjnXYtEkQIcZg6EbQk"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "These exceptions are thrown when some invalid data is sent",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Validation error": {
+                    "description": "A JSON object with an errors array containing the objects with them. Each object receive the property that is invalid with an string array explaining why it's invalid",
+                    "value": {
+                      "errors": [
+                        {
+                          "refreshToken": [
+                            "email should not be empty",
+                            "email must be an email"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "These exceptions are thrown when a invalid token is sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Invalid token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An message thrown when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "summary": "Return a list of users",
+        "tags": ["users"],
+        "security": [],
         "description": "",
         "parameters": [
           {
@@ -54,7 +265,7 @@
         ],
         "responses": {
           "200": {
-            "description": "A JSON array with the users public data",
+            "description": "A JSON array with the pagination and users public data",
             "content": {
               "application/json": {
                 "schema": {
@@ -111,7 +322,117 @@
             }
           },
           "500": {
-            "description": "An message throwed when an unexpected error occurs",
+            "description": "An message thrown when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new user",
+        "tags": ["users"],
+        "security": [],
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "default": "jonh_strong"
+                  },
+                  "email": {
+                    "type": "string",
+                    "default": "jonh_strong@email.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "default": "!Ab12345"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A JSON object with the created user public data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "These exceptions are thrown when some invalid data is sent",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Validation error": {
+                    "description": "A JSON object with an errors array containing the objects with them. Each object receive the property that is invalid with an string array explaining why it's invalid",
+                    "value": {
+                      "errors": [
+                        {
+                          "username": [
+                            "username should not be empty",
+                            "username must be an string"
+                          ]
+                        },
+                        {
+                          "email": [
+                            "email should not be empty",
+                            "email must be an email"
+                          ]
+                        },
+                        {
+                          "password": [
+                            "password should not be empty",
+                            "password must be an string"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Username already in use error": {
+                    "description": "Thrown when the username has been taken",
+                    "value": {
+                      "message": "Username already in use"
+                    }
+                  },
+                  "Email already in use error": {
+                    "description": "Thrown when the email has been taken",
+                    "value": {
+                      "message": "Email already in use"
+                    }
+                  },
+                  "Invalid username error": {
+                    "description": "Thrown when the username don't follow the required format (minimal length of 2 characters and/or 2 letters. uppercase/lowercase, numbers and the following special chars [\"hifen(-)\", \"underline(_)\", \"dot(.)\"] are allowed).",
+                    "value": {
+                      "message": "Invalid username. Username must have at least 2 characteres length and 2 letters. You can use uppercase and lowercase letters, numbers and the following special characters: [\"hifen(-)\", \"underline(_)\", \"dot(.)\"]"
+                    }
+                  },
+                  "Invalid password error": {
+                    "description": "Thrown when the password don't follow the required format (minimal length of 8 characters , 1 special char, 1 uppercase letter and 1 lowercase letter).",
+                    "value": {
+                      "message": "Invalid password. Password must have at least 8 characters length, 1 special character, 1 uppercase letter and 1 lowercase letter"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An message thrown when an unexpected error occurs",
             "content": {
               "application/json": {
                 "schema": {
@@ -126,6 +447,8 @@
     "/users/{username}": {
       "get": {
         "summary": "Return the user selected",
+        "tags": ["users"],
+        "security": [],
         "description": "",
         "parameters": [
           {
@@ -144,29 +467,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "example": "f1218770-2543-4398-bac7-4993b3631a5e"
-                    },
-                    "username": {
-                      "type": "string",
-                      "example": "Carlos Bonfim"
-                    },
-                    "email": {
-                      "type": "string",
-                      "example": "carlos.bonfim@email.com"
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "example": "2023-01-09T03:46:22.669Z"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "example": "2023-01-09T03:46:22.669Z"
-                    }
-                  }
+                  "$ref": "#/components/schemas/user"
                 }
               }
             }
@@ -188,7 +489,656 @@
             }
           },
           "500": {
-            "description": "An message throwed when an unexpected error occurs",
+            "description": "An message thrown when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "patch": {
+        "summary": "Updates an existent user",
+        "tags": ["users"],
+        "description": "",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The selected user id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "default": "jonh_strong"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A JSON object with the ammount of entities updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/successFullUpdate"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "These exceptions are thrown when some invalid data is sent",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Validation error": {
+                    "description": "A JSON object with an errors array containing the objects with them. Each object receive the property that is invalid with an string array explaining why it's invalid",
+                    "value": {
+                      "errors": [
+                        {
+                          "username": [
+                            "username must be an string"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Username already in use error": {
+                    "description": "Thrown when the username has been taken",
+                    "value": {
+                      "message": "Username already in use"
+                    }
+                  },
+                  "Invalid username error": {
+                    "description": "Thrown when the username don't follow the required format (minimal length of 2 characters and/or 2 letters. uppercase/lowercase, numbers and the following special chars [\"hifen(-)\", \"underline(_)\", \"dot(.)\"] are allowed).",
+                    "value": {
+                      "message": "Invalid username. Username must have at least 2 characteres length and 2 letters. You can use uppercase and lowercase letters, numbers and the following special characters: [\"hifen(-)\", \"underline(_)\", \"dot(.)\"]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Thrown when the logged in user try to update another user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized action"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Thrown when there is no user with that id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An message thrown when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an existent user",
+        "tags": ["users"],
+        "description": "",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The selected user id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON object with the ammount of entities deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/successFullDelete"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "These exceptions are thrown when some invalid data is sent",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Ammount affected error": {
+                    "description": "Thrown when more or less than 1(one) entities are affected by the update",
+                    "value": {
+                      "message": "1 User(s) should be affected but 0 was affected"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Thrown when the logged in user try to update another user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized action"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Thrown when there is no user with that id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An message thrown when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}/email": {
+      "patch": {
+        "summary": "Updates an existent user email",
+        "tags": ["users"],
+        "description": "",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The selected user id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "default": "jonh_strong@email.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "default": "!Ab12345"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A JSON object with the ammount of entities updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/successFullUpdate"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "These exceptions are thrown when some invalid data is sent",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Validation error": {
+                    "description": "A JSON object with an errors array containing the objects with them. Each object receive the property that is invalid with an string array explaining why it's invalid",
+                    "value": {
+                      "errors": [
+                        {
+                          "email": [
+                            "email should not be empty",
+                            "email must be an string"
+                          ],
+                          "password": [
+                            "password should not be empty",
+                            "password must be an string"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Email already in use error": {
+                    "description": "Thrown when the email has been taken",
+                    "value": {
+                      "message": "Email already in use"
+                    }
+                  },
+                  "Invalid username error": {
+                    "description": "Thrown when the username don't follow the required format (minimal length of 2 characters and/or 2 letters. uppercase/lowercase, numbers and the following special chars [\"hifen(-)\", \"underline(_)\", \"dot(.)\"] are allowed).",
+                    "value": {
+                      "message": "Invalid username. Username must have at least 2 characteres length and 2 letters. You can use uppercase and lowercase letters, numbers and the following special characters: [\"hifen(-)\", \"underline(_)\", \"dot(.)\"]"
+                    }
+                  },
+                  "User not found error": {
+                    "description": "Thrown when a user with the given id is not found",
+                    "value": {
+                      "message": "User not found"
+                    }
+                  },
+                  "Incorrect pasword error": {
+                    "description": "Thrown when the wrong password is sent",
+                    "value": {
+                      "message": "Incorrect password"
+                    }
+                  },
+                  "Equal email error": {
+                    "description": "Thrown when the new and old emails are equal",
+                    "value": {
+                      "message": "The new and old emails are equal"
+                    }
+                  },
+                  "Ammount affected error": {
+                    "description": "Thrown when more or less than 1(one) entities are affected by the update",
+                    "value": {
+                      "message": "1 User(s) should be affected but 0 was affected"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Thrown when the logged in user try to update another user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized action"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Thrown when there is no user with that id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An message thrown when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}/password": {
+      "patch": {
+        "summary": "Updates an existent user password",
+        "tags": ["users"],
+        "description": "",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The selected user id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "oldPassword": {
+                    "type": "string",
+                    "default": "!Ab12345"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "default": "@abcABC123456"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A JSON object with the ammount of entities updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/successFullUpdate"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "These exceptions are thrown when some invalid data is sent",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Validation error": {
+                    "description": "A JSON object with an errors array containing the objects with them. Each object receive the property that is invalid with an string array explaining why it's invalid",
+                    "value": {
+                      "errors": [
+                        {
+                          "oldPassword": [
+                            "oldPassword should not be empty",
+                            "oldPassword must be an string"
+                          ],
+                          "newPassword": [
+                            "newPassword should not be empty",
+                            "newPassword must be an string"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Incorrect pasword error": {
+                    "description": "Thrown when the wrong password is sent",
+                    "value": {
+                      "message": "Incorrect password"
+                    }
+                  },
+                  "Invalid password error": {
+                    "description": "Thrown when the new password don't follow the required format (minimal length of 8 characters , 1 special char, 1 uppercase letter and 1 lowercase letter).",
+                    "value": {
+                      "message": "Invalid password. Password must have at least 8 characters length, 1 special character, 1 uppercase letter and 1 lowercase letter"
+                    }
+                  },
+                  "User not found error": {
+                    "description": "Thrown when a user with the given id is not found",
+                    "value": {
+                      "message": "User not found"
+                    }
+                  },
+                  "Equal email error": {
+                    "description": "Thrown when the new and old emails are equal",
+                    "value": {
+                      "message": "The new and old emails are equal"
+                    }
+                  },
+                  "Ammount affected error": {
+                    "description": "Thrown when more or less than 1(one) entities are affected by the update",
+                    "value": {
+                      "message": "1 User(s) should be affected but 0 was affected"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Thrown when the logged in user try to update another user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized action"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Thrown when there is no user with that id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An message thrown when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notes": {
+      "get": {
+        "summary": "Return a list of notes",
+        "tags": ["notes"],
+        "security": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "filters[search]",
+            "in": "query",
+            "required": false,
+            "description": "It's possible to do searchs by the notes title and content.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pagination[skip]",
+            "in": "query",
+            "required": false,
+            "description": "Set the ammount of users to skipon the request.",
+            "schema": {
+              "type": "string",
+              "example": "0"
+            }
+          },
+          {
+            "name": "pagination[limit]",
+            "in": "query",
+            "required": false,
+            "description": "Set the users limit to be taken on the request.",
+            "schema": {
+              "type": "string",
+              "example": "10"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON array with the pagination and notes data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "limit": {
+                          "type": "integer",
+                          "example": 10
+                        },
+                        "skip": {
+                          "type": "integer",
+                          "example": 0
+                        }
+                      }
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "f1218770-2543-4398-bac7-4993b3631a5e"
+                          },
+                          "noteSlug": {
+                            "type": "string",
+                            "example": "my-first-note"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "My first note"
+                          },
+                          "content": {
+                            "type": "string",
+                            "example": "lorem ipsum dolor set amet in pan le cruix pe salvare."
+                          },
+                          "author": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "example": "f1218770-2543-4398-bac7-4993b3631a5e"
+                              },
+                              "username": {
+                                "type": "string",
+                                "example": "jonh_strong"
+                              },
+                              "email": {
+                                "type": "string",
+                                "example": "jonh_strong@email.com"
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "example": "2023-01-09T03:46:22.669Z"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "example": "2023-01-09T03:46:22.669Z"
+                              }
+                            }
+                          },
+                          "privacyStatus": {
+                            "type": "string",
+                            "example": "public"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2023-01-09T03:46:22.669Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "example": "2023-01-09T03:46:22.669Z"
+                          }
+                        }
+                      }             
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An message thrown when an unexpected error occurs",
             "content": {
               "application/json": {
                 "schema": {
@@ -201,6 +1151,7 @@
       }
     }
   },
+
   "components": {
     "schemas": {
       "error500": {
@@ -211,7 +1162,62 @@
             "default": "Internal server error"
           }
         }
+      },
+      "successFullUpdate": {
+        "type": "object",
+        "properties": {
+          "updatedCount": {
+            "type": "integer",
+            "default": 1
+          }
+        }
+      },
+      "successFullDelete": {
+        "type": "object",
+        "properties": {
+          "deletedCount": {
+            "type": "integer",
+            "default": 1
+          }
+        }
+      },
+      "user": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "f1218770-2543-4398-bac7-4993b3631a5e"
+          },
+          "username": {
+            "type": "string",
+            "example": "jonh_strong"
+          },
+          "email": {
+            "type": "string",
+            "example": "jonh_strong@email.com"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-01-09T03:46:22.669Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-01-09T03:46:22.669Z"
+          }
+        }
       }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT" 
+      }            
     }
-  }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }
