@@ -22,10 +22,10 @@ export class NotesRepository extends TypeORMBaseRepository implements INotesRepo
       const searchWords: string[] = filters.search.trim().split(" ")
       const conditions = searchWords
         .map((word) => {
-            if (word.includes(" ") || word.length < 1) {
-                return
-            }
-            return Like(`%${word}%`)
+          if (word.includes(" ") || word.length < 1) {
+              return
+          }
+          return Like(`%${word}%`)
         })
         .filter((like) => (like ? true : false))
 
@@ -45,10 +45,10 @@ export class NotesRepository extends TypeORMBaseRepository implements INotesRepo
         })
 
       return {
-          results,
-          total,
+        results,
+        total,
       }
-  }
+    }
 
     const selectedFilters: getManyOptionsFilter = pick(filters, [
       "id",
