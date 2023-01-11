@@ -21,13 +21,15 @@ export type deleteOneResponse = {
 
 export interface ITokenPayload {
   sub: string
+  username: string
   iat: number
   exp: number
 }
 
 export interface INotesRepository<Entity> {
   getMany(options: getManyOptions): Promise<getManyResponse<Entity>>
-  getOneBySlug(id: string): Promise<Entity>
+  getOneBySlug(id: string, userId?: string): Promise<Entity>
+  getOneBySlugOnlyForVerification(id: string): Promise<Entity>
   getOneById(id: string): Promise<Entity>
   create(data: Entity): Promise<Entity>
   updateOne(id: string, entity: Partial<Entity>): Promise<updateOneResponse>
@@ -37,7 +39,7 @@ export interface INotesRepository<Entity> {
 export interface IUsersRepository<Entity> {
   getMany(options: getManyOptions): Promise<getManyResponse<Entity>>
   getOneByUsername(username: string): Promise<Entity>
-  getOneByUsernameWithNotes(username: string, privacyStatus: string): Promise<Entity>
+  getOneByUsernameWithNotes(username: string, privacyStatus: string[]): Promise<Entity>
   getOneByEmail(email: string): Promise<Entity>
   getOneById(id: string): Promise<Entity>
   getOneByIdWithEmailAndPassword(id: string): Promise<Entity>

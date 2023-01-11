@@ -45,7 +45,7 @@ export function EnsureAuthenticated() {
           throw new UnauthorizedError({ substituteMessage: "Invalid token" })
         }
         
-        req.userdata = { id: tokenData.sub }
+        req.userdata = { id: tokenData.sub, username: tokenData.username }
 
         return await originalMethod.apply(this, [req, res, next])
       } catch (err) {

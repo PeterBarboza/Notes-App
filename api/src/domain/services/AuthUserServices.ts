@@ -31,10 +31,16 @@ export class AuthUserServices {
       subject: user.id,
       expiresIn: "30d"
     })
-    const accessToken = sign({}, CONFIG.accessTokenSecret, {
-      subject: user.id,
-      expiresIn: "1h"
-    })
+    const accessToken = sign(
+      {
+        username: user.username
+      },
+      CONFIG.accessTokenSecret,
+      {
+        subject: user.id,
+        expiresIn: "1h"
+      }
+    )
 
     return { accessToken, refreshToken }
   }
@@ -54,10 +60,15 @@ export class AuthUserServices {
       subject: user.id,
       expiresIn: "30d"
     })
-    const accessToken = sign({}, CONFIG.accessTokenSecret, {
-      subject: user.id,
-      expiresIn: "1h"
-    })
+    const accessToken = sign({
+        username: user.username
+      },
+      CONFIG.accessTokenSecret,
+      {
+        subject: user.id,
+        expiresIn: "1h"
+      }
+    )
 
     return { accessToken, refreshToken: newRefreshToken }
   }

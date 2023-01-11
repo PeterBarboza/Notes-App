@@ -52,12 +52,12 @@ export class UsersController {
     const { username } = req.params
 
     if(req.userdata?.username && (req.userdata.username === username)) {
-      const response = await this.services.getOneByUsernameWithNotes(username, "private")
+      const response = await this.services.getOneByUsernameWithNotes(username, ["private", "public"])
   
       return res.json(response)
     }
 
-    const response = await this.services.getOneByUsernameWithNotes(username, "public")
+    const response = await this.services.getOneByUsernameWithNotes(username, ["public"])
 
     return res.json(response)
   }

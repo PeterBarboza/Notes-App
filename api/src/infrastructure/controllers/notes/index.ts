@@ -8,6 +8,7 @@ import { UpdateNoteDTO } from "./dto/UpdateNoteDTO"
 import { UnauthorizedError, ValidationError } from "../../../errors"
 import { ExceptionsWrapper } from "../../middlewares/errorHandler"
 import { EnsureAuthenticated } from "../../middlewares/ensureAuthenticated"
+import { OptionalAuthenticated } from "../../middlewares/optionalAuthenticated"
 
 export class NotesController {
   services: NoteServices
@@ -34,10 +35,17 @@ export class NotesController {
     })
   }
 
+  @OptionalAuthenticated()
   @ExceptionsWrapper()
   async getOne(req: Request, res: Response): Promise<Response> {
     const { noteSlug } = req.params
 
+    if(req.userdata?.id) {
+      const response = await this.services.getOneBySlug(noteSlug, req.userdata?.id)
+  
+      return res.json(response)
+    }
+    
     const response = await this.services.getOneBySlug(noteSlug)
 
     return res.json(response)

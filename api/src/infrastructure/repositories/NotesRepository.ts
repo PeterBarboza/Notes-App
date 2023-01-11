@@ -30,11 +30,8 @@ export class NotesRepository extends TypeORMBaseRepository implements INotesRepo
         .filter((like) => (like ? true : false))
 
       const searchFilters = [
-        ...conditions.map((condition) => ({ title: condition })),
-        ...conditions.map((condition) => ({ content: condition })),
-        {
-          privacyStatus: "public"
-        }
+        ...conditions.map((condition) => ({ title: condition, privacyStatus: "public" })),
+        ...conditions.map((condition) => ({ content: condition, privacyStatus: "public" }))
       ]
 
       const [results, total] = await repository
@@ -81,13 +78,42 @@ export class NotesRepository extends TypeORMBaseRepository implements INotesRepo
     }
   }
 
-  async getOneBySlug(noteSlug: string): Promise<NoteModel> {
+  async getOneBySlug(noteSlug: string, userId?: string): Promise<NoteModel> {
+    const database = await this.database.getDatabase()
+    const repository = database.getRepository(NoteModel)
+
+    if(!userId) {
+      const result = await repository.findOne({
+        where: {
+          noteSlug: noteSlug,
+          privacyStatus: "public"
+        }
+      })
+
+      return result!
+    }
+
+    const result = await repository.findOne({
+      where: [
+        { noteSlug: noteSlug, author: { id: userId } },
+        { noteSlug: noteSlug, privacyStatus: "public" }
+      ]
+    })
+
+    return result!
+  }
+
+  async getOneBySlugOnlyForVerification(noteSlug: string): Promise<NoteModel> {
     const database = await this.database.getDatabase()
     const repository = database.getRepository(NoteModel)
 
     const result = await repository.findOne({
       where: {
         noteSlug: noteSlug
+      },
+      select: {
+        noteSlug: true,
+        id: true
       }
     })
 

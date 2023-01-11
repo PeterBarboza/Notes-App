@@ -56,22 +56,29 @@ export class UsersRepository extends TypeORMBaseRepository implements IUsersRepo
   }
 
   //TODO: Melhorar a lógica do usuário sem notas
-  async getOneByUsernameWithNotes(username: string, privacyStatus: string): Promise<UserModel> {
+  async getOneByUsernameWithNotes(username: string, privacyStatus: string[]): Promise<UserModel> {
     const database = await this.database.getDatabase()
     const repository = database.getRepository(UserModel)
 
     //TODO: Entender como tratar relacionamentos com query builder
     const result = await repository
-      .createQueryBuilder("user")
-      .select("user.username", "username")
-      .addSelect("user.id")
-      .addSelect("user.username")
-      .addSelect("user.createdAt")
-      .addSelect("user.updatedAt")
-      .addSelect("user.notes")
-      .where("username = :username", { username: username })
-      .andWhere("user.notes.privacyStatus = :privacyStatus ", { privacyStatus: privacyStatus })
-      .getOne()
+    .createQueryBuilder("user")
+    .leftJoinAndSelect("user.notes", "note")
+    .where("user.username = :username", { username: username })
+    .andWhere("note.privacyStatus IN (:...privacyStatus)", { privacyStatus: privacyStatus })
+    .getOne()
+
+    // const result = await repository
+    //   .createQueryBuilder("user")
+    //   .select("user.username", "username")
+    //   .addSelect("user.id")
+    //   .addSelect("user.username")
+    //   .addSelect("user.createdAt")
+    //   .addSelect("user.updatedAt")
+    //   .addSelect("user.notes")
+    //   .where("username = :username", { username: username })
+    //   .andWhere("user.notes.privacyStatus = :privacyStatus ", { privacyStatus: privacyStatus })
+    //   .getOne()
 
     // const result = await repository.findOne({
     //   where: {

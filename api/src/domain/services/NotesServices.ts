@@ -31,8 +31,8 @@ export class NoteServices {
     })
   }
 
-  async getOneBySlug(noteSlug: string): Promise<Note> {
-    const note = await this.repository.getOneBySlug(noteSlug)
+  async getOneBySlug(noteSlug: string, userId?: string): Promise<Note> {
+    const note = await this.repository.getOneBySlug(noteSlug, userId)
 
     if(!note) throw new NotFoundError({ entityName: "Note" })
 
@@ -50,7 +50,7 @@ export class NoteServices {
   async create(entity: Note): Promise<Note> {
     const noteSlug = await hasEqualSlug({
       slugToVerify: formatNoteSlug(entity.title),
-      verifierFunction: this.repository.getOneBySlug.bind(this.repository)
+      verifierFunction: this.repository.getOneBySlugOnlyForVerification.bind(this.repository)
     })
 
     const parsedEntity: Note = {
@@ -72,7 +72,7 @@ export class NoteServices {
     if(hasTitleChanges) {
       const noteSlug = await hasEqualSlug({
         slugToVerify: formatNoteSlug(entity.title!),
-        verifierFunction: this.repository.getOneBySlug.bind(this.repository)
+        verifierFunction: this.repository.getOneBySlugOnlyForVerification.bind(this.repository)
       })
 
       const { updatedCount } = await this.repository.updateOne(id, { ...entity, noteSlug })

@@ -58,7 +58,7 @@ export class UserServices {
     return user
   }
 
-  async getOneByUsernameWithNotes(username: string, privacyStatus: string): Promise<User> {
+  async getOneByUsernameWithNotes(username: string, privacyStatus: string[]): Promise<User> {
     const user = await this.repository.getOneByUsernameWithNotes(username, privacyStatus)
 
     if(!user) throw new NotFoundError({ entityName: "User" })
