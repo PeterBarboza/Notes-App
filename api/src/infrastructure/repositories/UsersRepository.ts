@@ -55,65 +55,20 @@ export class UsersRepository extends TypeORMBaseRepository implements IUsersRepo
     return result!
   }
 
-  //TODO: Melhorar a lógica do usuário sem notas
   async getOneByUsernameWithNotes(username: string, privacyStatus: string[]): Promise<UserModel> {
     const database = await this.database.getDatabase()
     const repository = database.getRepository(UserModel)
 
-    //TODO: Entender como tratar relacionamentos com query builder
     const result = await repository
     .createQueryBuilder("user")
-    .leftJoinAndSelect("user.notes", "note")
+    .leftJoinAndSelect(
+      "user.notes",
+      "note",
+      "note.privacyStatus IN (:...privacyStatus)",
+      { privacyStatus: privacyStatus }
+    )
     .where("user.username = :username", { username: username })
-    .andWhere("note.privacyStatus IN (:...privacyStatus)", { privacyStatus: privacyStatus })
     .getOne()
-
-    // const result = await repository
-    //   .createQueryBuilder("user")
-    //   .select("user.username", "username")
-    //   .addSelect("user.id")
-    //   .addSelect("user.username")
-    //   .addSelect("user.createdAt")
-    //   .addSelect("user.updatedAt")
-    //   .addSelect("user.notes")
-    //   .where("username = :username", { username: username })
-    //   .andWhere("user.notes.privacyStatus = :privacyStatus ", { privacyStatus: privacyStatus })
-    //   .getOne()
-
-    // const result = await repository.findOne({
-    //   where: {
-    //     username: username,
-    //     notes: {
-    //       privacyStatus: privacyStatus || "public"
-    //     }
-    //   },
-    //   select: {
-    //     notes: {
-    //       content: true,
-    //       createdAt: true,
-    //       id: true,
-    //       noteSlug: true,
-    //       title: true,
-    //       updatedAt: true,
-    //       privacyStatus: true,
-    //     }
-    //   }
-    // })
-
-    if(!result) {
-      const userWithoutNotes = await repository.findOne({
-        where: {
-          username: username
-        }
-      })
-
-      if(!userWithoutNotes) return userWithoutNotes!
-
-      return {
-        ...userWithoutNotes,
-        notes: []
-      }
-    }
 
     return result!
   }

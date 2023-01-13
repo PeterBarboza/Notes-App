@@ -20,7 +20,7 @@ export class NoteServices {
     this.repository = repository
   }
 
-  async getPublicFeed({ limit, skip, filters }: getManyOptions): Promise<any> {
+  async getPublicFeed({ limit, skip, filters }: getManyOptions): Promise<getManyResponse<Note>> {
     return await this.repository.getMany({
       limit, 
       skip, 
@@ -49,14 +49,17 @@ export class NoteServices {
 
   async create(entity: Note): Promise<Note> {
     const noteSlug = await hasEqualSlug({
-      slugToVerify: formatNoteSlug(entity.title),
+      slugToVerify: formatNoteSlug(entity.title.trim()),
       verifierFunction: this.repository.getOneBySlugOnlyForVerification.bind(this.repository)
     })
 
     const parsedEntity: Note = {
-      ...entity,
       id: uuid(),
       noteSlug: noteSlug,
+      title: entity.title.trim(),
+      author: entity.author,
+      content: entity.content.trim(),
+      privacyStatus: entity.privacyStatus
     }
 
     return await this.repository.create(parsedEntity)
@@ -67,8 +70,10 @@ export class NoteServices {
 
     if(!note) throw new NotFoundError({ entityName: "Note" })
 
-    const hasTitleChanges = entity.title && !(entity.title === note.title) ? true : false
+    if(entity.content) entity.content = entity.content.trim()
 
+    const hasTitleChanges = entity.title && !(entity.title === note.title) ? true : false
+    
     if(hasTitleChanges) {
       const noteSlug = await hasEqualSlug({
         slugToVerify: formatNoteSlug(entity.title!),

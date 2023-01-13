@@ -38,7 +38,7 @@ export function OptionalAuthenticated() {
 
           const tokenData = verifyAccessToken(token)
           
-          if (!tokenData || !tokenData?.sub) {
+          if (!tokenData || !tokenData?.sub || !tokenData?.username) {
             throw new UnauthorizedError({ substituteMessage: "Invalid token" })
           }
           

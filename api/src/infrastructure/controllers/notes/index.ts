@@ -9,6 +9,7 @@ import { UnauthorizedError, ValidationError } from "../../../errors"
 import { ExceptionsWrapper } from "../../middlewares/errorHandler"
 import { EnsureAuthenticated } from "../../middlewares/ensureAuthenticated"
 import { OptionalAuthenticated } from "../../middlewares/optionalAuthenticated"
+import { haveLettersVerify } from "../../shared/utils/haveLettersVerify"
 
 export class NotesController {
   services: NoteServices
@@ -59,6 +60,17 @@ export class NotesController {
     const errors = await validate(entity)
     if (errors.length > 0) throw new ValidationError(errors)
 
+    const haveLetters = haveLettersVerify(entity.title)
+    if (!haveLetters) 
+      throw new ValidationError([
+        { 
+          property: "title", 
+          constraints: { 
+            title: "title must have at least one letter"
+          }
+        }
+      ])
+
     const isAValidOperation = 
       !!req.userdata?.id && !!(req.userdata?.id === entity.author as unknown as string)
 
@@ -77,6 +89,19 @@ export class NotesController {
     
     const errors = await validate(entity)
     if (errors.length > 0) throw new ValidationError(errors)
+
+    if(entity.title) {
+      const haveLetters = haveLettersVerify(entity.title)
+      if (!haveLetters) 
+        throw new ValidationError([
+          { 
+            property: "title", 
+            constraints: { 
+              title: "title must have at least one letter"
+            }
+          }
+        ])
+    }
 
     const isAValidOperation = 
       !!req.userdata?.id && !!(req.userdata?.id === entity.author as unknown as string)

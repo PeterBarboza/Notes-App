@@ -23,7 +23,7 @@ export function isValidPassword(password: string, options?: isValidPasswordOptio
   const numbersValidator = /[0-9]/
   const lowerCaseValidator = /[a-z]/
   const upperCaseValidator = /[A-Z]/
-  const specialCharsValidator = /[!@#$%&*()\-_=+§`´\[\]{}^~º,<.>:;?°\'"\\]/
+  const specialCharsValidator = /[!@#$%&*()\-_=+§`´\[\]{}^~º,<.>:;?°\'"\\/]/
   
   const parsedPassword = password.trim()
 
