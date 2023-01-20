@@ -1,9 +1,9 @@
 import { v4 as uuid } from "uuid"
+import slug from "slug"
 
 import { Note } from "../entities/Note"
-import { formatNoteSlug } from "../../infrastructure/shared/utils/formatNoteSlug"
 import { hasEqualSlug } from "../../infrastructure/shared/utils/hasEqualSlug"
-import { GenericError, NotFoundError, AmmountAffectedError } from "../../errors"
+import { NotFoundError, AmmountAffectedError } from "../../errors"
 
 import { 
   INotesRepository, 
@@ -49,7 +49,7 @@ export class NoteServices {
 
   async create(entity: Note): Promise<Note> {
     const noteSlug = await hasEqualSlug({
-      slugToVerify: formatNoteSlug(entity.title.trim()),
+      slugToVerify: slug(entity.title.trim()),
       verifierFunction: this.repository.getOneBySlugOnlyForVerification.bind(this.repository)
     })
 
@@ -76,13 +76,19 @@ export class NoteServices {
     
     if(hasTitleChanges) {
       const noteSlug = await hasEqualSlug({
-        slugToVerify: formatNoteSlug(entity.title!),
+        slugToVerify: slug((entity.title!).trim()),
         verifierFunction: this.repository.getOneBySlugOnlyForVerification.bind(this.repository)
       })
 
       const { updatedCount } = await this.repository.updateOne(id, { ...entity, noteSlug })
 
-      if(updatedCount < 1) throw new GenericError({ message: "Note not affected" })
+      if(updatedCount != 1) {
+      throw new AmmountAffectedError({ 
+        entityName: "Note",
+        shouldBeAffect: 1,
+        wasAffected: updatedCount,
+      })
+    }
 
       return {
         updatedCount

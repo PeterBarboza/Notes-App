@@ -12,7 +12,10 @@ const apiMainLogger = logger("api:main")
 const app = express()
 
 //TODO: Configurar o cors corretamente antes do deploy
-app.use(cors())
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "PATCH", "POST", "DELETE"]
+}))
 app.use(requestsLogger)
 
 app.use(express.urlencoded({ extended: true }))

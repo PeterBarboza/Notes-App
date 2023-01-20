@@ -1,8 +1,10 @@
 export function haveLettersVerify(text: string) {
-  const upperCase = /[ABCDEFGHIJKLMNOPQRSTUVWXYZ]/
-  const lowerCase = /[abcdefghijklmnopqrstuvwxyz]/
+  const lettersRegex = /[abcdefghijklmnopqrstuvwxyz]/gi
+  const normalizeRegex = /[\u0300-\u036f]/g
 
-  if(upperCase.test(text) || lowerCase.test(text)) {
+  const normalizedText = text.normalize("NFD").replace(normalizeRegex, "")
+
+  if(lettersRegex.test(normalizedText)) {
     return true
   }
 
