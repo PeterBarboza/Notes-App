@@ -21,7 +21,7 @@ export function FullNote({
     <main className={styles.fullNote}>
       <h1>{title}</h1>
       <p className={styles.author}>
-        Escrito por: <Link href={`/${author.username}`}><span>{author.username}</span></Link>
+        Escrito por: <Link href={`/app/users/${author.username}`}><span>{author.username}</span></Link>
       </p>
       <p className={styles.lastUpdate}>Última atualização - {lastUpdate}</p>
       <p className={styles.content}>

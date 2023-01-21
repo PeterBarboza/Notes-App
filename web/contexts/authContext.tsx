@@ -33,7 +33,7 @@ export default function AuthContextProvider({ children }: props) {
       setCredentials({
         accessToken: result.data.accessToken
       })
-      localStorage.setItem("notes_app_refresh_token", result.data.accessToken)
+      localStorage.setItem("notes_app_refresh_token", result.data.refreshToken)
       setAuthRequestFinished(true)
       console.log("token refresh executed")
     } catch (error) {

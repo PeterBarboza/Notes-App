@@ -1,5 +1,5 @@
 export default function Home() {
   return (
-    <p style={{fontSize: "2rem"}}>Aqui vai ser o website, a Landing page</p>
+    <div style={{fontSize: "1.8rem"}}>Landing page</div>
   )
 }

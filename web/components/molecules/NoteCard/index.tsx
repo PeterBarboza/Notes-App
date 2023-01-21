@@ -34,7 +34,7 @@ export function NoteCard({
   }, [])
 
   return (
-    <Link href={`/${author.username}/${noteSlug}`} className={styles.linkWrap}>
+    <Link href={`/app/users/${author.username}/${noteSlug}`} className={styles.linkWrap}>
       <article className={styles.noteCard} title={`${title} - ${author.username}`}>
         <div className={styles.cardHeading}>
           {PrivacyIcon(privacyStatus)}

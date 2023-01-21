@@ -24,7 +24,7 @@ export function Header() {
   return (
     <>
       <header className={styles.header}>
-        <Link href="/notas-publicas">
+        <Link href="/app/notas-publicas">
           <div className={styles.logo}>
             <span>Notes</span>
           </div>
@@ -103,7 +103,7 @@ export function Header() {
         </div>
         <ul className={styles.sideBarOptionsBox}>
           <Link 
-            href="/minhas-notas"
+            href="/#"
             className={styles.optionLinkWrap}
           >
             <li>Minhas notas</li>
