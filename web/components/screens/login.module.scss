@@ -1,0 +1,97 @@
+.loginWrapper {
+  width: 100%;
+  min-height: 100vh;
+  height: fit-content;
+
+  padding: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #868686;
+
+  .loginBox {
+    width: 100%;
+    max-width: 500px;
+
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+  
+    border-radius: 5px;
+
+    background-color: #ffffff;
+    color: #616161;
+    
+    .form {
+      width: 100%;
+      height: 100%;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 20px;
+
+      .formField {
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 5px;
+
+        label {
+          font-size: 1.4rem;
+        }
+  
+        input {
+          width: 100%;
+          height: 40px;
+          padding: 0 10px;
+
+          color: #616161;
+          background-color: #f7f7f7;
+
+          border: 1px solid #b8b8b8;
+          border-radius: 2px;
+        }
+      }
+
+      .inputSubmit {
+        width: fit-content;
+        height: 40px;
+        padding: 0 10px;
+
+        font-size: 1.4rem;
+        align-self: flex-end;
+
+        border: 0;
+        border-radius: 2px;
+        background-color: #0084FF;
+        color: #ffffff;
+        cursor: pointer;
+      }
+    }
+
+    .continueWithoutLogin {
+      width: 100%;
+      height: fit-content;
+
+      text-align: center;
+
+      p {
+        font-size: 1.6rem;
+        color: #0084FF;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+  }
+}

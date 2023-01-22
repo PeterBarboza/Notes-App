@@ -3,8 +3,8 @@ import { useCallback, useEffect, useState, useContext } from "react"
 import { FullNote } from "../../../../../components/organisms/FullNote"
 import { NotesServiceFactory } from "../../../../../services/factories/notesServiceFactory"
 
-import { Note } from "../../../../../interface"
-import { GetOneResponse } from "../../../../../services/shared/interface"
+import { Note } from "../../../../../interface/schemas"
+import { GetOneResponse } from "../../../../../services/shared/interface/responses"
 import { AuthContext } from "../../../../../contexts/authContext"
 import { SingleNote } from "../../../../../components/screens/SingleNote"
 

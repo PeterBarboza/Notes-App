@@ -3,7 +3,7 @@ import { BaseLayout } from "../organisms/BaseLayout"
 import { FullNote } from "../organisms/FullNote"
 import { Loading } from "../molecules/Loading"
 
-import { Note } from "../../interface"
+import { Note } from "../../interface/schemas"
 
 type props = {
   isLoadingNote: boolean,

@@ -4,12 +4,20 @@ import { NotesServiceFactory } from "../../../../services/factories/notesService
 import { AuthContext } from "../../../../contexts/authContext"
 import { Feed } from "../../../../components/screens/Feed"
 
-import { Note } from "../../../../interface"
-import { GetManyResponse } from "../../../../services/shared/interface"
+import { Note } from "../../../../interface/schemas"
+import { GetManyResponse } from "../../../../services/shared/interface/responses"
 
 const notesService = new NotesServiceFactory().handle()
 
-export default function() {  
+export async function getServerSideProps(context: any) {
+  const sla = {
+    search: context?.query?.keyWords || null
+  }
+  console.log(context)
+  return { props: { ...sla } }
+}
+
+export default function({ search }: any) {  
   const [isLoadingNotes, setIsLoadingNotes] = useState<boolean>(false)
   const [notes, setNotes] = useState<GetManyResponse<Note>>({
     pagination: {
@@ -24,7 +32,9 @@ export default function() {
   const getNotes = useCallback(async () => {
     notesService.accessToken = accessToken
     try {
-      const result = await notesService.getMany({})
+      const result = await notesService.getMany({
+        search: search
+      })
       setNotes(result)
     } catch (error) {
       console.log(error)

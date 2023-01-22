@@ -3,7 +3,7 @@ import { useState, useContext, useCallback, useEffect } from "react"
 import { AuthContext } from "../../../../contexts/authContext"
 import { UsersServiceFactory } from "../../../../services/factories/usersServiceFactory"
 
-import { User } from "../../../../interface"
+import { User } from "../../../../interface/schemas"
 
 import { UserNotes } from "../../../../components/screens/UserNotes"
 
@@ -14,7 +14,7 @@ export async function getServerSideProps(context: any) {
   return { props: { ...slugs } }
 }
 
-const notesService = new UsersServiceFactory().handle()
+const usersService = new UsersServiceFactory().handle()
 
 export default function({ username }: any) {
   const [isLoadingNotes, setIsLoadingNotes] = useState<boolean>(false)
@@ -22,9 +22,9 @@ export default function({ username }: any) {
   const { accessToken } = useContext(AuthContext)
   
   const getNotes = useCallback(async () => {
-    notesService.accessToken = accessToken
+    usersService.accessToken = accessToken
     try {
-      const result = await notesService.getOneWithNotes(username)
+      const result = await usersService.getOneWithNotes(username)
   
       result.notes = result.notes.map((note) => {
         return {

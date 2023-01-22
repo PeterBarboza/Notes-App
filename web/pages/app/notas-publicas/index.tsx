@@ -4,8 +4,8 @@ import { NotesServiceFactory } from "../../../services/factories/notesServiceFac
 import { AuthContext } from "../../../contexts/authContext"
 import { Feed } from "../../../components/screens/Feed"
 
-import { Note } from "../../../interface"
-import { GetManyResponse } from "../../../services/shared/interface"
+import { Note } from "../../../interface/schemas"
+import { GetManyResponse } from "../../../services/shared/interface/responses"
 
 const notesService = new NotesServiceFactory().handle()
 

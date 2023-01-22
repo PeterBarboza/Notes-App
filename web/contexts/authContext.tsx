@@ -1,71 +1,36 @@
-import { createContext, ReactNode, useCallback, useEffect, useState } from "react"
-import { AuthServiceFactory } from "../services/factories/authServiceFactory"
+import { createContext, ReactNode, useState } from "react"
 
-export type authContextParams = {
+export type authContextCredentials = {
   accessToken?: string
+  userData?: {
+    id: string,
+    username: string
+  }
+}
+export interface authContextParams extends authContextCredentials {
+  setAuthContextData?: (args: authContextCredentials) => void
 }
 
-export const AuthContext = createContext<authContextParams>({ 
-  accessToken: undefined,
-})
+export const AuthContext = createContext<authContextParams>({})
 
 type props = {
   children: ReactNode
 }
 
-export default function AuthContextProvider({ children }: props) {
-  const [authRequestFinished, setAuthRequestFinished] = useState(false)
-  const [credentials, setCredentials] = useState<authContextParams>({
-    accessToken: undefined
-  })
+export function AuthContextProvider({ children }: props) {
+  const [authData, setAuthData] = useState<authContextCredentials>()
 
-  const getCredentials = useCallback(async (refreshToken: string) => {
-    try {
-      const authServices = new AuthServiceFactory().handle()
-  
-      setAuthRequestFinished(false)
-      const result = await authServices.authWithRefreshToken(refreshToken)
-  
-      if(result.status !== 200) {
-        throw new Error("RT Auth failed")
-      }
+  const setAuthContextData = ({ accessToken, userData }: authContextCredentials) => {
+    setAuthData({ accessToken, userData })
+  }
 
-      setCredentials({
-        accessToken: result.data.accessToken
-      })
-      localStorage.setItem("notes_app_refresh_token", result.data.refreshToken)
-      setAuthRequestFinished(true)
-      console.log("token refresh executed")
-    } catch (error) {
-      setCredentials({
-        accessToken: undefined
-      })
-      setAuthRequestFinished(true)
-      console.log("token refresh failed")
-    }
-  }, [])
-
-  useEffect(() => {
-    const rt = localStorage.getItem("notes_app_refresh_token")
-    
-    if(rt) {
-      getCredentials(rt)
-      return
-    }
-    setCredentials({
-      accessToken: undefined
-    })
-  }, [])
-
-  return authRequestFinished ? (
-      <AuthContext.Provider value={{
-        accessToken: credentials?.accessToken, 
-      }}>
-        {children}
-      </AuthContext.Provider>
-    )
-    :
-    <>
+  return (
+    <AuthContext.Provider value={{
+      accessToken: authData?.accessToken, 
+      userData: authData?.userData,
+      setAuthContextData: setAuthContextData
+    }}>
       {children}
-    </>
+    </AuthContext.Provider>
+  )
 }

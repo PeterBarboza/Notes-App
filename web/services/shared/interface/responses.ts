@@ -7,12 +7,4 @@ export interface GetManyResponse<Entity> {
   }
 }
 
-export interface getManyParams {
-  pagination?: {
-    skip: number
-    limit: number
-  },
-  search?: string
-}
-
 export type GetOneResponse<Entity> = Entity | null

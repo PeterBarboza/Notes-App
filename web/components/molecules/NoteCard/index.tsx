@@ -4,7 +4,7 @@ import { BiWorld, BiNote } from "react-icons/bi"
 import { FaLock } from "react-icons/fa"
 import { format } from "date-fns"
 
-import { Note } from "../../../interface"
+import { Note } from "../../../interface/schemas"
 
 import styles from "./styles.module.scss"
 
@@ -34,7 +34,7 @@ export function NoteCard({
   }, [])
 
   return (
-    <Link href={`/app/users/${author.username}/${noteSlug}`} className={styles.linkWrap}>
+    <Link href={`/app/usuarios/${author.username}/${noteSlug}`} className={styles.linkWrap}>
       <article className={styles.noteCard} title={`${title} - ${author.username}`}>
         <div className={styles.cardHeading}>
           {PrivacyIcon(privacyStatus)}

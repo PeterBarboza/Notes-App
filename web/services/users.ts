@@ -1,6 +1,7 @@
 import { ApiFactory } from "./api"
 
-import { User } from "../interface"
+import { User } from "../interface/schemas"
+import { GetOneResponse } from "./shared/interface/responses"
 
 export class UsersService {
   private api: ApiFactory
@@ -16,7 +17,27 @@ export class UsersService {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 
     const result = await apiCaller.get<User>(
-      `${this.basePath}/${username}/notes`
+      `${this.basePath}/username/${username}/notes`
+    )
+
+    return result.data
+  }
+
+  async getOneByUsername(username: string): Promise<User> {
+    const apiCaller = this.api.getApiCaller(this.accessToken)
+
+    const result = await apiCaller.get<User>(
+      `${this.basePath}/username/${username}`
+    )
+
+    return result.data
+  }
+
+  async getOneById(id: string): Promise<User> {
+    const apiCaller = this.api.getApiCaller(this.accessToken)
+
+    const result = await apiCaller.get<User>(
+      `${this.basePath}/id/${id}`
     )
 
     return result.data

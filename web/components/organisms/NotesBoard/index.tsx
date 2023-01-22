@@ -1,7 +1,7 @@
 import { NoteCard } from "../../molecules/NoteCard"
 import { NotesBox } from "../../molecules/NotesBox"
 
-import { Note } from "../../../interface"
+import { Note } from "../../../interface/schemas"
 
 import styles from "./styles.module.scss"
 

@@ -5,8 +5,8 @@ import Link from "next/link"
 import { NotesServiceFactory } from "../../../services/factories/notesServiceFactory"
 import { AuthContext } from "../../../contexts/authContext"
 
-import { GetManyResponse } from "../../../services/shared/interface"
-import { Note } from "../../../interface"
+import { GetManyResponse } from "../../../services/shared/interface/responses"
+import { Note } from "../../../interface/schemas"
 
 import styles from "./styles.module.scss"
 
@@ -37,7 +37,7 @@ export function SearchBarInputAndPreview({
     setTimeout(async () => {
       try {
         const result = await notesService.getMany({
-          keyWords: searchWords
+          search: searchWords
         })
         setNotes(result)
       } catch (error) {
@@ -56,7 +56,7 @@ export function SearchBarInputAndPreview({
       (event.key === "enter")
     ) {
       if(event.currentTarget.value.length >= 1) {
-        router.push(`/notas-publicas/pesquisa/${event.target.value}`)
+        router.push(`/app/notas-publicas/pesquisa/${event.target.value}`)
       }
     }
   }, [])
@@ -100,7 +100,7 @@ export function SearchBarInputAndPreview({
                   notes.results.map((note) => {
                     return (
                       <Link 
-                        href={`/app/users/${note.author.username}/${note.noteSlug}`}
+                        href={`/app/usuarios/${note.author.username}/${note.noteSlug}`}
                         className={styles.linkWrap}
                         key={`note-searchbar-preview-link-${note.id}`}
                       >

@@ -1,16 +1,8 @@
 import { ApiFactory } from "./api"
 
-import { GetManyResponse, GetOneResponse } from "./shared/interface"
-import { Note } from "../interface"
-
-type paginationParams = {
-  limit?: number
-  skip?: number
-}
-type searchParams = {
-  paginationParams?: paginationParams
-  keyWords?: string
-}
+import { GetManyResponse, GetOneResponse } from "./shared/interface/responses"
+import { getManyParams } from "./shared/interface/requestParams"
+import { Note } from "../interface/schemas"
 
 export class NotesService {
   private api: ApiFactory
@@ -22,19 +14,16 @@ export class NotesService {
     this.basePath = "/notes"
   }
 
-  async getMany({ paginationParams, keyWords = undefined }: searchParams): Promise<GetManyResponse<Note>> {
+  async getMany({ pagination, search = undefined }: getManyParams): Promise<GetManyResponse<Note>> {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 
     const result = await apiCaller.get<GetManyResponse<Note>>(
       this.basePath,
       {
         params: {
-          pagination: {
-            limit: paginationParams?.limit,
-            skip: paginationParams?.skip
-          },
+          pagination: pagination,
           filters: {
-            search: keyWords
+            search: search
           }
         }
       }

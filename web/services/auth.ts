@@ -16,4 +16,12 @@ export class AuthService {
 
     return result
   }
+
+  async authWithEmailAndPassword(email: string, password: string) {
+    const apiCaller = this.api.getApiCaller()
+
+    const result = await apiCaller.post(this.basePath, { email, password })
+
+    return result
+  }
 }

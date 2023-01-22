@@ -2,7 +2,7 @@ import { NotesBoard } from "../organisms/NotesBoard"
 import { BaseLayout } from "../organisms/BaseLayout"
 import { Loading } from "../molecules/Loading"
 
-import { Note } from "../../interface"
+import { Note } from "../../interface/schemas"
 
 type props = {
   isLoadingNotes: boolean,

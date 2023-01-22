@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react"
+import { ReactNode, useContext, useState } from "react"
 import { FaPen } from "react-icons/fa"
 import { BsPlusLg } from "react-icons/bs"
 
@@ -7,6 +7,7 @@ import { HeadMetaTags } from "../../atoms/HeadMetaTags"
 
 import styles from "./styles.module.scss"
 import { CreateNoteModal } from "../../modals/CreateNoteModal"
+import { AuthContext } from "../../../contexts/authContext"
 
 type props = {
   children: ReactNode
@@ -14,6 +15,8 @@ type props = {
 
 export function BaseLayout({ children }: props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { accessToken } = useContext(AuthContext)
+
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -26,19 +29,27 @@ export function BaseLayout({ children }: props) {
         <div className={styles.layoutBox}>
           {children} 
         </div>
-        <div 
-          className={styles.composeNote}
-          title="Adicionar nova nota"
-          onClick={openModal}
-        >
-          <BsPlusLg size={10} className={styles.composeNoteIcon} />
-          <FaPen size={20} className={styles.composeNoteIcon} />
-        </div>
 
-        <CreateNoteModal
-          isModalOpen={isModalOpen}
-          closeModal={closeModal}
-        />
+        {
+          accessToken ? 
+            <>
+              <div 
+                className={styles.composeNote}
+                title="Adicionar nova nota"
+                onClick={openModal}
+              >
+                <BsPlusLg size={10} className={styles.composeNoteIcon} />
+                <FaPen size={20} className={styles.composeNoteIcon} />
+              </div>
+      
+              <CreateNoteModal
+                isModalOpen={isModalOpen}
+                closeModal={closeModal}
+              />
+            </>
+            :
+            null
+        }
       </div>
     </>
   )

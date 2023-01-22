@@ -1,5 +1,7 @@
-export default function({ username }: any) {
+import { Login } from "../components/screens/Login";
+
+export default function() {
   return (
-    <div style={{fontSize: "1.8rem"}}>Tela de login</div>
+    <Login />
   )
 }

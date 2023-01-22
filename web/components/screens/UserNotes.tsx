@@ -4,7 +4,7 @@ import { NotesBoard } from "../organisms/NotesBoard"
 import { BaseLayout } from "../organisms/BaseLayout"
 import { Loading } from "../molecules/Loading"
 
-import { User } from "../../interface"
+import { User } from "../../interface/schemas"
 
 import styles from "./userNotes.module.scss"
 
