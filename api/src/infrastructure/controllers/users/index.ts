@@ -38,10 +38,19 @@ export class UsersController {
   }
 
   @ExceptionsWrapper()
-  async getOne(req: Request, res: Response): Promise<Response> {
+  async getOneByUsername(req: Request, res: Response): Promise<Response> {
     const { username } = req.params
 
-    const response = await this.services.getOne(username)
+    const response = await this.services.getOneByUsername(username)
+
+    return res.json(response)
+  }
+
+  @ExceptionsWrapper()
+  async getOneById(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params
+
+    const response = await this.services.getOneById(id)
 
     return res.json(response)
   }

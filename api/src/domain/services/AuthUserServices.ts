@@ -42,7 +42,7 @@ export class AuthUserServices {
       }
     )
 
-    return { accessToken, refreshToken }
+    return { user, accessToken, refreshToken }
   }
 
   async authUserWithRefreshtoken(refreshToken: string) {
@@ -70,6 +70,6 @@ export class AuthUserServices {
       }
     )
 
-    return { accessToken, refreshToken: newRefreshToken }
+    return { user, accessToken, refreshToken: newRefreshToken }
   }
 }

@@ -13,11 +13,15 @@ usersRouter.get(
   notesController.getMany.bind(notesController)
 )
 usersRouter.get(
-  "/:username",
-  notesController.getOne.bind(notesController)
+  "/username/:username",
+  notesController.getOneByUsername.bind(notesController)
 )
 usersRouter.get(
-  "/:username/notes",
+  "/id/:id",
+  notesController.getOneById.bind(notesController)
+)
+usersRouter.get(
+  "/username/:username/notes",
   notesController.getOneWithNotes.bind(notesController)
 )
 usersRouter.post(

@@ -50,8 +50,16 @@ export class UserServices {
     return await this.repository.getMany(options)
   }
 
-  async getOne(username: string): Promise<User> {
+  async getOneByUsername(username: string): Promise<User> {
     const user = await this.repository.getOneByUsername(username)
+
+    if(!user) throw new NotFoundError({ entityName: "User" })
+
+    return user
+  }
+
+  async getOneById(id: string): Promise<User> {
+    const user = await this.repository.getOneById(id)
 
     if(!user) throw new NotFoundError({ entityName: "User" })
 
