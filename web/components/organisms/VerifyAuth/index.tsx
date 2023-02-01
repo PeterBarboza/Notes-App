@@ -3,6 +3,7 @@ import { ReactNode, useCallback, useContext, useEffect } from "react"
 
 import { AuthContext } from "../../../contexts/authContext"
 import { AuthServiceFactory } from "../../../services/factories/authServiceFactory"
+import { SHARED_CONSTANTS } from "../../../configs"
 
 type props = {
   children: ReactNode
@@ -22,11 +23,14 @@ export function VerifyAuth({ children }: props) {
         throw new Error("RT Auth failed")
       }
 
-      localStorage.setItem("notes_app_refresh_token", result.data.refreshToken)
+      localStorage.setItem(
+        SHARED_CONSTANTS.localStorage.refreshTokenLabel, 
+        result.data.refreshToken
+      )
 
       setAuthContextData!({
         accessToken: result.data?.accessToken,
-        userData: result.data?.userData
+        userData: result.data?.user
       })
 
       console.log("token refresh executed")
@@ -44,7 +48,7 @@ export function VerifyAuth({ children }: props) {
   }, [])
 
   useEffect(() => {
-    const rt = localStorage.getItem("notes_app_refresh_token")
+    const rt = localStorage.getItem(SHARED_CONSTANTS.localStorage.refreshTokenLabel)
     
     if(rt) {
       getCredentials(rt)

@@ -1,4 +1,7 @@
+import { AxiosResponse } from "axios"
 import { ApiFactory } from "./api"
+
+import { AuthResponse } from "./shared/interface/responses"
 
 export class AuthService {
   private api: ApiFactory
@@ -9,18 +12,32 @@ export class AuthService {
     this.basePath = "/auth"
   }
 
-  async authWithRefreshToken(refreshToken: string) {
+  async authWithRefreshToken(refreshToken: string): Promise<AxiosResponse<AuthResponse>> {
     const apiCaller = this.api.getApiCaller()
 
-    const result = await apiCaller.post(`${this.basePath}/rt`, { refreshToken: refreshToken })
+    const result = await apiCaller.post<AuthResponse>(
+      `${this.basePath}/rt`, 
+      { 
+        refreshToken: refreshToken,
+      }
+    )
 
     return result
   }
 
-  async authWithEmailAndPassword(email: string, password: string) {
+  async authWithEmailAndPassword(
+    email: string, 
+    password: string, 
+  ): Promise<AxiosResponse<AuthResponse>> {
     const apiCaller = this.api.getApiCaller()
 
-    const result = await apiCaller.post(this.basePath, { email, password })
+    const result = await apiCaller.post<AuthResponse>(
+      this.basePath, 
+      { 
+        email, 
+        password, 
+      }
+    )
 
     return result
   }

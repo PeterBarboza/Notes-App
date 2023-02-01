@@ -3,6 +3,9 @@ import { ApiFactory } from "./api"
 import { User } from "../interface/schemas"
 import { GetOneResponse } from "./shared/interface/responses"
 
+//TODO: Trocar o retorno dos métodos para retornar toda a resposta do Axios
+//pois isso sera usado nos middlewares/decorators que verificaram a validade
+//do token do usuário para realizar o refreshToken caso necessário. 
 export class UsersService {
   private api: ApiFactory
   private basePath: string
@@ -13,7 +16,7 @@ export class UsersService {
     this.basePath = "/users"
   }
 
-  async getOneWithNotes(username: string): Promise<User> {
+  async getOneWithNotes(username: string): Promise<GetOneResponse<User>> {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 
     const result = await apiCaller.get<User>(
@@ -23,7 +26,7 @@ export class UsersService {
     return result.data
   }
 
-  async getOneByUsername(username: string): Promise<User> {
+  async getOneByUsername(username: string): Promise<GetOneResponse<User>> {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 
     const result = await apiCaller.get<User>(
@@ -33,7 +36,7 @@ export class UsersService {
     return result.data
   }
 
-  async getOneById(id: string): Promise<User> {
+  async getOneById(id: string): Promise<GetOneResponse<User>> {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 
     const result = await apiCaller.get<User>(

@@ -1,14 +1,16 @@
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { useEffect } from "react";
+
 import { AuthContext } from "../contexts/authContext";
+import { SHARED_CONSTANTS } from "../configs";
 
 export default function() {
   const router = useRouter()
   const { setAuthContextData } = useContext(AuthContext)
 
   useEffect(() => {
-    localStorage.removeItem("notes_app_refresh_token")
+    localStorage.removeItem(SHARED_CONSTANTS.localStorage.refreshTokenLabel)
 
     setAuthContextData!({
       accessToken: undefined,

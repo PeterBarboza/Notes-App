@@ -65,12 +65,12 @@ export function CreateNoteModal({ isModalOpen, closeModal }: props) {
           inputs={
             [
               {
-                id: "123",
+                id: "create-note-modal-radio-input-1",
                 label: "Público",
                 value: "public"
               },
               {
-                id: "321",
+                id: "create-note-modal-radio-input-2",
                 label: "Privado",
                 value: "private"
               }

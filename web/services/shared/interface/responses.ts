@@ -1,3 +1,5 @@
+import { UserPublicData } from "./entitiesResponseData"
+
 export interface GetManyResponse<Entity> {
   results: Entity[]
   pagination: {
@@ -8,3 +10,9 @@ export interface GetManyResponse<Entity> {
 }
 
 export type GetOneResponse<Entity> = Entity | null
+
+export type AuthResponse = {
+  accessToken: string
+  refreshToken: string
+  user: UserPublicData
+}

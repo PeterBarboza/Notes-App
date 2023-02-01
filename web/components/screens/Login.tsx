@@ -5,6 +5,7 @@ import Link from "next/link"
 
 import { AuthContext } from "../../contexts/authContext"
 import { AuthServiceFactory } from "../../services/factories/authServiceFactory"
+import { SHARED_CONSTANTS } from "../../configs"
 
 import { authWithEmailAndPasswordParams } from "../../services/shared/interface/requestParams"
 
@@ -15,10 +16,8 @@ export type userLoginData = {
   password: string
 }
 
-const authService = new AuthServiceFactory().handle()
-
 export function Login() {  
-  const { accessToken, userData, setAuthContextData } = useContext(AuthContext)
+  const { accessToken, setAuthContextData } = useContext(AuthContext)
   const router = useRouter()
   const { 
     register, 
@@ -28,12 +27,18 @@ export function Login() {
 
   const onSubmit = useCallback(async ({ email, password }: authWithEmailAndPasswordParams) => {
     try {
+      const authService = new AuthServiceFactory().handle()
+
+      console.log("Login request send")
+
       const result = await authService.authWithEmailAndPassword(email, password)
 
       if(result.status != 200) {
         throw new Error("Auth Failed")
       }
       
+      localStorage.setItem(SHARED_CONSTANTS.localStorage.refreshTokenLabel, result.data.refreshToken)
+
       setAuthContextData!({
         accessToken: result.data.accessToken,
         userData: result.data.user
