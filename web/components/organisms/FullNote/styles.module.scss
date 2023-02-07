@@ -12,6 +12,44 @@
 
   color: #616161;
 
+  .noteTools {
+    width: 100%;
+    min-height: fit-content;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    div {
+      width: fit-content;
+      height: fit-content;
+      
+      padding: 5px;
+      border-radius: 5px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      justify-self: flex-end;
+
+      color: #ffffff;
+      cursor: pointer;
+
+      font-size: 1.2rem;
+    }
+
+    .editNote {
+      background-color: #0084ff;
+    }
+
+    .deleteNote {
+      background-color: #ff1717;
+    }
+  }
+
   h1 {
     font-size: 3rem;
 

@@ -26,8 +26,21 @@
     align-items: center;
     gap: 5px;
 
+    .iconBox {
+      min-width: 20px;
+      min-height: 20px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
     h2 {
       font-size: 1.8rem;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   
@@ -61,8 +74,9 @@
     justify-content: center;
     align-items: center;
 
-    background-color: #616161b0;
-    background-color: #0084ffb2;
+    // background-color: #47474733;
+    // background-color: #616161b0;
+    background-color: #0084ff5e;
     opacity: 0;
 
     cursor: pointer;

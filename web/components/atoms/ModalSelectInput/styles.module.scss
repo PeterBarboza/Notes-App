@@ -1,0 +1,69 @@
+.modalSelectInput {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 5px;
+
+  position: relative;
+
+  label {
+    font-size: 1.4rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .selectInput {
+    width: 100%;
+    height: 30px;
+
+    padding: 0 10px;
+
+    border: 1px solid #b8b8b8;
+    border-radius: 2px;
+
+    background-color: #f7f7f7;
+  }
+  .selectOptionsBox {
+    width: 100%;
+    height: fit-content;
+    padding: 5px 0;
+
+    position: absolute;
+    top: 60px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    background-color: #ffffff;
+    border: 1px solid #b8b8b8;
+    font-size: 1.4rem;
+
+    border-radius: 2px;
+    overflow: hidden;
+
+    .option {
+      transition-duration: 0.2s;
+      width: 100%;
+      height: 30px;
+
+      padding: 0 10px;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      background-color: #ffffff;
+
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    .option:hover {
+      filter: brightness(90%);
+    }
+  }
+}

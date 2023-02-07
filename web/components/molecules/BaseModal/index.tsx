@@ -1,8 +1,6 @@
-import { CSSProperties, ReactNode, useState } from "react";
-import { Modal } from "react-responsive-modal"
-import "react-responsive-modal/styles.css"
-
+import { LegacyRef, ReactNode, useCallback, useMemo, useRef } from "react"
 import styles from "./styles.module.scss"
+
 
 type props = {
   heading: string
@@ -11,40 +9,50 @@ type props = {
   children: ReactNode
 }
 
-type modalStylesClasses = {
-  root?: string;
-  overlay?: string;
-  overlayAnimationIn?: string;
-  overlayAnimationOut?: string;
-  modalContainer?: string;
-  modal?: string;
-  modalAnimationIn?: string;
-  modalAnimationOut?: string;
-  closeButton?: string;
-  closeIcon?: string;
-}
-
 export function BaseModal({
   heading,
   isOpen,
   closeModal,
-  children
+  children,
 }: props) {
+  const backgroundShadowRef = useRef<HTMLDivElement>(null)
+  const baseModalRef = useRef<HTMLDivElement>(null)
 
-  const modalStyles: modalStylesClasses = {
-    modal: styles.modal,
-    modalContainer: styles.modalContainer,
-  }
+  const closeTransitionClass = useMemo(() => {
+    return styles.closeTransition
+  }, [])
+
+  const handleCloseModal = useCallback(() => {
+    if(backgroundShadowRef.current?.className) {
+      backgroundShadowRef.current.className += ` ${closeTransitionClass}`
+    }
+    if(baseModalRef.current?.className) {
+      baseModalRef.current.className += ` ${closeTransitionClass}`
+    }
+
+    setTimeout(() => {
+      closeModal()
+    }, 100)
+  }, [closeModal])
 
   return (
-    <Modal 
-      open={isOpen} 
-      onClose={closeModal} 
-      center showCloseIcon={false} 
-      classNames={modalStyles}
-    >
-      <h2>{heading}</h2>
-      {children}
-    </Modal>
+    isOpen ?
+      <>
+        <div 
+          className={styles.backgroundShadow} 
+          onClick={() => handleCloseModal()} 
+          ref={backgroundShadowRef}
+        />
+
+        <div 
+          className={styles.baseModal}
+          ref={baseModalRef}
+        >
+          <h2>{heading}</h2>
+          {children}
+        </div>
+      </>
+    :
+      null
   )
 }

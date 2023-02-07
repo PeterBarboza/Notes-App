@@ -1,6 +1,7 @@
 import styles from "./styles.module.scss"
 
 type props = {
+  actualValue: string
   inputId: string
   inputLabel: string
   inputName: string
@@ -10,6 +11,7 @@ type props = {
 }
 
 export function ModalTextArea({
+  actualValue,
   inputId,
   inputName,
   inputLabel,
@@ -19,13 +21,22 @@ export function ModalTextArea({
 }: props) {
   return (
     <div className={styles.modalTextArea}>
-      <label htmlFor={inputId}>{inputLabel}</label>
+      <label htmlFor={inputId}>
+        {inputLabel}
+        {
+          required ?
+            <span style={{ color: "#ff3e3e" }}> *</span>
+            :
+            null
+        }
+      </label>
       <textarea
         id={inputId}
         name={inputName}
         className={styles.textArea}
         placeholder={exampleText}
         onChange={(event) => onChange(event.currentTarget.value)}
+        value={actualValue}
         required={required}
       />
     </div>

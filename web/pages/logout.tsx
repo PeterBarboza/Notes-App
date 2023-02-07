@@ -5,7 +5,15 @@ import { useEffect } from "react";
 import { AuthContext } from "../contexts/authContext";
 import { SHARED_CONSTANTS } from "../configs";
 
-export default function() {
+export async function getServerSideProps(context: any) {
+  const sla = {
+    redirectURL: context?.query?.redirectTo || null
+  }
+  console.log(context)
+  return { props: { ...sla } }
+}
+
+export default function({ redirectURL }: any) {
   const router = useRouter()
   const { setAuthContextData } = useContext(AuthContext)
 
@@ -16,6 +24,11 @@ export default function() {
       accessToken: undefined,
       userData: undefined
     })
+
+    if(redirectURL) {
+      router.push(redirectURL)
+      return
+    }
 
     router.push("/")
   }, [])

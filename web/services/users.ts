@@ -2,6 +2,7 @@ import { ApiFactory } from "./api"
 
 import { User } from "../interface/schemas"
 import { GetOneResponse } from "./shared/interface/responses"
+import { EnsureAuthenticated } from "./shared/decorators/EnsureAuthenticated"
 
 //TODO: Trocar o retorno dos métodos para retornar toda a resposta do Axios
 //pois isso sera usado nos middlewares/decorators que verificaram a validade
@@ -16,6 +17,7 @@ export class UsersService {
     this.basePath = "/users"
   }
 
+  @EnsureAuthenticated({ optional: true })
   async getOneWithNotes(username: string): Promise<GetOneResponse<User>> {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 
@@ -26,6 +28,7 @@ export class UsersService {
     return result.data
   }
 
+  @EnsureAuthenticated({ optional: true })
   async getOneByUsername(username: string): Promise<GetOneResponse<User>> {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 
@@ -36,6 +39,7 @@ export class UsersService {
     return result.data
   }
 
+  @EnsureAuthenticated({ optional: true })
   async getOneById(id: string): Promise<GetOneResponse<User>> {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 

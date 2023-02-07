@@ -1,8 +1,9 @@
 import Link from "next/link"
-import { useCallback } from "react"
+import { useCallback, useMemo } from "react"
 import { BiWorld, BiNote } from "react-icons/bi"
 import { FaLock } from "react-icons/fa"
 import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
 
 import { Note } from "../../../interface/schemas"
 
@@ -18,7 +19,11 @@ export function NoteCard({
   updatedAt, 
   noteSlug
 }: Note) {
-  const lastUpdate = format(new Date(updatedAt || createdAt), "dd/MM/yyyy - hh:mm")
+  const lastUpdate = useMemo(() => {
+    return format(new Date(updatedAt || createdAt), "dd/MM/yyyy - hh:mm", {
+      locale: ptBR,
+    })
+  }, [updatedAt, createdAt])
 
   const PrivacyIcon = useCallback((status: string) => {
     switch (status) {
@@ -37,7 +42,9 @@ export function NoteCard({
     <Link href={`/app/usuarios/${author.username}/${noteSlug}`} className={styles.linkWrap}>
       <article className={styles.noteCard} title={`${title} - ${author.username}`}>
         <div className={styles.cardHeading}>
-          {PrivacyIcon(privacyStatus)}
+          <div className={styles.iconBox}>
+            {PrivacyIcon(privacyStatus)}
+          </div>
           <h2>{title}</h2>
         </div>
 
@@ -48,7 +55,6 @@ export function NoteCard({
         <p className={styles.content}>{content}</p>
 
         <div className={styles.readMore}>
-          <p>Ler mais</p>
         </div>
         <span className={styles.overflowShadow} />
       </article>
