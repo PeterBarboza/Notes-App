@@ -108,7 +108,13 @@ export class NotesController {
 
     if(!isAValidOperation) throw new UnauthorizedError({})
 
-    const { updatedCount } = await this.services.updateOne(id, entity)
+    const parsedEntity = {
+      title: entity.title,
+      content: entity.content,
+      privacyStatus: entity.privacyStatus
+    }
+
+    const { updatedCount } = await this.services.updateOne(id, parsedEntity)
 
     return res.status(200).json({ updatedCount })
   }
