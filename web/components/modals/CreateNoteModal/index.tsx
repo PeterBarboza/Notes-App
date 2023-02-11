@@ -20,17 +20,15 @@ type props = {
 const notesService = new NotesServiceFactory().handle()
 
 export function CreateNoteModal({ isModalOpen, closeModal }: props) {
-  const [title, setTitle] = useState<string>()
-  const [content, setContent] = useState<string>()
-  const [privacy, setPrivacy] = useState<string>()
+  const [title, setTitle] = useState<string>("")
+  const [content, setContent] = useState<string>("")
+  const [privacy, setPrivacy] = useState<string>(NOTE_PRIVACY_STATUS_OPTIONS[0].value)
   const { accessToken, userData } = useContext(AuthContext)
 
   const createNote = useCallback(async (noteData: any) => {
     notesService.accessToken = accessToken
     
     const result = await notesService.create(noteData)
-    
-    console.log({ result })
   }, [])
 
   const handleSubmit = useCallback(async (event: FormEvent<HTMLFormElement>) => {
@@ -60,6 +58,7 @@ export function CreateNoteModal({ isModalOpen, closeModal }: props) {
     >
       <form onSubmit={(event) => handleSubmit(event)} className={styles.form}>
         <ModalTextInput
+        actualValue={title}
           inputId="1"
           inputName="title"
           inputLabel="Título"
@@ -68,6 +67,7 @@ export function CreateNoteModal({ isModalOpen, closeModal }: props) {
           required
         />
         <ModalTextArea
+        actualValue={content}
           inputId="2"
           inputName="content"
           inputLabel="Conteúdo"

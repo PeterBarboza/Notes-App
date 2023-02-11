@@ -13,8 +13,11 @@ export async function getServerSideProps(context: any) {
   const sla = {
     search: context?.query?.keyWords || null
   }
-  console.log(context)
-  return { props: { ...sla } }
+  return { 
+    props: {
+      search: context?.query?.keyWords || null
+    } 
+  }
 }
 
 export default function({ search }: any) {  
@@ -32,10 +35,12 @@ export default function({ search }: any) {
   const getNotes = useCallback(async () => {
     notesService.accessToken = accessToken
     try {
+      setIsLoadingNotes(true)
+      
       const result = await notesService.getMany({
         search: search
       })
-      setNotes(result)
+      setNotes(result.data)
     } catch (error) {
       console.log(error)
     } finally {
@@ -44,7 +49,6 @@ export default function({ search }: any) {
   }, [])
 
   useEffect(() => {
-    setIsLoadingNotes(true)
     getNotes()
   }, [getNotes])
 

@@ -32,8 +32,6 @@ export function EditNoteModal({ isModalOpen, closeModal, entity }: props) {
     notesService.accessToken = accessToken
     
     const result = await notesService.update(noteId, { ...noteData, author: userData?.id })
-    
-    console.log({ result })
   }, [])
 
   const handleSubmit = useCallback(async (event: FormEvent<HTMLFormElement>) => {

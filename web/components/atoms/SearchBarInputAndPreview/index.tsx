@@ -39,7 +39,7 @@ export function SearchBarInputAndPreview({
         const result = await notesService.getMany({
           search: searchWords
         })
-        setNotes(result)
+        setNotes(result.data)
       } catch (error) {
         console.log(error)
       } finally {

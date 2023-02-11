@@ -19,7 +19,7 @@ export function Header() {
   const handleMenu = useCallback(() => setIsMenuOpen(prevState => !prevState), [])
 
   useEffect(() => {
-    router.events.on("routeChangeComplete", () => handleMenu())
+    router.events.on("routeChangeComplete", () => setIsMenuOpen(false))
   }, [])
 
   return (

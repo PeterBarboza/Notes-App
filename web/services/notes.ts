@@ -3,7 +3,8 @@ import { ApiFactory } from "./api"
 import { GetManyResponse, GetOneResponse } from "./shared/interface/responses"
 import type { createNoteData, fullUpdateNoteData, getManyParams } from "./shared/interface/requestParams"
 import { Note } from "../interface/schemas"
-import { EnsureAuthenticated } from "./shared/decorators/EnsureAuthenticated"
+import { withRefreshTokenAuth } from "./shared/decorators/withRefreshTokenAuth"
+import { AxiosResponse } from "axios"
 
 export class NotesService {
   private api: ApiFactory
@@ -14,37 +15,37 @@ export class NotesService {
     this.api = api
     this.basePath = "/notes"
   }
-  async getMany({ pagination, search = undefined }: getManyParams): Promise<GetManyResponse<Note>> {
+  async getMany(params: getManyParams)
+    : Promise<AxiosResponse<GetManyResponse<Note>>> {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 
     const result = await apiCaller.get<GetManyResponse<Note>>(
       this.basePath,
       {
         params: {
-          pagination: pagination,
+          pagination: params?.pagination,
           filters: {
-            search: search
+            search: params?.search
           }
         }
       }
     )
 
-    return result as any
+    return result
   }
 
-  @EnsureAuthenticated({ optional: true })
-  async getOne(noteSlug: string): Promise<GetOneResponse<Note>> {
+  async getOne(noteSlug: string): Promise<AxiosResponse<GetOneResponse<Note>>> {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 
     const result = await apiCaller.get<GetOneResponse<Note>>(
       `${this.basePath}/${noteSlug}`
     )
 
-    return result as any
+    return result
   }
 
-  @EnsureAuthenticated({})
-  async create(noteData: createNoteData): Promise<GetOneResponse<Note>> {
+  async create(noteData: createNoteData)
+    : Promise<AxiosResponse<GetOneResponse<Note>>> {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 
     const result = await apiCaller.post<GetOneResponse<Note>>(
@@ -52,11 +53,11 @@ export class NotesService {
       noteData
     )
 
-    return result as any
+    return result
   }
 
-  @EnsureAuthenticated({})
-  async update(noteId: string, noteData: fullUpdateNoteData): Promise<GetOneResponse<Note>> {
+  async update(noteId: string, noteData: fullUpdateNoteData)
+    : Promise<AxiosResponse<GetOneResponse<Note>>> {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 
     const result = await apiCaller.patch<GetOneResponse<Note>>(
@@ -64,6 +65,6 @@ export class NotesService {
       noteData
     )
 
-    return result as any
+    return result
   }
 }

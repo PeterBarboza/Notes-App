@@ -2,15 +2,15 @@ import { useRouter } from "next/router";
 import { useContext } from "react";
 import { useEffect } from "react";
 
-import { AuthContext } from "../contexts/authContext";
-import { SHARED_CONSTANTS } from "../configs";
+import { AuthContext } from "../../../contexts/authContext";
+import { SHARED_CONSTANTS } from "../../../configs";
 
 export async function getServerSideProps(context: any) {
-  const sla = {
-    redirectURL: context?.query?.redirectTo || null
+  return { 
+    props: { 
+      redirectURL: context.query.href || null 
+    } 
   }
-  console.log(context)
-  return { props: { ...sla } }
 }
 
 export default function({ redirectURL }: any) {
@@ -25,11 +25,11 @@ export default function({ redirectURL }: any) {
       userData: undefined
     })
 
-    if(redirectURL) {
-      router.push(redirectURL)
+    if(redirectURL && redirectURL.length > 0) {
+      router.push(`/${redirectURL.join("/")}`)
       return
     }
-
+    
     router.push("/")
   }, [])
 

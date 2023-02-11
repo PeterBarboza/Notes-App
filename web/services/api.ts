@@ -27,6 +27,9 @@ export class ApiFactory {
         },
         paramsSerializer: {
           serialize: (params) => qs.stringify(params)
+        },
+        validateStatus: function (status) {
+          return status < 500; // Resolve somente se o código de status for menor que 500
         }
       })
 

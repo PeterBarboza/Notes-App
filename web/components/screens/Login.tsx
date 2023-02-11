@@ -29,15 +29,16 @@ export function Login() {
     try {
       const authService = new AuthServiceFactory().handle()
 
-      console.log("Login request send")
-
       const result = await authService.authWithEmailAndPassword(email, password)
 
       if(result.status != 200) {
         throw new Error("Auth Failed")
       }
       
-      localStorage.setItem(SHARED_CONSTANTS.localStorage.refreshTokenLabel, result.data.refreshToken)
+      localStorage.setItem(
+        SHARED_CONSTANTS.localStorage.refreshTokenLabel,
+        result.data.refreshToken
+      )
 
       setAuthContextData!({
         accessToken: result.data.accessToken,

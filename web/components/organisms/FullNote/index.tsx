@@ -23,9 +23,13 @@ export function FullNote({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { accessToken, userData } = useContext(AuthContext)
   const lastUpdate = useMemo(() => {
-    return format(new Date(updatedAt || createdAt), "dd/MM/yyyy - hh:mm", {
-      locale: ptBR,
-    })
+    try {
+      return format(new Date(updatedAt || createdAt), "dd/MM/yyyy - hh:mm", {
+        locale: ptBR,
+      })
+    } catch (error) {
+      return "indisponível"      
+    }
   }, [updatedAt, createdAt])
 
   const openModal = () => setIsModalOpen(true);
@@ -34,7 +38,7 @@ export function FullNote({
   return (
     <main className={styles.fullNote}>
       {
-        accessToken && userData?.id === author.id ?
+        accessToken && userData?.id === author?.id ?
           <div className={styles.noteTools}>
             <div className={styles.editNote} onClick={() => openModal()}>
               <AiOutlineEdit size={20} color={"#ffffff"}/>
@@ -49,8 +53,8 @@ export function FullNote({
       <h1>{title}</h1>
       <p className={styles.author}>
         Escrito por: 
-        <Link href={`/app/usuarios/${author.username}`}>
-          <span>{author.username}</span>
+        <Link href={`/app/usuarios/${author?.username}`}>
+          <span>{author?.username}</span>
         </Link>
       </p>
       <p className={styles.lastUpdate}>Última atualização - {lastUpdate}</p>

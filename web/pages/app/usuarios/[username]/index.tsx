@@ -6,6 +6,8 @@ import { UsersServiceFactory } from "../../../../services/factories/usersService
 import { User } from "../../../../interface/schemas"
 
 import { UserNotes } from "../../../../components/screens/UserNotes"
+import { withRefreshTokenAuth } from "../../../../services/shared/decorators/withRefreshTokenAuth"
+import { useRouter } from "next/router"
 
 export async function getServerSideProps(context: any) {
   const slugs = {
@@ -19,24 +21,35 @@ const usersService = new UsersServiceFactory().handle()
 export default function({ username }: any) {
   const [isLoadingNotes, setIsLoadingNotes] = useState<boolean>(false)
   const [userData, setUserData] = useState<User>()
-  const { accessToken } = useContext(AuthContext)
-  
+  const { accessToken, setAuthContextData } = useContext(AuthContext)
+  const router = useRouter()  
+
   const getNotes = useCallback(async () => {
     usersService.accessToken = accessToken
-    try {
-      const result = await usersService.getOneWithNotes(username)
-  
-      result.notes = result.notes.map((note) => {
-        return {
-          ...note,
-          author: {
-            ...result!,
-            notes: []
+    try {  
+      setIsLoadingNotes(true)
+      
+      const result = await withRefreshTokenAuth(
+        usersService.getOneWithNotes.bind(usersService), 
+        { 
+          setAuthContextData: setAuthContextData!,
+          routerInstance: router 
+        }, 
+        { optional: true }
+      )(username)
+
+      if(result?.data) {
+        result.data.notes = result.data.notes.map((note) => {
+          return {
+            ...note,
+            author: {
+              ...result.data!,
+              notes: []
+            }
           }
-        }
-      })
-  
-      setUserData(result)
+        })
+        setUserData(result.data)
+      }
     } catch (error) {
       console.log(error)
     } finally {
@@ -45,7 +58,6 @@ export default function({ username }: any) {
   }, [])
 
   useEffect(() => {
-    setIsLoadingNotes(true)
     getNotes()
   }, [getNotes])
 

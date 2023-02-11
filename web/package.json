@@ -27,11 +27,6 @@
     "typescript": "4.9.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.12",
-    "@babel/plugin-proposal-decorators": "^7.20.13",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-react": "^7.18.6",
-    "@types/qs": "^6.9.7",
-    "next-transpile-modules": "^10.0.0"
+    "@types/qs": "^6.9.7"
   }
 }

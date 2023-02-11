@@ -33,17 +33,13 @@ export function VerifyAuth({ children }: props) {
         userData: result.data?.user
       })
 
-      console.log("token refresh executed")
-
       router.push("/app")
     } catch (error) {
-      //TODO: Aplicar o padrão de redirecionamento que está abaixo quando
-      //a api dizer que o accessToken usado é invalido e precisa ser gerado
-      //novamente para redirecionar para uma que também gere o refreshToken
-      //ou para recarregar totalmente a página
       window.alert("É necessário refazer o login 🔒")
-      router.push("/logout", { query: { redirectTo: "/login" } })
-      console.log("token refresh failed")
+      router.push({
+          pathname: '/logout/redirect/[href]',
+          query: { href: "/login" },
+        })
     }
   }, [])
 

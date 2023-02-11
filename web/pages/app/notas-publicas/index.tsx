@@ -24,8 +24,10 @@ export default function() {
   const getNotes = useCallback(async () => {
     notesService.accessToken = accessToken
     try {
+      setIsLoadingNotes(true)
+      
       const result = await notesService.getMany({})
-      setNotes(result)
+      setNotes(result.data)
     } catch (error) {
       console.log(error)
     } finally {
@@ -34,7 +36,6 @@ export default function() {
   }, [])
 
   useEffect(() => {
-    setIsLoadingNotes(true)
     getNotes()
   }, [getNotes])
 
