@@ -1,56 +1,36 @@
 import { useRouter } from "next/router"
-import { ReactNode, useCallback, useContext, useEffect } from "react"
+import { ReactNode, useCallback } from "react"
 
-import { AuthContext } from "../../../contexts/authContext"
-import { AuthServiceFactory } from "../../../services/factories/authServiceFactory"
-import { SHARED_CONSTANTS } from "../../../configs"
+import { useVerifyAuth } from "../../../shared/hooks/useVerifyAuth"
 
 type props = {
   children: ReactNode
 }
 
 export function VerifyAuth({ children }: props) {
-  const { setAuthContextData } = useContext(AuthContext)
   const router = useRouter()
 
-  const getCredentials = useCallback(async (refreshToken: string) => {
-    try {
-      const authServices = new AuthServiceFactory().handle()
-  
-      const result = await authServices.authWithRefreshToken(refreshToken)
-  
-      if(result.status !== 200) {
-        throw new Error("RT Auth failed")
-      }
+  const successCallback = useCallback(() => {
+    const shouldRedirect = 
+      router?.asPath === "/" || 
+      router?.asPath === "/login" || 
+      router?.asPath === "/app"
 
-      localStorage.setItem(
-        SHARED_CONSTANTS.localStorage.refreshTokenLabel, 
-        result.data.refreshToken
-      )
-
-      setAuthContextData!({
-        accessToken: result.data?.accessToken,
-        userData: result.data?.user
-      })
-
+    if(shouldRedirect) {
       router.push("/app")
-    } catch (error) {
-      window.alert("É necessário refazer o login 🔒")
-      router.push({
-          pathname: '/logout/redirect/[href]',
-          query: { href: "/login" },
-        })
-    }
-  }, [])
-
-  useEffect(() => {
-    const rt = localStorage.getItem(SHARED_CONSTANTS.localStorage.refreshTokenLabel)
-    
-    if(rt) {
-      getCredentials(rt)
       return
     }
-  }, [])
+  }, [router])
+
+  const errorCallback = useCallback(() => {
+    window.alert("É necessário refazer o login 🔒")
+    router.push({
+      pathname: '/logout/redirect/[href]',
+      query: { href: "login" },
+    })
+  }, [router])
+
+  useVerifyAuth({ successCallback, errorCallback })
 
   return (
     <>
