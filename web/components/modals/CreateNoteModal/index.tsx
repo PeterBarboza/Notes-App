@@ -1,4 +1,5 @@
-import { FormEvent, useCallback, useContext, useState } from "react"
+import { useCallback, useContext } from "react"
+import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 
 import { ModalSelectInput } from "../../atoms/ModalSelectInput"
@@ -6,11 +7,13 @@ import { ModalSubmitInput } from "../../atoms/ModalSubmitInput"
 import { ModalTextArea } from "../../atoms/ModalTextArea"
 import { ModalTextInput } from "../../atoms/ModalTextInput"
 import { BaseModal } from "../../molecules/BaseModal"
-import { NOTE_PRIVACY_STATUS_OPTIONS } from "../../../shared/constants"
-
-import styles from "./styles.module.scss"
 import { NotesServiceFactory } from "../../../services/factories/notesServiceFactory"
 import { AuthContext } from "../../../contexts/authContext"
+import { NOTE_PRIVACY_STATUS_OPTIONS } from "../../../shared/constants"
+
+import { createNoteData } from "../../../services/shared/interface/requestParams"
+
+import styles from "./styles.module.scss"
 
 type props = {
   isModalOpen: boolean
@@ -20,35 +23,45 @@ type props = {
 const notesService = new NotesServiceFactory().handle()
 
 export function CreateNoteModal({ isModalOpen, closeModal }: props) {
-  const [title, setTitle] = useState<string>("")
-  const [content, setContent] = useState<string>("")
-  const [privacy, setPrivacy] = useState<string>(NOTE_PRIVACY_STATUS_OPTIONS[0].value)
   const { accessToken, userData } = useContext(AuthContext)
+  const { 
+    register, 
+    handleSubmit, 
+    setValue,
+    reset,
+    formState: { errors } ,
+  } = useForm<createNoteData>({
+    defaultValues: {
+      title: "",
+      content: "",
+      author: userData?.id,
+      privacyStatus: "private"
+    },
+  })
 
-  const createNote = useCallback(async (noteData: any) => {
+  const onSubmit = useCallback(async (noteData: createNoteData) => {
     notesService.accessToken = accessToken
-    
-    const result = await notesService.create(noteData)
+  
+    console.log(noteData)
+    try {      
+      const response = await toast.promise(
+        notesService.create({
+          ...noteData,
+          author: userData?.id!,
+        }),
+        {
+          pending: 'Criando nota...',
+          success: 'Nota criada com suceso!',
+          error: 'Falha na criação da nota.'
+        }
+      )
+
+      setTimeout(() => {
+        reset({}, { keepDefaultValues: true })
+        closeModal()
+      }, 500)
+    } catch (error) {}
   }, [])
-
-  const handleSubmit = useCallback(async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    
-    const noteData = { 
-      title: title,
-      content: content,
-      author: userData?.id!,
-      privacyStatus: privacy
-    }
-
-    try {
-      toast.promise(createNote(noteData), {
-        pending: 'Criando nota...',
-        success: 'Nota criada com suceso!',
-        error: 'Falha na criação da nota.'
-      })
-    } catch(err) {}
-  }, [createNote, title, content, userData, privacy])
 
   return (
     <BaseModal
@@ -56,36 +69,42 @@ export function CreateNoteModal({ isModalOpen, closeModal }: props) {
     isOpen={isModalOpen}
     closeModal={closeModal}
     >
-      <form onSubmit={(event) => handleSubmit(event)} className={styles.form}>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <ModalTextInput
-        actualValue={title}
-          inputId="1"
-          inputName="title"
+          inputProps={{
+            ...register("title", {
+              required: true,
+              minLength: 1,
+            }),
+            required: true
+          }}
+          inputErrors={errors.title?.message}
+          inputId="create-note-title-input"
           inputLabel="Título"
-          exampleText=""
-          onChange={setTitle}
-          required
         />
         <ModalTextArea
-        actualValue={content}
-          inputId="2"
-          inputName="content"
+          inputProps={{
+            ...register("content", {
+              required: true,
+              minLength: 1,
+            }),
+            required: true
+          }}
+          inputErrors={errors.content?.message}
+          inputId="create-note-.content-input"
           inputLabel="Conteúdo"
-          exampleText=""
-          onChange={setContent}
-          required
         />
         <ModalSelectInput
           inputId="3"
           inputName="privacy"
           inputLabel="Privacidade"
           exampleText=""
-          onChange={setPrivacy}
+          onChange={(value) => setValue("privacyStatus", value as "public" | "private")}
           initialValue={NOTE_PRIVACY_STATUS_OPTIONS[0]}
           required={true}
           options={NOTE_PRIVACY_STATUS_OPTIONS}
         />
-        <ModalSubmitInput
+        <ModalSubmitInput 
           inputDisplayText="Criar nota"
         />
       </form>

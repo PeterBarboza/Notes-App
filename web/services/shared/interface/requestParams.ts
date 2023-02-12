@@ -15,12 +15,12 @@ export interface createNoteData {
   title: string
   content: string
   author: string
-  privacyStatus: string
+  privacyStatus: "public" | "private"
 }
 
 export interface fullUpdateNoteData {
   title: string
   content: string
-  privacyStatus: string
+  privacyStatus: "public" | "private"
   author: string
 }

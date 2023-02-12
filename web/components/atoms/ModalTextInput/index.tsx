@@ -1,46 +1,41 @@
+import { DetailedHTMLProps, InputHTMLAttributes } from "react"
 import styles from "./styles.module.scss"
 
-type props = {
-  actualValue: string
+interface props {
   inputId: string
   inputLabel: string
-  inputName: string
-  exampleText?: string
-  required: boolean
-  onChange: (value: string) => void
+  inputErrors?: string
+  inputProps: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 }
 
 export function ModalTextInput({
-  actualValue,
   inputId,
-  inputName,
   inputLabel,
-  exampleText,
-  required,
-  onChange
+  inputErrors,
+  inputProps
 }: props) {
   return (
     <div className={styles.modalTextInput}>
       <label htmlFor={inputId}>
         {inputLabel}
         {
-          required ?
-            <span style={{ color: "#ff3e3e" }}> *</span>
+          inputProps?.required ?
+            <span className={styles.errorsBox}> *</span>
             :
             null
         }
       </label>
+      {
+        inputErrors ? 
+          <span className={styles.errorsBox}>{inputErrors}</span>
+          :
+          null
+      }
       <input
         id={inputId}
         type="text"
-        name={inputName}
         className={styles.textInput}
-        placeholder={exampleText}
-        onChange={(event) => {
-          onChange(event.currentTarget.value)
-        }}
-        value={actualValue}
-        required={required}
+        {...inputProps}
       />
     </div>
   )
