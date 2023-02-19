@@ -10,3 +10,5 @@ export const NOTE_PRIVACY_STATUS_OPTIONS = [
     value: "public"
   }
 ]
+
+export const NOTES_PAGE_SIZE = 9
