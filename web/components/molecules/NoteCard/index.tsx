@@ -20,9 +20,13 @@ export function NoteCard({
   noteSlug
 }: Note) {
   const lastUpdate = useMemo(() => {
-    return format(new Date(updatedAt || createdAt), "dd/MM/yyyy - hh:mm", {
-      locale: ptBR,
-    })
+    try {
+      return format(new Date(updatedAt || createdAt), "dd/MM/yyyy - hh:mm", {
+        locale: ptBR,
+      })
+    } catch (error) {
+      return updatedAt || createdAt || "Indisponível"      
+    }
   }, [updatedAt, createdAt])
 
   const PrivacyIcon = useCallback((status: string) => {
