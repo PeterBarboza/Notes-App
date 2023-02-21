@@ -1,5 +1,5 @@
 import { pick } from "lodash"
-import { Like } from "typeorm"
+import { Like, In } from "typeorm"
 
 import { TypeORMBaseRepository } from "./typeorm"
 import { NoteModel } from "./typeorm/models/NoteModel"
@@ -60,10 +60,27 @@ export class NotesRepository extends TypeORMBaseRepository implements INotesRepo
       "author",
       "privacyStatus"
     ])
+    
+    const parsedFilters = Object.entries(selectedFilters)
+      .reduce((previousValue, currentValue) => {
+        if(currentValue[1]?.constructor === Array) {
+          return {
+            ...previousValue,
+            [currentValue[0]]: In(currentValue[1])
+          }
+        }
+
+        return {
+          ...previousValue,
+          [currentValue[0]]: currentValue[1]
+        }
+      }, {})
+
+    console.log(parsedFilters)
 
     const [results, total] = await repository.findAndCount({
       where: {
-        ...selectedFilters
+        ...parsedFilters
       },
       skip: skip,
       take: limit,

@@ -18,13 +18,42 @@ export class NotesController {
     this.services = services
   }
 
+  @OptionalAuthenticated()
   @ExceptionsWrapper()
   async getPublicFeed(req: Request, res: Response): Promise<Response> {
-    const { pagination, filters = {} } = req.query
+    const { pagination, filters = {} as any } = req.query
     const limit = pagination?.limit as number
     const skip = pagination?.skip as number
 
-    const { results, total } = await this.services.getPublicFeed({ limit, skip, filters })
+    if(req.userdata?.username && (req.userdata.username === filters?.author?.username)) {
+      const { results, total } = await this.services.getPublicFeed({ 
+        limit, 
+        skip, 
+        filters: {
+          author: {
+            username: req.userdata?.username,
+          },
+          privacyStatus: ["public", "private"]
+        }
+      })
+  
+      return res.json({
+        pagination: {
+          total,
+          limit,
+          skip
+        },
+        results
+      })
+    }
+
+    const { results, total } = await this.services.getPublicFeed({ 
+      limit, 
+      skip, 
+      filters: {
+        privacyStatus: ["public"]
+      }
+    })
 
     return res.json({
       pagination: {
