@@ -98,25 +98,25 @@ export function NotesBoard({ notes, pagination = null, setPagination }: props) {
 
   const goNextPage = useCallback(() => {
     if(!pagination) return 
-    
-    const currentPageIndex = pagination?.pagesList?.findIndex((page) => {
-      page.pageNumber === pagination.currentPage
+
+    const nextPage = pagination.pagesList.find((page) => {
+      return page.pageNumber === (pagination.currentPage + 1)
     })
 
-    if(pagination?.pagesList?.length > currentPageIndex - 1) {
-      setPagination(pagination?.pagesList[currentPageIndex - 1].paginationFilters)
+    if(nextPage) {
+      setPagination(nextPage.paginationFilters)
     }
   }, [setPagination])
 
   const goPreviousPage = useCallback(() => {
     if(!pagination) return 
 
-    const currentPageIndex = pagination?.pagesList?.findIndex((page) => {
-      page.pageNumber === pagination.currentPage
+    const previousPage = pagination.pagesList.find((page) => {
+      return page.pageNumber === (pagination.currentPage - 1)
     })
 
-    if((pagination?.pagesList?.length - (currentPageIndex - 1)) > 0) {
-      setPagination(pagination?.pagesList[currentPageIndex - 1].paginationFilters)
+    if(previousPage) {
+      setPagination(previousPage.paginationFilters)
     }
   }, [setPagination])
 
