@@ -21,7 +21,7 @@ export class NotesController {
   @OptionalAuthenticated()
   @ExceptionsWrapper()
   async getPublicFeed(req: Request, res: Response): Promise<Response> {
-    const { pagination, filters = {} as any } = req.query
+    const { pagination, filters = {} as any, select } = req.query
     const limit = pagination?.limit as number
     const skip = pagination?.skip as number
 
@@ -35,7 +35,8 @@ export class NotesController {
             username: req.userdata?.username,
           },
           privacyStatus: ["public", "private"]
-        }
+        },
+        select: select as string []
       })
   
       return res.json({
@@ -54,7 +55,8 @@ export class NotesController {
       filters: {
         ...filters,
         privacyStatus: ["public"]
-      }
+      },
+      select: select as string []
     })
 
     return res.json({

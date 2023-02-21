@@ -14,7 +14,7 @@ import {
  } from "../shared/interface"
 
 export class NotesRepository extends TypeORMBaseRepository implements INotesRepository<NoteModel> {
-  async getMany({ filters, limit, skip }: getManyOptions): Promise<getManyResponse<NoteModel>> {
+  async getMany({ filters, limit, skip, select }: getManyOptions): Promise<getManyResponse<NoteModel>> {
     const database = await this.database.getDatabase()
     const repository = database.getRepository(NoteModel)
 
@@ -39,6 +39,7 @@ export class NotesRepository extends TypeORMBaseRepository implements INotesRepo
           where: searchFilters,
           skip: skip,
           take: limit,
+          select: select as any,
           order: {
             updatedAt: -1,
           },
@@ -82,6 +83,8 @@ export class NotesRepository extends TypeORMBaseRepository implements INotesRepo
       },
       skip: skip,
       take: limit,
+      select: select as any,
+      relations: [],
       order: {
         updatedAt: -1,
       },

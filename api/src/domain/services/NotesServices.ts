@@ -20,8 +20,8 @@ export class NoteServices {
     this.repository = repository
   }
 
-  async getPublicFeed({ limit, skip, filters }: getManyOptions): Promise<getManyResponse<Note>> {
-    return await this.repository.getMany({ limit, skip, filters })
+  async getPublicFeed({ limit, skip, filters, select }: getManyOptions): Promise<getManyResponse<Note>> {
+    return await this.repository.getMany({ limit, skip, filters, select })
   }
 
   async getOneBySlug(noteSlug: string, userId?: string): Promise<Note> {

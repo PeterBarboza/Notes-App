@@ -6,7 +6,8 @@ export type getManyOptions = {
   filters: {
     search?: string
     [key: string]: unknown
-  }
+  },
+  select?: string[]
 }
 export type getManyResponse<Entity> = {
   total: number
