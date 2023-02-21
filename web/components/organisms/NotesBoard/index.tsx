@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import { useRouter } from "next/router"
 import { BiBlock } from "react-icons/bi"
 
@@ -9,6 +9,7 @@ import { Note } from "../../../interface/schemas"
 import { NotesPagination, page, paginationParams } from "../../../shared/interface"
 
 import styles from "./styles.module.scss"
+import { NOTES_PAGE_SIZE } from "../../../shared/constants"
 
 type props = {
   notes: Note[] | null
@@ -19,75 +20,54 @@ type props = {
 export function NotesBoard({ notes, pagination = null, setPagination }: props) {
   const router = useRouter()
 
-  const currentAmmount = useMemo(() => {
-    const currentAmmount = pagination?.pagesList
-      .find(page => page.pageNumber === pagination.currentPage)
-      ?.currentAmmount
+  const presenting = useMemo(() => {
+    const { currentAmmount, pageNumber } = pagination?.pagesList
+      .find(page => page.pageNumber === pagination.currentPage) ||
+      { currentAmmount: null, pageNumber: null }
 
-    if(currentAmmount?.constructor !== Number || isNaN(currentAmmount)) {
+    if(
+      (currentAmmount?.constructor !== Number || isNaN(currentAmmount)) ||
+      (pageNumber?.constructor !== Number || isNaN(pageNumber))
+    ) {
       return null
     }
 
-    return currentAmmount
+    if(pageNumber === 1) {
+      return {
+        from: 1,
+        to: currentAmmount,
+      }
+    } 
+
+    if(pagination?.pagesList[pagination?.pagesList.length - 1]?.pageNumber === pagination?.currentPage) {
+      return {
+        from: pagination?.total! - currentAmmount + 1,
+        to: pagination?.total,
+      }
+    }
+
+    return {
+      from: (NOTES_PAGE_SIZE * pageNumber) - currentAmmount + 1,
+      to: currentAmmount * pageNumber,
+    }
   }, [pagination])
 
   const generateList = useCallback(() => {
     if (!pagination) return null
 
-    if(pagination.pagesList.length <= 5) {
-      return pagination.pagesList.map((item) => {
-        return (
-          <li 
-            className={`
-              ${styles.listItem} 
-              ${item.pageNumber === pagination.currentPage ? styles.activeListItem : ""}
-            `}
-            onClick={() => {changePage(item)}}
-          >
-            {item.pageNumber}
-          </li>
-        )
-      })
-    }
-    
-    const firstPart = pagination.pagesList.slice(0, 2)
-    const lastPart = pagination.pagesList.slice(-2)
-
-    return (
-      <>
-        {
-          firstPart.map((item) => {
-            return (
-              <li 
-                className={`
-                  ${styles.listItem} 
-                  ${item.pageNumber === pagination.currentPage ? styles.activeListItem : ""}
-                `}
-                onClick={() => {changePage(item)}}
-              >
-                {item.pageNumber}
-              </li>
-            )
-          })
-        }
-        <li className={styles.listItem}>...</li>
-        {
-          lastPart.map((item) => {
-            return (
-              <li 
-                className={`
-                  ${styles.listItem} 
-                  ${item.pageNumber === pagination.currentPage ? styles.activeListItem : ""}
-                `}
-                onClick={() => {changePage(item)}}
-              >
-                {item.pageNumber}
-              </li>
-            )
-          })
-        }
-      </>
-    )
+    return pagination.pagesList.map((item) => {
+      return (
+        <li 
+          className={`
+            ${styles.listItem} 
+            ${item.pageNumber === pagination.currentPage ? styles.activeListItem : ""}
+          `}
+          onClick={() => {changePage(item)}}
+        >
+          {item.pageNumber}
+        </li>
+      )
+    })
   }, [pagination])
 
   const changePage = useCallback((pageData: page) => {
@@ -96,29 +76,37 @@ export function NotesBoard({ notes, pagination = null, setPagination }: props) {
     }
   }, [pagination, setPagination])
 
+  const hasNextPage = useMemo(() => {
+    if(!pagination) return
+
+    return pagination.pagesList.find((page) => {
+      return page.pageNumber === (pagination.currentPage + 1)
+    })
+  }, [pagination])
+
+  const hasPreviousPage = useMemo(() => {
+    if(!pagination) return
+
+    return pagination.pagesList.find((page) => {
+      return page.pageNumber === (pagination.currentPage - 1)
+    })
+  }, [pagination])
+
   const goNextPage = useCallback(() => {
     if(!pagination) return 
 
-    const nextPage = pagination.pagesList.find((page) => {
-      return page.pageNumber === (pagination.currentPage + 1)
-    })
-
-    if(nextPage) {
-      setPagination(nextPage.paginationFilters)
+    if(hasNextPage) {
+      setPagination(hasNextPage.paginationFilters)
     }
-  }, [setPagination])
+  }, [setPagination, hasNextPage])
 
   const goPreviousPage = useCallback(() => {
     if(!pagination) return 
 
-    const previousPage = pagination.pagesList.find((page) => {
-      return page.pageNumber === (pagination.currentPage - 1)
-    })
-
-    if(previousPage) {
-      setPagination(previousPage.paginationFilters)
+    if(hasPreviousPage) {
+      setPagination(hasPreviousPage.paginationFilters)
     }
-  }, [setPagination])
+  }, [setPagination, hasPreviousPage])
 
   return (
     <main className={styles.notesBoard}>
@@ -148,27 +136,44 @@ export function NotesBoard({ notes, pagination = null, setPagination }: props) {
             {
               pagination ?
               <nav className={styles.paginationComp}>
-                <span>
-                  Apresentando: {currentAmmount} de {pagination?.total}
-                </span>
+                {
+                  presenting ?
+                    <>
+                      <span>
+                        Apresentando: de {presenting?.from} à {presenting?.to} Total: {pagination?.total}
+                      </span>
+                    </>
+                    :
+                    null
+                }
                 <div className={styles.paginationActions}>
-                  <span 
-                    className={styles.navigateButton}
-                    onClick={() => goPreviousPage()}
-                  >
-                    Anterior
-                  </span>
+                  {
+                    hasPreviousPage ? 
+                    <span 
+                      className={styles.navigateButton}
+                      onClick={() => goPreviousPage()}
+                    >
+                      Anterior
+                    </span>
+                    :
+                    null
+                  }
                   <ul className={styles.pagesList}>
                     {
                       generateList()
                     }
                   </ul>
-                  <span 
-                    className={styles.navigateButton}
-                    onClick={() => goNextPage()}
-                  >
-                    Próximo
-                  </span>
+                  {
+                    hasNextPage ? 
+                    <span 
+                      className={styles.navigateButton}
+                      onClick={() => goNextPage()}
+                    >
+                      Próximo
+                    </span>
+                    :
+                    null
+                  }
                 </div>
               </nav>
               :
