@@ -1,12 +1,15 @@
 import { useState, useContext, useCallback, useEffect } from "react"
 import { useRouter } from "next/router"
+import useSWR from "swr"
 
 import { AuthContext } from "../../../../contexts/authContext"
 import { UserNotes } from "../../../../components/screens/UserNotes"
 import { withRefreshTokenAuth } from "../../../../services/shared/decorators/withRefreshTokenAuth"
 import { NotesServiceFactory } from "../../../../services/factories/notesServiceFactory"
+import { NOTES_PAGE_SIZE } from "../../../../shared/constants"
 
-import { Note, User } from "../../../../interface/schemas"
+import { NotesPagination, page, paginationParams } from "../../../../shared/interface"
+import { GetManyResponse } from "../../../../services/shared/interface/responses"
 
 export async function getServerSideProps(context: any) {
   const slugs = {
@@ -15,69 +18,114 @@ export async function getServerSideProps(context: any) {
   return { props: { ...slugs } }
 }
 
-type userData = {
-  username: string
-  notes: Note[] | null
-}
+const notesService = new NotesServiceFactory().handle()
 
-export default function({ username }: any) {
-  const [isLoadingNotes, setIsLoadingNotes] = useState<boolean>(false)
-  const [userData, setUserData] = useState<userData>({ username: username, notes: null })
+export default function({ username }: any) {  
+  const [paginationParams, setPaginationParams] = useState<paginationParams | null>({
+    limit: NOTES_PAGE_SIZE,
+    skip: 0
+  })
   const { accessToken, setAuthContextData } = useContext(AuthContext)
-  const router = useRouter()  
+  const router = useRouter()
 
   const getNotes = useCallback(async () => {
-    const notesService = new NotesServiceFactory().handle()
-    
     notesService.accessToken = accessToken
-    try {  
-      setIsLoadingNotes(true)
-      
+    try {
       const result = await withRefreshTokenAuth(
-        notesService.getMany.bind(notesService),
-        { 
+        notesService.getMany,
+        {
           setAuthContextData: setAuthContextData!,
-          routerInstance: router 
-        }, 
-        { optional: true }
-      )([{ filters: { author: { username: username } } }])
-
-      if(result?.data) {
-        const notes = result.data.results.length < 1 ? 
-          null
-          :
-          result.data.results.map((note) => {
-            return {
-              ...note,
-              author: {
-                username: username
+          routerInstance: router
+        },
+        { optional: true, thisArg: notesService }
+      )
+      (
+        paginationParams ?
+          [
+            {
+              pagination: paginationParams,
+              filters: {
+                author: {
+                  username: username
+                }
               }
             }
-          }) as Note[]
-        
-        setUserData({ username: username, notes: notes })
+          ]
+          : 
+          [
+            {
+              pagination: {
+                limit: NOTES_PAGE_SIZE,
+                skip: 0
+              },
+              filters: {
+                author: {
+                  username: username
+                }
+              }
+            }
+          ]
+      )
+
+      if (result?.data?.results?.length! >= 0) {
+        return result?.data!
       }
+      return null
     } catch (error) {
-      console.log(error)
-    } finally {
-      setIsLoadingNotes(false)
+      return null
     }
-  }, [
-    setIsLoadingNotes, 
-    setAuthContextData, 
-    setUserData, 
-    accessToken, 
-    router
-  ])
+  }, [accessToken, notesService, paginationParams, username])
+
+  const { data, error, isLoading, mutate } = useSWR('/api/notes/feed', getNotes)
+
+  const generatePagination = useCallback(
+    function <Entity = any>(getManyResponse: GetManyResponse<Entity>): NotesPagination | null {
+      if (
+        !getManyResponse?.pagination || 
+        getManyResponse?.results?.length === undefined
+      ) return null
+
+      const { total, limit, skip } = getManyResponse.pagination
+      const currentAmmount = getManyResponse.results.length
+      const totalPagesAmmount = Math.ceil(total / NOTES_PAGE_SIZE)
+
+      const pagesList: page[] = []
+
+      const currentPage = Math.ceil(skip / NOTES_PAGE_SIZE) + 1
+      
+      for (let page = 1; page <= totalPagesAmmount; page++) {
+        pagesList.push({
+          currentAmmount: currentAmmount,
+          pageNumber: page,
+          paginationFilters: {
+            limit: limit,
+            skip: page === 1 ? 0 : limit * (page - 1)
+          }
+        })
+      }
+
+      return {
+        currentPage: currentPage,
+        pagesList: pagesList,
+        total: total
+      }
+    },
+    []
+  )
 
   useEffect(() => {
-    getNotes()
-  }, [getNotes])
+    mutate()
+  }, [paginationParams])
 
   return (
     <UserNotes 
-      data={{ username: userData?.username!, notes: userData?.notes }} 
-      isLoadingNotes={isLoadingNotes} 
+      isLoadingNotes={isLoading}
+      notes={data?.results?.length! > 0 ? data?.results! : null}
+      pagination={data ? generatePagination(data) : null}
+      setPagination={(value) => {
+        setPaginationParams(value)
+      }}
+      username={username}
     />
   )
 }
