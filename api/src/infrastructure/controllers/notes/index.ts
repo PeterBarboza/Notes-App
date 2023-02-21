@@ -30,6 +30,7 @@ export class NotesController {
         limit, 
         skip, 
         filters: {
+          ...filters,
           author: {
             username: req.userdata?.username,
           },
@@ -51,6 +52,7 @@ export class NotesController {
       limit, 
       skip, 
       filters: {
+        ...filters,
         privacyStatus: ["public"]
       }
     })

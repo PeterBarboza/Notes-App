@@ -76,8 +76,6 @@ export class NotesRepository extends TypeORMBaseRepository implements INotesRepo
         }
       }, {})
 
-    console.log(parsedFilters)
-
     const [results, total] = await repository.findAndCount({
       where: {
         ...parsedFilters
