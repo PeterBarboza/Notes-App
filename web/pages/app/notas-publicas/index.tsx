@@ -26,7 +26,6 @@ const notesService = new NotesServiceFactory().handle()
 // P.S: Aplicar o padrão descrito acima em toda a aplicação.
 // P.S: Criar componente de paginação
 export default function() {  
-  const [getNotesResponse, setGetNotesResponse] = useState<GetManyResponse<Note> | null>(null)
   const [paginationParams, setPaginationParams] = useState<paginationParams | null>({
     limit: NOTES_PAGE_SIZE,
     skip: 0
@@ -106,9 +105,7 @@ export default function() {
       notes={data?.results?.length! > 0 ? data?.results! : null}
       pagination={data ? generatePagination(data) : null}
       setPagination={(value) => {
-        console.log(value)
         setPaginationParams(value)
-        mutate()
       }}
     />  
   )
