@@ -6,7 +6,8 @@ export interface getManyParams {
   filters?: {
     search?: string
     [key: string]: any
-  }
+  },
+  select?: string[]
 }
 
 export interface authWithEmailAndPasswordParams {

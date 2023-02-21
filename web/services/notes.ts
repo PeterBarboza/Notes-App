@@ -24,7 +24,8 @@ export class NotesService {
       {
         params: {
           pagination: params?.pagination,
-          filters: params?.filters
+          filters: params?.filters,
+          select:  params?.select
         }
       }
     )
