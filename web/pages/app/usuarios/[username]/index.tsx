@@ -76,7 +76,7 @@ export default function({ username }: any) {
     }
   }, [accessToken, notesService, paginationParams, username])
 
-  const { data, error, isLoading, mutate } = useSWR('/api/notes/feed', getNotes)
+  const { data, error, isLoading, mutate } = useSWR(`/api/notes/${username || "user"}`, getNotes)
 
   const generatePagination = useCallback(
     function <Entity = any>(getManyResponse: GetManyResponse<Entity>): NotesPagination | null {

@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState, useContext } from "react"
+import { useCallback, useState, useContext } from "react"
 import useSWR from "swr"
 
 import { NotesServiceFactory } from "../../../../services/factories/notesServiceFactory"
 import { AuthContext } from "../../../../contexts/authContext"
 import { Feed } from "../../../../components/screens/Feed"
 import { NOTES_PAGE_SIZE } from "../../../../shared/constants"
+import { useLoadingToast } from "../../../../shared/hooks/useLoadingToast"
 
 import { GetManyResponse } from "../../../../services/shared/interface/responses"
 import { NotesPagination, page, paginationParams } from "../../../../shared/interface"
@@ -25,6 +26,7 @@ export default function({ search }: any) {
     skip: 0
   })
   const { accessToken } = useContext(AuthContext)
+  const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
   
   const getNotes = useCallback(async () => {
     notesService.accessToken = accessToken
@@ -95,9 +97,14 @@ export default function({ search }: any) {
     []
   )
 
-  useEffect(() => {
-    mutate()
-  }, [paginationParams])
+  useLoadingToast({ 
+    callbackDeps: [paginationParams],
+    errorMessage: error,
+    asyncMethod: mutate,
+    noToastCondition: isFirstRender,
+    noToastCallback: () => setIsFirstRender(false),
+    customLoadingToastMessage: "Carregando notas..."
+  })
 
   return (
     <Feed 

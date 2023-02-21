@@ -5,8 +5,8 @@ import { NotesServiceFactory } from "../../../services/factories/notesServiceFac
 import { AuthContext } from "../../../contexts/authContext"
 import { Feed } from "../../../components/screens/Feed"
 import { NOTES_PAGE_SIZE } from "../../../shared/constants"
+import { useLoadingToast } from "../../../shared/hooks/useLoadingToast"
 
-import { Note } from "../../../interface/schemas"
 import { GetManyResponse } from "../../../services/shared/interface/responses"
 import { NotesPagination, page, paginationParams } from "../../../shared/interface"
 
@@ -30,6 +30,7 @@ export default function() {
     limit: NOTES_PAGE_SIZE,
     skip: 0
   })
+  const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
   const { accessToken } = useContext(AuthContext)
   
   const getNotes = useCallback(async () => {
@@ -95,9 +96,14 @@ export default function() {
     []
   )
 
-  useEffect(() => {
-    mutate()
-  }, [paginationParams])
+  useLoadingToast({ 
+    callbackDeps: [paginationParams],
+    errorMessage: error,
+    asyncMethod: mutate,
+    noToastCondition: isFirstRender,
+    noToastCallback: () => setIsFirstRender(false),
+    customLoadingToastMessage: "Carregando notas..."
+  })
 
   return (
     <Feed 
