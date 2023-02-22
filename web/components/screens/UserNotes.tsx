@@ -1,8 +1,11 @@
+import { useRouter } from "next/router"
+import { useEffect } from "react"
 import { BsPersonCircle } from "react-icons/bs"
 
 import { NotesBoard } from "../organisms/NotesBoard"
 import { BaseLayout } from "../organisms/BaseLayout"
 import { Loading } from "../molecules/Loading"
+import { NoDataFound } from "../molecules/NoDataFound"
 
 import { Note } from "../../interface/schemas"
 import { NotesPagination, paginationParams } from "../../shared/interface"
@@ -15,34 +18,50 @@ type props = {
   username: string
   pagination: NotesPagination | null
   setPagination: (args: paginationParams) => void
+  onUpdateData?: () => Promise<any>
 }
 
-export function UserNotes({ isLoadingNotes, notes, username, pagination, setPagination }: props) {  
+export function UserNotes({ 
+  isLoadingNotes, 
+  notes, 
+  username, 
+  pagination, 
+  setPagination, 
+  onUpdateData 
+}: props) {  
+  const router = useRouter()
+
+  useEffect(() => {
+    console.log(notes)
+  }, [notes])
+
   return (
-    <BaseLayout>
+    <BaseLayout onUpdateData={onUpdateData}>
       {
         isLoadingNotes ? 
           <Loading />
-        :
-          <>
-            {
-              notes === null ?
-                null
-                :
-                <div className={styles.userNotesProfileBox}>
-                  <BsPersonCircle 
-                    size={40}
-                    color="#616161"
-                  />
-                  <p>{username}</p>
-                </div>
-            }
+        : notes === null ?
+            <NoDataFound 
+              messages={[
+                "Nenhuma nota foi encontrada em:",
+                router.asPath
+              ]}
+            />
+            :
+            <>
+              <div className={styles.userNotesProfileBox}>
+                <BsPersonCircle 
+                  size={40}
+                  color="#616161"
+                />
+                <p>{username}</p>
+              </div>
               <NotesBoard
                 notes={notes}
                 pagination={pagination}
                 setPagination={setPagination}
               />
-          </>
+            </>
       }
     </BaseLayout>
   )

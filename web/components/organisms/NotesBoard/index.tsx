@@ -1,25 +1,23 @@
-import { useCallback, useEffect, useMemo } from "react"
+import { useCallback, useMemo } from "react"
 import { useRouter } from "next/router"
-import { BiBlock } from "react-icons/bi"
 
 import { NoteCard } from "../../molecules/NoteCard"
 import { NotesBox } from "../../molecules/NotesBox"
 
 import { Note } from "../../../interface/schemas"
 import { NotesPagination, page, paginationParams } from "../../../shared/interface"
+import { NOTES_PAGE_SIZE } from "../../../shared/constants"
+import { NoDataFound } from "../../molecules/NoDataFound"
 
 import styles from "./styles.module.scss"
-import { NOTES_PAGE_SIZE } from "../../../shared/constants"
 
 type props = {
-  notes: Note[] | null
+  notes: Note[]
   pagination?: NotesPagination | null
   setPagination: (args: paginationParams) => void
 }
 
 export function NotesBoard({ notes, pagination = null, setPagination }: props) {
-  const router = useRouter()
-
   const presenting = useMemo(() => {
     const { currentAmmount, pageNumber } = pagination?.pagesList
       .find(page => page.pageNumber === pagination.currentPage) ||
@@ -110,76 +108,63 @@ export function NotesBoard({ notes, pagination = null, setPagination }: props) {
 
   return (
     <main className={styles.notesBoard}>
+      <NotesBox>
+        {
+          notes.map(note => {
+            return (
+              <NoteCard
+                key={note.id}
+                {...note}
+              />
+            )
+          })
+        }
+      </NotesBox>
       {
-        notes === null?
-          <div className={styles.noNotesFound}>
-            <BiBlock size={80} color="#9b9b9b"/>
-            <div>
-              <p>Nenhuma nota foi encontrada em:</p>
-              <p>{router.asPath}</p>
-            </div>
-          </div>
-          :
-          <>
-            <NotesBox>
-              {
-                notes.map(note => {
-                  return (
-                    <NoteCard
-                      key={note.id}
-                      {...note}
-                    />
-                  )
-                })
-              }
-            </NotesBox>
+        pagination ?
+        <nav className={styles.paginationComp}>
+          {
+            presenting ?
+              <>
+                <span>
+                  Apresentando: de {presenting?.from} à {presenting?.to} Total: {pagination?.total}
+                </span>
+              </>
+              :
+              null
+          }
+          <div className={styles.paginationActions}>
             {
-              pagination ?
-              <nav className={styles.paginationComp}>
-                {
-                  presenting ?
-                    <>
-                      <span>
-                        Apresentando: de {presenting?.from} à {presenting?.to} Total: {pagination?.total}
-                      </span>
-                    </>
-                    :
-                    null
-                }
-                <div className={styles.paginationActions}>
-                  {
-                    hasPreviousPage ? 
-                    <span 
-                      className={styles.navigateButton}
-                      onClick={() => goPreviousPage()}
-                    >
-                      Anterior
-                    </span>
-                    :
-                    null
-                  }
-                  <ul className={styles.pagesList}>
-                    {
-                      generateList()
-                    }
-                  </ul>
-                  {
-                    hasNextPage ? 
-                    <span 
-                      className={styles.navigateButton}
-                      onClick={() => goNextPage()}
-                    >
-                      Próximo
-                    </span>
-                    :
-                    null
-                  }
-                </div>
-              </nav>
+              hasPreviousPage ? 
+              <span 
+                className={styles.navigateButton}
+                onClick={() => goPreviousPage()}
+              >
+                Anterior
+              </span>
               :
               null
             }
-          </>
+            <ul className={styles.pagesList}>
+              {
+                generateList()
+              }
+            </ul>
+            {
+              hasNextPage ? 
+              <span 
+                className={styles.navigateButton}
+                onClick={() => goNextPage()}
+              >
+                Próximo
+              </span>
+              :
+              null
+            }
+          </div>
+        </nav>
+        :
+        null
       }
     </main>
   )

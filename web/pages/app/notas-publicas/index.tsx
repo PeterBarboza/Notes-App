@@ -108,11 +108,12 @@ export default function() {
   return (
     <Feed 
       isLoadingNotes={isLoading}
-      notes={data?.results?.length! > 0 ? data?.results! : null}
+      notes={data?.results || null}
       pagination={data ? generatePagination(data) : null}
       setPagination={(value) => {
         setPaginationParams(value)
       }}
+      onUpdateData={mutate}
     />  
   )
 }

@@ -18,11 +18,12 @@ import styles from "./styles.module.scss"
 type props = {
   isModalOpen: boolean
   closeModal: () => void
+  onUpdateData?: () => Promise<any>
 }
 
 const notesService = new NotesServiceFactory().handle()
 
-export function CreateNoteModal({ isModalOpen, closeModal }: props) {
+export function CreateNoteModal({ isModalOpen, closeModal, onUpdateData }: props) {
   const { accessToken, userData } = useContext(AuthContext)
   const { 
     register, 
@@ -42,7 +43,6 @@ export function CreateNoteModal({ isModalOpen, closeModal }: props) {
   const onSubmit = useCallback(async (noteData: createNoteData) => {
     notesService.accessToken = accessToken
   
-    console.log(noteData)
     try {      
       const response = await toast.promise(
         notesService.create({
@@ -61,6 +61,9 @@ export function CreateNoteModal({ isModalOpen, closeModal }: props) {
         closeModal()
       }, 500)
     } catch (error) {}
+    finally {
+      if(onUpdateData) onUpdateData()
+    }
   }, [])
 
   return (

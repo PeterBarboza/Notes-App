@@ -1,10 +1,8 @@
-import { useCallback, useEffect, useState, useContext } from "react"
+import { useCallback, useEffect, useContext } from "react"
 import { useRouter } from "next/router"
+import useSWR from "swr"
 
 import { NotesServiceFactory } from "../../../../../services/factories/notesServiceFactory"
-
-import { Note } from "../../../../../interface/schemas"
-import { GetOneResponse } from "../../../../../services/shared/interface/responses"
 import { AuthContext } from "../../../../../contexts/authContext"
 import { SingleNote } from "../../../../../components/screens/SingleNote"
 import { withRefreshTokenAuth } from "../../../../../services/shared/decorators/withRefreshTokenAuth"
@@ -20,15 +18,12 @@ export async function getServerSideProps(context: any) {
 const notesService = new NotesServiceFactory().handle()
 
 export default function({ username, noteSlug }: any) {
-  const [isLoadingNote, setIsLoadingNote] = useState<boolean>(false)
-  const [note, setNote] = useState<GetOneResponse<Note>>()
   const { accessToken, setAuthContextData } = useContext(AuthContext)
   const router = useRouter()
 
   const getNote = useCallback(async () => {
     notesService.accessToken = accessToken
     try {
-      setIsLoadingNote(true)
       
       const result = await withRefreshTokenAuth(
         notesService.getOne, 
@@ -38,19 +33,28 @@ export default function({ username, noteSlug }: any) {
         }, 
         { optional: true, thisArg: notesService }
       )([noteSlug])
-      if(result?.data) setNote(result.data)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setIsLoadingNote(false)
-    }
-  }, [noteSlug, setIsLoadingNote, router])
 
-  useEffect(() => {
-    getNote()
-  }, [getNote])
+      if(result?.data?.id) return result.data
+
+      return null
+    } catch (error) {
+      return null
+    }
+  }, [noteSlug, router])
+
+  const { data, error, isLoading, mutate } = useSWR(`/api/notes/${noteSlug || "single-note"}`, getNote)
 
   return (
-    <SingleNote isLoadingNote={isLoadingNote} note={note!} />
+    <SingleNote 
+      isLoadingNote={isLoading} 
+      note={data!} 
+      onUpdateData={async (newNoteTitle) => {
+        if(newNoteTitle) {
+          router.push(`/app/usuarios/${username}/${newNoteTitle}`)
+          return
+        }
+        mutate()
+      }} 
+    />
   )
 }

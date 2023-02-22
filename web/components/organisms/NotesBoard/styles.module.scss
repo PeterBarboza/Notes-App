@@ -8,25 +8,6 @@
   align-items: flex-start;
   gap: 40px;
 
-  .noNotesFound {
-    width: 100%;
-    min-height: fit-content;
-    height: 50vh;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-
-    p {
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: #858585;
-      text-align: center;
-    }
-  }
-
   .paginationComp {
     width: 100%;
     min-height: 50px;

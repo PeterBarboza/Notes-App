@@ -14,6 +14,10 @@ import { Note } from "../../../interface/schemas"
 
 import styles from "./styles.module.scss"
 
+interface props extends Note {
+  onUpdateData?: (...args: any) => Promise<any>
+}
+
 export function FullNote({ 
   id, 
   title, 
@@ -22,8 +26,9 @@ export function FullNote({
   privacyStatus, 
   createdAt, 
   updatedAt, 
-  noteSlug
-}: Note) {
+  noteSlug,
+  onUpdateData
+}: props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { accessToken, userData } = useContext(AuthContext)
   const router = useRouter()
@@ -56,8 +61,6 @@ export function FullNote({
           closeOnClick: true,
           closeButton: true,
         });
-
-        setTimeout(() => router.push(`/app/usuarios/${author.username}`), 1500)
         
         return
       }
@@ -92,14 +95,13 @@ export function FullNote({
         closeButton: true,
       });
     }
+    finally {
+      if(onUpdateData) onUpdateData()
+    }
   }, [id])
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
-  useEffect(() => {
-    // console.log(window.history)
-  }, [])
 
   return (
     <main className={styles.fullNote}>
@@ -144,6 +146,7 @@ export function FullNote({
                 }}
                 isModalOpen={isModalOpen}
                 closeModal={closeModal}
+                onUpdateData={onUpdateData}
               />
             </>
             :

@@ -11,9 +11,10 @@ import { AuthContext } from "../../../contexts/authContext"
 
 type props = {
   children: ReactNode
+  onUpdateData?: () => Promise<any>
 }
 
-export function BaseLayout({ children }: props) {
+export function BaseLayout({ children, onUpdateData }: props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { accessToken } = useContext(AuthContext)
 
@@ -45,6 +46,7 @@ export function BaseLayout({ children }: props) {
               <CreateNoteModal
                 isModalOpen={isModalOpen}
                 closeModal={closeModal}
+                onUpdateData={onUpdateData}
               />
             </>
             :

@@ -29,14 +29,14 @@ export class UsersService {
     return result
   }
 
-  async getOneByUsername(username: string): Promise<GetOneResponse<User>> {
+  async getOneByUsername(username: string): Promise<AxiosResponse<GetOneResponse<User>>> {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 
     const result = await apiCaller.get<User>(
       `${this.basePath}/username/${username}`
     )
 
-    return result.data
+    return result
   }
 
   async getOneById(id: string): Promise<GetOneResponse<User>> {

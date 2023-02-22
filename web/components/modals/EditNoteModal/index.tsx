@@ -20,11 +20,12 @@ type props = {
   entity: Note,
   isModalOpen: boolean
   closeModal: () => void
+  onUpdateData?: (...args: any) => Promise<any>
 }
 
 const notesService = new NotesServiceFactory().handle()
 
-export function EditNoteModal({ isModalOpen, closeModal, entity }: props) {
+export function EditNoteModal({ isModalOpen, closeModal, entity, onUpdateData }: props) {
   const { accessToken, userData } = useContext(AuthContext)
   const { 
     register, 
@@ -56,6 +57,21 @@ export function EditNoteModal({ isModalOpen, closeModal, entity }: props) {
           error: 'Falha na criação da nota.'
         }
       )
+      
+      if(onUpdateData) {
+        const updatedNote = await notesService.getMany({ 
+          filters: {
+            id: entity.id
+          },
+          select: ["id", "updatedAt", "noteSlug"]
+        })
+        
+        if(updatedNote.status !== 200) {
+          onUpdateData()
+        } else {
+          onUpdateData(updatedNote.data?.results[0].noteSlug)
+        }
+      }
 
       setTimeout(() => {
         reset({}, { keepDefaultValues: true })
@@ -66,9 +82,9 @@ export function EditNoteModal({ isModalOpen, closeModal, entity }: props) {
 
   return (
     <BaseModal
-    heading="Editar nota"
-    isOpen={isModalOpen}
-    closeModal={closeModal}
+      heading="Editar nota"
+      isOpen={isModalOpen}
+      closeModal={closeModal}
     >
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <ModalTextInput
@@ -101,7 +117,11 @@ export function EditNoteModal({ isModalOpen, closeModal, entity }: props) {
           inputLabel="Privacidade"
           exampleText=""
           onChange={(value) => setValue("privacyStatus", value as "public" | "private")}
-          initialValue={NOTE_PRIVACY_STATUS_OPTIONS[0]}
+          initialValue={
+            NOTE_PRIVACY_STATUS_OPTIONS.find(option => option.value === entity.privacyStatus)
+            ||
+            NOTE_PRIVACY_STATUS_OPTIONS[0]
+          }
           required={true}
           options={NOTE_PRIVACY_STATUS_OPTIONS}
         />

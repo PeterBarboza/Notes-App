@@ -98,7 +98,7 @@ export default function({ search }: any) {
   )
 
   useLoadingToast({ 
-    callbackDeps: [paginationParams],
+    callbackDeps: [paginationParams, search],
     errorMessage: error,
     asyncMethod: mutate,
     noToastCondition: isFirstRender,
@@ -109,11 +109,12 @@ export default function({ search }: any) {
   return (
     <Feed 
       isLoadingNotes={isLoading}
-      notes={data?.results?.length! > 0 ? data?.results! : null}
+      notes={null}
       pagination={data ? generatePagination(data) : null}
       setPagination={(value) => {
         setPaginationParams(value)
       }}
+      onUpdateData={mutate}
     />  
   )
 }

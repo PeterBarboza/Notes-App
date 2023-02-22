@@ -7,6 +7,7 @@ import { UserNotes } from "../../../../components/screens/UserNotes"
 import { withRefreshTokenAuth } from "../../../../services/shared/decorators/withRefreshTokenAuth"
 import { NotesServiceFactory } from "../../../../services/factories/notesServiceFactory"
 import { NOTES_PAGE_SIZE } from "../../../../shared/constants"
+import { UsersServiceFactory } from "../../../../services/factories/usersServiceFactory"
 
 import { NotesPagination, page, paginationParams } from "../../../../shared/interface"
 import { GetManyResponse } from "../../../../services/shared/interface/responses"
@@ -19,6 +20,7 @@ export async function getServerSideProps(context: any) {
 }
 
 const notesService = new NotesServiceFactory().handle()
+const usersService = new UsersServiceFactory().handle()
 
 export default function({ username }: any) {  
   const [paginationParams, setPaginationParams] = useState<paginationParams | null>({
@@ -31,6 +33,11 @@ export default function({ username }: any) {
   const getNotes = useCallback(async () => {
     notesService.accessToken = accessToken
     try {
+      const user = await usersService.getOneByUsername(username)
+      if(user.status !== 200) {
+        return null
+      }
+
       const result = await withRefreshTokenAuth(
         notesService.getMany,
         {
@@ -120,12 +127,13 @@ export default function({ username }: any) {
   return (
     <UserNotes 
       isLoadingNotes={isLoading}
-      notes={data?.results?.length! > 0 ? data?.results! : null}
+      notes={data?.results || null}
       pagination={data ? generatePagination(data) : null}
       setPagination={(value) => {
         setPaginationParams(value)
       }}
       username={username}
+      onUpdateData={mutate}
     />
   )
 }
