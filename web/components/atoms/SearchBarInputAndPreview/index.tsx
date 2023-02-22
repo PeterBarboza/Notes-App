@@ -57,6 +57,9 @@ export function SearchBarInputAndPreview({
 
   const handleSearchRoute = useCallback(() => {
     router.push(`/app/notas-publicas/pesquisa/${query}`)
+
+    router.events.on("routeChangeComplete", () => setIsPreviewVisible(false))
+    router.events.on("routeChangeError", () => setIsPreviewVisible(false))
   }, [query])
 
   const handleSearchRouterOnKeyEnterDown = useCallback((event: any) => {
