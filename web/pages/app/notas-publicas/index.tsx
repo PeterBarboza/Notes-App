@@ -3,28 +3,15 @@ import useSWR from 'swr'
 
 import { NotesServiceFactory } from "../../../services/factories/notesServiceFactory"
 import { AuthContext } from "../../../contexts/authContext"
-import { Feed } from "../../../components/screens/Feed"
 import { NOTES_PAGE_SIZE } from "../../../shared/constants"
 import { useLoadingToast } from "../../../shared/hooks/useLoadingToast"
+import { PublicNotes } from "../../../components/screens/PublicNotes"
 
 import { GetManyResponse } from "../../../services/shared/interface/responses"
 import { NotesPagination, page, paginationParams } from "../../../shared/interface"
 
 const notesService = new NotesServiceFactory().handle()
 
-// TODO: O padrão a ser implementado nas lógicas de requisição de dados será
-//   o seguinte: <DADO_RETORNADO> ou <NULO>
-
-// Dentro dos componentes SCREENS, será feita a verificação desses valores
-//   que serão recebidos via propriedades e baseado nisso será renderizado o
-//   componente de exibição dos dados ou então um componente que indique ao usuário
-//   a ausência de dados.
-
-// Também serão criados um componente contendo a lógica de usuários logados
-//   e outro contendo a lógica de usuários não logados.
-
-// P.S: Aplicar o padrão descrito acima em toda a aplicação.
-// P.S: Criar componente de paginação
 export default function() {  
   const [paginationParams, setPaginationParams] = useState<paginationParams | null>({
     limit: NOTES_PAGE_SIZE,
@@ -50,7 +37,7 @@ export default function() {
           }
       )
 
-      if (result.data.results.length >= 0) {
+      if (result?.data?.results?.length > 0) {
         return result.data
       }
       return null
@@ -106,7 +93,7 @@ export default function() {
   })
 
   return (
-    <Feed 
+    <PublicNotes 
       isLoadingNotes={isLoading}
       notes={data?.results || null}
       pagination={data ? generatePagination(data) : null}

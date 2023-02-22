@@ -3,9 +3,9 @@ import useSWR from "swr"
 
 import { NotesServiceFactory } from "../../../../services/factories/notesServiceFactory"
 import { AuthContext } from "../../../../contexts/authContext"
-import { Feed } from "../../../../components/screens/Feed"
 import { NOTES_PAGE_SIZE } from "../../../../shared/constants"
 import { useLoadingToast } from "../../../../shared/hooks/useLoadingToast"
+import { PublicNotesSearch } from "../../../../components/screens/PublicNotesSearch"
 
 import { GetManyResponse } from "../../../../services/shared/interface/responses"
 import { NotesPagination, page, paginationParams } from "../../../../shared/interface"
@@ -107,7 +107,7 @@ export default function({ search }: any) {
   })
 
   return (
-    <Feed 
+    <PublicNotesSearch 
       isLoadingNotes={isLoading}
       notes={null}
       pagination={data ? generatePagination(data) : null}
