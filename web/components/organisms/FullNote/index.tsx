@@ -120,7 +120,7 @@ export function FullNote({
       }
       <h1>{title}</h1>
       <p className={styles.author}>
-        Escrito por: 
+        Escrito por:{" "}
         <Link href={`/app/usuarios/${author?.username}`}>
           <span>{author?.username}</span>
         </Link>

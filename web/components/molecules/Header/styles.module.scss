@@ -34,6 +34,12 @@
     max-width: 800px;
     height: 100%;
 
+    visibility: hidden;
+
+    @media (max-width: 800px) {
+      visibility: visible;
+    }
+
     margin: auto;
 
     display: flex;
@@ -71,10 +77,10 @@
     max-width: 600px;
     height: 100%;
 
-    display: none;
+    visibility: hidden;
 
     @media (min-width: 800px) {
-      display: block;
+      visibility: visible;
     }
   }
 

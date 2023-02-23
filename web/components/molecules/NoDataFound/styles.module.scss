@@ -9,10 +9,27 @@
   align-items: center;
   gap: 20px;
 
-  p {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #858585;
-    text-align: center;
+  .icon {
+    min-width: fit-content;
+    height: fit-content;
+  }
+
+  div {
+    max-width: 90vw;
+    p {
+      width: 100%;
+
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #858585;
+      text-align: center;
+      
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
+      // word-break: break-all;
+      // word-wrap: break-word;
+    }
   }
 }

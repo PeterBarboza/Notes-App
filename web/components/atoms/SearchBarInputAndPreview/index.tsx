@@ -9,6 +9,9 @@ import { GetManyResponse } from "../../../services/shared/interface/responses"
 import { Note } from "../../../interface/schemas"
 
 import styles from "./styles.module.scss"
+import { NOTES_PAGE_SIZE } from "../../../shared/constants"
+import { toast } from "react-toastify"
+import { RxMagnifyingGlass } from "react-icons/rx"
 
 interface props extends Partial<HTMLInputElement> {
   setIsInputFocused: (value: boolean) => void
@@ -16,9 +19,6 @@ interface props extends Partial<HTMLInputElement> {
 
 const notesService = new NotesServiceFactory().handle()
 
-//TODO: Adicionar useLoadingToast quando o usuário der o comando 
-//para ir para a rota de pesquisa
-//(/app/notas-publicas/pesquisa/keyWords)
 export function SearchBarInputAndPreview({
   setIsInputFocused,
 }: props) {
@@ -36,13 +36,17 @@ export function SearchBarInputAndPreview({
   const { accessToken } = useContext(AuthContext)
   const router = useRouter()
 
-  const getNotes = useCallback(async () => {
+  const getNotes = useCallback(async (query: string) => {
     notesService.accessToken = accessToken
+    setIsLoadingNotes(true)
     setTimeout(async () => {
       try {
         const result = await notesService.getMany({
           filters: {
             search: query
+          },
+          pagination: {
+            limit: NOTES_PAGE_SIZE
           },
           select: ["id", "updatedAt", "noteSlug", "title"]
         })
@@ -52,28 +56,42 @@ export function SearchBarInputAndPreview({
       } finally {
         setIsLoadingNotes(false)
       }
-    }, 100)
-  }, [query])
+    }, 400)
+  }, [notesService, setNotes, setIsLoadingNotes])
 
-  const handleSearchRoute = useCallback(() => {
+  const changeRoute = useCallback(() => {
+    if(query.length < 1) {
+      toast.info("Digite algo para poder efetuar a pesquisa.", { 
+        autoClose: 2000,
+        closeOnClick: true,
+        closeButton: true,
+      })
+      return
+    }
+
+    const toastId = toast.loading("Carregando notas...")
+
     router.push(`/app/notas-publicas/pesquisa/${query}`)
-
-    router.events.on("routeChangeComplete", () => setIsPreviewVisible(false))
-    router.events.on("routeChangeError", () => setIsPreviewVisible(false))
+    router.events.on("routeChangeComplete", () => {
+      setIsPreviewVisible(false)
+      toast.dismiss(toastId)
+    })
+    router.events.on("routeChangeError", () => {
+      setIsPreviewVisible(false)
+      toast.dismiss(toastId)
+    })
   }, [query])
 
-  const handleSearchRouterOnKeyEnterDown = useCallback((event: any) => {
+  const handleChangeRouteOnKeyDown = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
     if(
       (event.code === "Enter") ||
       (event.code === "enter") ||
       (event.key === "Enter") ||
       (event.key === "enter")
     ) {
-      if(query.length > 0) {
-        handleSearchRoute()
-      }
+      changeRoute()
     }
-  }, [query, handleSearchRoute])
+  }, [query, changeRoute])
 
   return (
     <div className={styles.inputAndPreviewWrap}>
@@ -89,8 +107,10 @@ export function SearchBarInputAndPreview({
           }
           setIsPreviewVisible(true)
 
-          setIsLoadingNotes(true)
-          getNotes()
+          getNotes(event?.target?.value)
+        }}
+        onFocus={() => {
+          setIsPreviewVisible(true)
         }}
         onBlur={() => {
           setTimeout(() => {
@@ -98,8 +118,17 @@ export function SearchBarInputAndPreview({
             setIsPreviewVisible(false)
           }, 100)
         }}
-        onKeyDown={(event) => handleSearchRouterOnKeyEnterDown(event)}
+        onKeyDown={(event) => handleChangeRouteOnKeyDown(event)}
       />
+      <button className={styles.searchButton}>
+        <RxMagnifyingGlass 
+          size={30}
+          color="#ffffff"
+          onClick={() => {
+            changeRoute()
+          }}
+        />
+      </button>
       {
         isPreviewVisible ? 
           <ul className={styles.searchResultsPreview}>
@@ -121,25 +150,29 @@ export function SearchBarInputAndPreview({
                             className={styles.linkWrap}
                             key={`note-searchbar-preview-link-${note.id}`}
                           >
-                            <li>{`${note.title} - ${note.author.username}`}</li>
+                            <li className={styles.listItem}>{`${note.title} - ${note.author.username}`}</li>
                           </Link>
                         )
                       })
                     }
                     {
-                      notes?.pagination?.total > 10 ?
+                      notes?.pagination?.total > NOTES_PAGE_SIZE ?
                           <div 
                             className={styles.linkWrap}
-                            onClick={() => handleSearchRoute()}
+                            onClick={() => changeRoute()}
                           >
-                            <li>Ver mais ({notes?.pagination?.total - 10}) resultados...</li>
+                            <li className={styles.listItem}>Ver mais ({notes?.pagination?.total - NOTES_PAGE_SIZE}) resultados...</li>
                           </div>
                         :
                         null
                     }
                   </>
-                :                  
-                  (() => {setIsPreviewVisible(false); return null})()
+                :    
+                  <div 
+                    className={styles.linkWrap}
+                  >
+                    <li>Nenhuma nota encontrada</li>
+                  </div>              
             }
           </ul>
           :

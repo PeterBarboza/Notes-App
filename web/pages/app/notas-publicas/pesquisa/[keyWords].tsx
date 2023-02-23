@@ -51,7 +51,7 @@ export default function({ search }: any) {
           }
       )
 
-      if (result.data.results.length >= 0) {
+      if (result?.data?.results?.length > 0) {
         return result.data
       }
       return null
@@ -109,7 +109,7 @@ export default function({ search }: any) {
   return (
     <PublicNotesSearch 
       isLoadingNotes={isLoading}
-      notes={null}
+      notes={data?.results || null}
       pagination={data ? generatePagination(data) : null}
       setPagination={(value) => {
         setPaginationParams(value)

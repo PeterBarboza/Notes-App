@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import Link from "next/link"
@@ -12,9 +12,11 @@ import { authWithEmailAndPasswordParams } from "../../services/shared/interface/
 import styles from "./login.module.scss"
 import { AuthTextInput } from "../atoms/AuthTextInput"
 import { ModalSubmitInput } from "../atoms/ModalSubmitInput"
+import { toast } from "react-toastify"
 
 export function Login() {  
   const { accessToken, setAuthContextData } = useContext(AuthContext)
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { 
     register, 
@@ -23,13 +25,36 @@ export function Login() {
   } = useForm<authWithEmailAndPasswordParams>()
 
   const onSubmit = useCallback(async ({ email, password }: authWithEmailAndPasswordParams) => {
+    const toastId = toast.loading("Autenticando...")
     try {
+      setIsLoading(true)
       const authService = new AuthServiceFactory().handle()
 
-      const result = await authService.authWithEmailAndPassword(email, password)
+      const result: any = await authService.authWithEmailAndPassword(email, password)
 
       if(result.status != 200) {
-        throw new Error("Auth Failed")
+
+        if(result?.data?.message) {
+          toast.update(toastId, { 
+            render: result?.data?.message,
+            type: "error", 
+            isLoading: false,
+            autoClose: 2000,
+            closeOnClick: true,
+            closeButton: true,
+          })
+          return
+        }
+
+        toast.update(toastId, { 
+          render: "Erro ao fazer login", 
+          type: "error", 
+          isLoading: false,
+          autoClose: 5000,
+          closeOnClick: true,
+          closeButton: true,
+        });
+        return
       }
       
       localStorage.setItem(
@@ -42,8 +67,20 @@ export function Login() {
         userData: result.data.user
       })
       
+      toast.update(toastId, { 
+        render: "Autenticado com sucesso", 
+        type: "success", 
+        isLoading: false,
+        autoClose: 2000,
+        closeOnClick: true,
+        closeButton: true,
+      })
+
       router.push("/app")
     } catch (error) {}
+    finally {
+      setIsLoading(false)
+    }
   }, [])
 
   useEffect(() => {
@@ -75,6 +112,7 @@ export function Login() {
           />
           <ModalSubmitInput
             inputDisplayText="Fazer login"
+            isLoading={isLoading}
           />
         </form>
         <div className={styles.redirectLinksBox}>
