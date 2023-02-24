@@ -17,7 +17,7 @@ export function SingleNote({ isLoadingNote, note, onUpdateData }: props) {
   const router = useRouter()
 
   return (
-    <BaseLayout>
+    <BaseLayout createNoteButtonEnabled={true}>
       {
         isLoadingNote ?
           <Loading />

@@ -41,7 +41,7 @@ export function PublicNotes({
   ], [])
 
   return (
-    <BaseLayout onUpdateData={onUpdateData}>
+    <BaseLayout onUpdateData={onUpdateData} createNoteButtonEnabled={true}>
       {
         isLoadingNotes ? 
           <Loading />

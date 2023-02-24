@@ -26,7 +26,7 @@ export function PublicNotesSearch({
   const router = useRouter()
 
   return (
-    <BaseLayout onUpdateData={onUpdateData}>
+    <BaseLayout onUpdateData={onUpdateData} createNoteButtonEnabled={true}>
       {
         isLoadingNotes ? 
           <Loading />

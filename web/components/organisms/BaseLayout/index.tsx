@@ -12,9 +12,10 @@ import { AuthContext } from "../../../contexts/authContext"
 type props = {
   children: ReactNode
   onUpdateData?: () => Promise<any>
+  createNoteButtonEnabled: boolean 
 }
 
-export function BaseLayout({ children, onUpdateData }: props) {
+export function BaseLayout({ children, onUpdateData, createNoteButtonEnabled }: props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { accessToken } = useContext(AuthContext)
 
@@ -32,7 +33,7 @@ export function BaseLayout({ children, onUpdateData }: props) {
         </div>
 
         {
-          accessToken ? 
+          accessToken && createNoteButtonEnabled ? 
             <>
               <div 
                 className={styles.composeNote}
