@@ -17,16 +17,20 @@
     background-color: #ffffff;
   }
   .searchButton {
+    transition-property: 0.2s;
     width: 60px;
     height: 40px;
 
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #b3b3b3;
+    background-color: #c2c2c2;
 
     border: 0;
     cursor: pointer;
+  }
+  .searchButton:hover {
+    filter: brightness(95%);
   }
 
   .searchResultsPreview {
@@ -42,6 +46,8 @@
 
     background-color: #ffffff;
     border: 1px solid #e7e7e7;
+
+    box-shadow: 0 2px 5px #00000079;
 
     position: absolute;
     top: calc(100% + 5px);
