@@ -24,6 +24,14 @@ export interface createAccountParams {
 export interface updateProfileParams {
   username: string
 }
+export interface updateEmailParams {
+  email: string
+  password: string
+}
+export interface updatePasswordParams {
+  newPassword: string
+  oldPassword: string
+}
 
 export interface createNoteData {
   title: string

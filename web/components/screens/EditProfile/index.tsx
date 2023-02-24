@@ -1,15 +1,15 @@
 import { useRouter } from "next/router"
 import { useCallback, useContext, useEffect, useState } from "react"
-import { BsPersonCircle } from "react-icons/bs"
+import { BsFillGearFill, BsPersonCircle } from "react-icons/bs"
 import { toast } from "react-toastify"
+import Link from "next/link"
 
 import { AuthContext } from "../../../contexts/authContext"
 import { UsersServiceFactory } from "../../../services/factories/usersServiceFactory"
 import { withRefreshTokenAuth } from "../../../services/shared/decorators/withRefreshTokenAuth"
 import { BaseLayout } from "../../organisms/BaseLayout"
 import { useGetNewCredentials } from "../../../shared/hooks/useGetNewCredentials"
-import { AuthServiceFactory } from "../../../services/factories/authServiceFactory"
-import { SHARED_CONSTANTS } from "../../../configs"
+import { parseErrorsArray } from "../../../shared/utils/parseErrorsArray"
 
 import { updateProfileParams } from "../../../services/shared/interface/requestParams"
 
@@ -74,6 +74,18 @@ export function EditProfile() {
         return
       }
 
+      if(result.data?.errors) {
+      toast.update(toastId, { 
+        render: parseErrorsArray(result.data?.errors),
+        type: "error", 
+        isLoading: false,
+        autoClose: 5000,
+        closeOnClick: true,
+        closeButton: true,
+      })
+      return
+    }
+
       toast.update(toastId, { 
         render: "Erro ao editar perfil", 
         type: "error", 
@@ -108,7 +120,7 @@ export function EditProfile() {
   }, [userData, setUsername])
 
   return (
-    <BaseLayout>
+    <BaseLayout createNoteButtonEnabled={false}>
       <div className={styles.userNotesProfileBox}>
         <h1>Editar Perfil</h1>
         <BsPersonCircle 
@@ -142,6 +154,16 @@ export function EditProfile() {
             />
           </div>
         </form>
+        <div className={styles.updateAccessData}>
+          <Link href="/app/atualizar-dados-de-acesso">
+            <button className={styles.redirectButton}>
+              <span>
+                Alterar dados de acesso
+              </span>
+              <BsFillGearFill className={styles.gearIcon}/>
+            </button>
+          </Link>
+        </div>
         {/* Adicionar edição de dados de acesso (email e senha) */}
       </div>
     </BaseLayout>

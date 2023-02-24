@@ -16,3 +16,11 @@ export type AuthResponse = {
   refreshToken: string
   user: UserPublicData
 }
+
+export type UpdateResponse = {
+  updatedCount: number
+}
+
+export type DeleteResponse = {
+  deletedCount: number
+}

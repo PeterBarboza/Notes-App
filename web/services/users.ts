@@ -3,8 +3,8 @@ import { AxiosResponse } from "axios"
 import { ApiFactory } from "./api"
 
 import { User } from "../interface/schemas"
-import { GetOneResponse } from "./shared/interface/responses"
-import { createAccountParams, updateProfileParams } from "./shared/interface/requestParams"
+import { GetOneResponse, UpdateResponse } from "./shared/interface/responses"
+import { createAccountParams, updateEmailParams, updatePasswordParams, updateProfileParams } from "./shared/interface/requestParams"
 
 //TODO: Trocar o retorno dos métodos para retornar toda a resposta do Axios
 //pois isso sera usado nos middlewares/decorators que verificaram a validade
@@ -60,11 +60,51 @@ export class UsersService {
     return result
   }
 
-  async updateOne(id: string, userData: Partial<updateProfileParams>): Promise<AxiosResponse<GetOneResponse<User>>> {
+  async updateOne(id: string, userData: Partial<updateProfileParams>): 
+    Promise<AxiosResponse<UpdateResponse>> {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 
-    const result = await apiCaller.patch<User, any, Partial<updateProfileParams>>(
+    const result = await apiCaller.patch
+      <
+        User, 
+        AxiosResponse<UpdateResponse>, 
+        Partial<updateProfileParams>
+      >(
       `${this.basePath}/${id}`,
+      userData
+    )
+
+    return result
+  }
+
+  async updateEmail(id: string, userData: updateEmailParams): Promise<AxiosResponse<UpdateResponse>> {
+    const apiCaller = this.api.getApiCaller(this.accessToken)
+
+    const result = await apiCaller.patch
+      <
+        UpdateResponse, 
+        AxiosResponse<UpdateResponse>, 
+        updateEmailParams
+      >
+    (
+      `${this.basePath}/${id}/email`,
+      userData
+    )
+
+    return result
+  }
+
+  async updatePassword(id: string, userData: updatePasswordParams): Promise<AxiosResponse<UpdateResponse>> {
+    const apiCaller = this.api.getApiCaller(this.accessToken)
+
+    const result = await apiCaller.patch
+      <
+        UpdateResponse, 
+        AxiosResponse<UpdateResponse>, 
+        updatePasswordParams
+      >
+    (
+      `${this.basePath}/${id}/password`,
       userData
     )
 
