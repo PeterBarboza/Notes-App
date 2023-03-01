@@ -22,5 +22,10 @@ export const CONFIG = {
       migrations: [migrationsRelativePath, `src/${migrationsRelativePath}`],
       entities: TYPE_ORM_MODELS
     } as DataSourceOptions
+  },
+  nodemailer: {
+    sender: process.env.NODEMAILER_SENDER!,
+    user: process.env.NODEMAILER_USER!,
+    pass: process.env.NODEMAILER_PASS!
   }
 }
