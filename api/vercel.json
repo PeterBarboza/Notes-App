@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "buildCommand": "yarn run build",
+  "installCommand": "yarn install",
+  "outputDirectory": ".",
+  "rewrites": [{ "source": "(.*)", "destination": "/api" }]
+}
