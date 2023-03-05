@@ -3,6 +3,7 @@
   "buildCommand": "yarn run build",
   "installCommand": "yarn install",
   "devCommand": "yarn run dev:DEBUG",
+  "outputDirectory": "./dist",
   "routes": [
     {
       "src": "/(.*)",
