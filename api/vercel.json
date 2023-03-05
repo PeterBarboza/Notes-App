@@ -3,11 +3,6 @@
   "buildCommand": "yarn run build",
   "installCommand": "yarn install",
   "devCommand": "yarn run dev:DEBUG",
-  "builds": [
-    {
-      "src": "/dist/index.js"
-    }
-  ],
   "routes": [
     {
       "src": "/(.*)",
