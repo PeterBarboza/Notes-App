@@ -2,7 +2,7 @@
   "version": 2,
   "buildCommand": "yarn run build",
   "installCommand": "yarn install",
-  "startDevCommand": "yarn run dev:DEBUG",
+  "devCommand": "yarn run dev:DEBUG",
   "builds": [
     {
       "src": "/dist/index.js"
