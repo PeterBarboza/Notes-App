@@ -1,13 +1,7 @@
 {
-  "version": 2,
-  "buildCommand": "yarn run build",
-  "installCommand": "yarn install",
-  "devCommand": "yarn run dev:DEBUG",
-  "outputDirectory": "./dist",
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/dist/index.js"
-    }
-  ]
+    "version": 2,
+    "buildCommand": "yarn run build",
+    "installCommand": "yarn install",
+    "outputDirectory": ".",
+    "rewrites": [{ "source": "(.*)", "destination": "/api" }]
 }
