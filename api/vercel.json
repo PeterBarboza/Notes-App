@@ -3,5 +3,5 @@
   "buildCommand": "yarn run build",
   "installCommand": "yarn install",
   "outputDirectory": ".",
-  "rewrites": [{ "source": "/dist/index.js", "destination": "/api" }]
+  "rewrites": [{ "source": "/(.*)", "destination": "/dist" }]
 }
