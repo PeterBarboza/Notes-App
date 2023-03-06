@@ -5,8 +5,8 @@
   "outputDirectory": "/dist",
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/"
+      "source": "(.*)",
+      "destination": "/api"
     }
   ]
 }
