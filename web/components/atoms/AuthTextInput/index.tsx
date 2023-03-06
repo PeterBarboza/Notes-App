@@ -15,7 +15,6 @@ export function AuthTextInput({
   inputErrors,
   inputProps,
 }: props) {
-  useEffect(() => {console.log("login")}, [])
 
   return (
     <div className={styles.formField}>
@@ -28,13 +27,13 @@ export function AuthTextInput({
             null
         }
         {
-          inputErrors ? 
+          inputErrors ?
             <span className={styles.errorsBox}>{inputErrors}</span>
             :
             null
         }
       </label>
-      <input 
+      <input
         id={inputId}
         className={styles.input}
         {...inputProps}

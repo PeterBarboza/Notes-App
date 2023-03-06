@@ -21,27 +21,23 @@ type props = {
   onUpdateData?: () => Promise<any>
 }
 
-export function UserNotes({ 
-  isLoadingNotes, 
-  notes, 
-  username, 
-  pagination, 
-  setPagination, 
-  onUpdateData 
-}: props) {  
+export function UserNotes({
+  isLoadingNotes,
+  notes,
+  username,
+  pagination,
+  setPagination,
+  onUpdateData
+}: props) {
   const router = useRouter()
-
-  useEffect(() => {
-    console.log(notes)
-  }, [notes])
 
   return (
     <BaseLayout onUpdateData={onUpdateData} createNoteButtonEnabled={true}>
       {
-        isLoadingNotes ? 
+        isLoadingNotes ?
           <Loading />
-        : notes === null ?
-            <NoDataFound 
+          : notes === null ?
+            <NoDataFound
               messages={[
                 "Nenhuma nota foi encontrada em:",
                 router.asPath
@@ -50,7 +46,7 @@ export function UserNotes({
             :
             <>
               <div className={styles.userNotesProfileBox}>
-                <BsPersonCircle 
+                <BsPersonCircle
                   size={40}
                   color="#616161"
                 />

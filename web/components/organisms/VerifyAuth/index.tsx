@@ -13,10 +13,10 @@ export function VerifyAuth({ children }: props) {
   const router = useRouter()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [counter, setCounter] = useState(5)
-  
+
   const redirectFunction = useCallback(() => {
     const toastId = toast.loading("Redirecionando...")
-    
+
     router.push({
       pathname: '/logout/redirect/[href]',
       query: { href: "login" },
@@ -26,17 +26,15 @@ export function VerifyAuth({ children }: props) {
   }, [router])
 
   const handleRedirect = useCallback(() => {
-    console.log("Rodou a função do verify", counter)
-    
-    if(counter > 0) {
+    if (counter > 0) {
       setTimeout(() => {
         setCounter(counter - 1)
       }, 1000)
       return counter
     }
-    
-    if(counter === 0) {  
-      redirectFunction()      
+
+    if (counter === 0) {
+      redirectFunction()
     }
 
     return counter
@@ -44,12 +42,12 @@ export function VerifyAuth({ children }: props) {
 
 
   const successCallback = useCallback(() => {
-    const shouldRedirect = 
-      router?.asPath === "/" || 
-      router?.asPath === "/login" || 
+    const shouldRedirect =
+      router?.asPath === "/" ||
+      router?.asPath === "/login" ||
       router?.asPath === "/app"
 
-    if(shouldRedirect) {
+    if (shouldRedirect) {
       router.push("/app")
       return
     }
@@ -75,11 +73,11 @@ export function VerifyAuth({ children }: props) {
       {children}
       {
         isModalOpen ?
-          <WarnActionModal 
+          <WarnActionModal
             heading="Sessão expirada"
             bodyText="É nescessário refazer o login."
-            isModalOpen={isModalOpen} 
-            closeModal={handleCloseModal} 
+            isModalOpen={isModalOpen}
+            closeModal={handleCloseModal}
             buttonText={`Ok (${handleRedirect()})`}
           />
           :

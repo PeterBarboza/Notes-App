@@ -51,17 +51,16 @@ export function SearchBarInputAndPreview({
           select: ["id", "updatedAt", "noteSlug", "title"]
         })
         setNotes(result.data)
-      } catch (error) {
-        console.log(error)
-      } finally {
+      } catch (error) { }
+      finally {
         setIsLoadingNotes(false)
       }
     }, 400)
   }, [notesService, setNotes, setIsLoadingNotes])
 
   const changeRoute = useCallback(() => {
-    if(query.length < 1) {
-      toast.info("Digite algo para poder efetuar a pesquisa.", { 
+    if (query.length < 1) {
+      toast.info("Digite algo para poder efetuar a pesquisa.", {
         autoClose: 2000,
         closeOnClick: true,
         closeButton: true,
@@ -83,7 +82,7 @@ export function SearchBarInputAndPreview({
   }, [query])
 
   const handleChangeRouteOnKeyDown = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
-    if(
+    if (
       (event.code === "Enter") ||
       (event.code === "enter") ||
       (event.key === "Enter") ||
@@ -95,13 +94,13 @@ export function SearchBarInputAndPreview({
 
   return (
     <div className={styles.inputAndPreviewWrap}>
-      <input 
+      <input
         type="text"
         className={styles.input}
         placeholder="Pesquisar por notas públicas"
         onChange={(event) => {
           setQuery(event?.target?.value)
-          if(event.currentTarget.value.length < 1) {
+          if (event.currentTarget.value.length < 1) {
             setIsPreviewVisible(false)
             return
           }
@@ -121,7 +120,7 @@ export function SearchBarInputAndPreview({
         onKeyDown={(event) => handleChangeRouteOnKeyDown(event)}
       />
       <button className={styles.searchButton}>
-        <RxMagnifyingGlass 
+        <RxMagnifyingGlass
           size={30}
           color="#ffffff"
           onClick={() => {
@@ -130,22 +129,22 @@ export function SearchBarInputAndPreview({
         />
       </button>
       {
-        isPreviewVisible ? 
+        isPreviewVisible ?
           <ul className={styles.searchResultsPreview}>
             {
               isLoadingNotes ?
                 <div className={styles.loaderBox}>
                   <li>
-                    <div className={styles.loader}/>
+                    <div className={styles.loader} />
                     <p>Carregando...</p>
                   </li>
                 </div>
-              : notes?.results?.length > 0 ?
+                : notes?.results?.length > 0 ?
                   <>
                     {
                       notes.results.map((note) => {
                         return (
-                          <Link 
+                          <Link
                             href={`/app/usuarios/${note.author.username}/${note.noteSlug}`}
                             className={styles.linkWrap}
                             key={`note-searchbar-preview-link-${note.id}`}
@@ -157,22 +156,22 @@ export function SearchBarInputAndPreview({
                     }
                     {
                       notes?.pagination?.total > NOTES_PAGE_SIZE ?
-                          <div 
-                            className={styles.linkWrap}
-                            onClick={() => changeRoute()}
-                          >
-                            <li className={styles.listItem}>Ver mais ({notes?.pagination?.total - NOTES_PAGE_SIZE}) resultados...</li>
-                          </div>
+                        <div
+                          className={styles.linkWrap}
+                          onClick={() => changeRoute()}
+                        >
+                          <li className={styles.listItem}>Ver mais ({notes?.pagination?.total - NOTES_PAGE_SIZE}) resultados...</li>
+                        </div>
                         :
                         null
                     }
                   </>
-                :    
-                  <div 
+                  :
+                  <div
                     className={styles.linkWrap}
                   >
                     <li>Nenhuma nota encontrada</li>
-                  </div>              
+                  </div>
             }
           </ul>
           :
