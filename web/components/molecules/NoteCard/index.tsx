@@ -42,6 +42,7 @@ export function NoteCard({
     }
   }, [])
 
+  const onlySpacesStringRegExp = /^\s+$/
   const splitedContent = useMemo(() => {
     return content.split("\n")
   }, [content])
@@ -60,11 +61,18 @@ export function NoteCard({
 
         <p className={styles.lastUpdate}>Última atualização | {lastUpdate}</p>
 
-        {
-          splitedContent.map((paragraph) => {
-            return <p className={styles.content}>{paragraph}</p>
-          })
-        }
+        <div className={styles.contentBox}>
+          {
+            splitedContent.map((paragraph) => {
+              if (paragraph.length === 0 || onlySpacesStringRegExp.test(paragraph)) {
+                return <br />
+              }
+              return (
+                <p className={styles.content}>{paragraph}</p>
+              )
+            })
+          }
+        </div>
 
         <div className={styles.readMore}>
         </div>

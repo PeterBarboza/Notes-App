@@ -118,10 +118,9 @@ export function FullNote({
     [id, title, content, author, privacyStatus, createdAt, updatedAt, noteSlug]
   )
 
+  const onlySpacesStringRegExp = /^\s+$/
   const splitedContent = useMemo(() => {
-    const a = content.split("\n")
-    console.log(a)
-    return a
+    return content.split("\n")
   }, [content])
 
   return (
@@ -153,7 +152,7 @@ export function FullNote({
       <div className={styles.contentBox}>
         {
           splitedContent.map((paragraph) => {
-            if (paragraph.length === 0) {
+            if (paragraph.length === 0 || onlySpacesStringRegExp.test(paragraph)) {
               return <br />
             }
             return <p className={styles.content}>{paragraph}</p>
