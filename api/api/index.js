@@ -1,3 +1,3 @@
-const routes = require("../dist/infrastructure/routes")
+const app = require("../dist/app").app
 
-module.exports = routes
+module.exports = app
