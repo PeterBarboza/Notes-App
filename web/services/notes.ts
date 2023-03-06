@@ -56,7 +56,7 @@ export class NotesService {
   }
 
   async update(noteId: string, noteData: fullUpdateNoteData)
-    : Promise<AxiosResponse<GetOneResponse<Note>>> {
+    : Promise<AxiosResponse<GetOneResponse<any>>> {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 
     const result = await apiCaller.patch<GetOneResponse<Note>>(

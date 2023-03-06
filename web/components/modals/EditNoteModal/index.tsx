@@ -27,12 +27,12 @@ const notesService = new NotesServiceFactory().handle()
 
 export function EditNoteModal({ isModalOpen, closeModal, entity, onUpdateData }: props) {
   const { accessToken, userData } = useContext(AuthContext)
-  const { 
-    register, 
-    handleSubmit, 
+  const {
+    register,
+    handleSubmit,
     setValue,
     reset,
-    formState: { errors } ,
+    formState: { errors },
   } = useForm<fullUpdateNoteData>({
     defaultValues: {
       title: entity?.title,
@@ -44,40 +44,55 @@ export function EditNoteModal({ isModalOpen, closeModal, entity, onUpdateData }:
 
   const onSubmit = useCallback(async (noteData: fullUpdateNoteData) => {
     notesService.accessToken = accessToken
-  
-    try {      
-      const response = await toast.promise(
-        notesService.update(entity.id, {
-          ...noteData,
-          author: userData?.id!,
-        }),
-        {
-          pending: 'Atualizando nota...',
-          success: 'Nota atuzalizada com suceso!',
-          error: 'Falha na criação da nota.'
-        }
-      )
-      
-      if(onUpdateData) {
-        const updatedNote = await notesService.getMany({ 
-          filters: {
-            id: entity.id
-          },
-          select: ["id", "updatedAt", "noteSlug"]
+
+    const toastId = toast.loading("Atualizando nota...")
+    try {
+      const result = await notesService.update(entity.id, {
+        ...noteData,
+        author: userData?.id!,
+      })
+
+      if (result?.data?.updatedCount === 1) {
+        toast.update(toastId, {
+          render: "Nota atuzalizada com suceso",
+          type: "success",
+          isLoading: false,
+          autoClose: 1500,
+          closeOnClick: true,
+          closeButton: true,
+        });
+        return
+      }
+
+      if (result.data?.message) {
+        toast.update(toastId, {
+          render: result.data?.message,
+          type: "error",
+          isLoading: false,
+          autoClose: 5000,
+          closeOnClick: true,
+          closeButton: true,
         })
-        
-        if(updatedNote.status !== 200) {
-          onUpdateData()
-        } else {
-          onUpdateData(updatedNote.data?.results[0].noteSlug)
-        }
+        return
       }
 
       setTimeout(() => {
         reset({}, { keepDefaultValues: true })
         closeModal()
       }, 500)
-    } catch (error) {}
+    } catch (error) {
+      toast.update(toastId, {
+        render: "Erro ao deletar nota",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+        closeOnClick: true,
+        closeButton: true,
+      });
+    } finally {
+      if (onUpdateData) onUpdateData()
+      closeModal()
+    }
   }, [])
 
   return (
@@ -125,7 +140,7 @@ export function EditNoteModal({ isModalOpen, closeModal, entity, onUpdateData }:
           required={true}
           options={NOTE_PRIVACY_STATUS_OPTIONS}
         />
-        <ModalSubmitInput 
+        <ModalSubmitInput
           inputDisplayText="Editar nota"
         />
       </form>
