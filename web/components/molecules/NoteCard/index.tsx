@@ -9,23 +9,23 @@ import { Note } from "../../../interface/schemas"
 
 import styles from "./styles.module.scss"
 
-export function NoteCard({ 
-  id, 
-  title, 
-  content, 
-  author, 
-  privacyStatus, 
-  createdAt, 
-  updatedAt, 
+export function NoteCard({
+  id,
+  title,
+  content,
+  author,
+  privacyStatus,
+  createdAt,
+  updatedAt,
   noteSlug
 }: Note) {
   const lastUpdate = useMemo(() => {
     try {
-      return format(new Date(updatedAt || createdAt), "dd/MM/yyyy - hh:mm", {
+      return format(new Date(updatedAt || createdAt), "dd/MM/yyyy - HH:mm", {
         locale: ptBR,
       })
     } catch (error) {
-      return updatedAt || createdAt || "Indisponível"      
+      return updatedAt || createdAt || "Indisponível"
     }
   }, [updatedAt, createdAt])
 
@@ -33,14 +33,18 @@ export function NoteCard({
     switch (status) {
       case "public":
         return <BiWorld size={20} />
-  
+
       case "private":
         return <FaLock size={15} />
-  
+
       default:
         return <BiNote size={20} />
     }
   }, [])
+
+  const splitedContent = useMemo(() => {
+    return content.split("\n")
+  }, [content])
 
   return (
     <Link href={`/app/usuarios/${author.username}/${noteSlug}`} className={styles.linkWrap}>
@@ -56,7 +60,11 @@ export function NoteCard({
 
         <p className={styles.lastUpdate}>Última atualização | {lastUpdate}</p>
 
-        <p className={styles.content}>{content}</p>
+        {
+          splitedContent.map((paragraph) => {
+            return <p className={styles.content}>{paragraph}</p>
+          })
+        }
 
         <div className={styles.readMore}>
         </div>

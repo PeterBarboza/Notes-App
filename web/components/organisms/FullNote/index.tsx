@@ -18,14 +18,14 @@ interface props extends Note {
   onUpdateData?: (...args: any) => Promise<any>
 }
 
-export function FullNote({ 
-  id, 
-  title, 
-  content, 
-  author, 
-  privacyStatus, 
-  createdAt, 
-  updatedAt, 
+export function FullNote({
+  id,
+  title,
+  content,
+  author,
+  privacyStatus,
+  createdAt,
+  updatedAt,
   noteSlug,
   onUpdateData
 }: props) {
@@ -34,11 +34,11 @@ export function FullNote({
   const router = useRouter()
   const lastUpdate = useMemo(() => {
     try {
-      return format(new Date(updatedAt || createdAt), "dd/MM/yyyy - hh:mm", {
+      return format(new Date(updatedAt || createdAt), "dd/MM/yyyy - HH:mm", {
         locale: ptBR,
       })
     } catch (error) {
-      return "indisponível"      
+      return "indisponível"
     }
   }, [updatedAt, createdAt])
 
@@ -47,28 +47,27 @@ export function FullNote({
 
     try {
       const notesService = new NotesServiceFactory().handle()
-  
+
       notesService.accessToken = accessToken
 
       const result: any = await notesService.delete(id)
 
-       if(result?.data?.deletedCount === 1) {
-        toast.update(toastId, { 
-          render: "Nota deletada com sucesso", 
-          type: "success", 
+      if (result?.data?.deletedCount === 1) {
+        toast.update(toastId, {
+          render: "Nota deletada com sucesso",
+          type: "success",
           isLoading: false,
           autoClose: 1500,
           closeOnClick: true,
           closeButton: true,
         });
-        
         return
       }
-      
-      if(result.data?.message) {
-        toast.update(toastId, { 
-          render: result.data?.message, 
-          type: "error", 
+
+      if (result.data?.message) {
+        toast.update(toastId, {
+          render: result.data?.message,
+          type: "error",
           isLoading: false,
           autoClose: 5000,
           closeOnClick: true,
@@ -77,18 +76,18 @@ export function FullNote({
         return
       }
 
-      toast.update(toastId, { 
-        render: "Erro ao deletar nota", 
-        type: "error", 
+      toast.update(toastId, {
+        render: "Erro ao deletar nota",
+        type: "error",
         isLoading: false,
         autoClose: 5000,
         closeOnClick: true,
         closeButton: true,
       });
     } catch (error) {
-       toast.update(toastId, { 
-        render: "Erro ao deletar nota", 
-        type: "error", 
+      toast.update(toastId, {
+        render: "Erro ao deletar nota",
+        type: "error",
         isLoading: false,
         autoClose: 5000,
         closeOnClick: true,
@@ -96,12 +95,34 @@ export function FullNote({
       });
     }
     finally {
-      if(onUpdateData) onUpdateData()
+      if (onUpdateData) onUpdateData()
     }
   }, [id])
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const initialUpdateDataModal = useMemo(
+    () => {
+      return {
+        id,
+        title,
+        content,
+        author,
+        privacyStatus,
+        createdAt,
+        updatedAt,
+        noteSlug,
+      }
+    },
+    [id, title, content, author, privacyStatus, createdAt, updatedAt, noteSlug]
+  )
+
+  const splitedContent = useMemo(() => {
+    const a = content.split("\n")
+    console.log(a)
+    return a
+  }, [content])
 
   return (
     <main className={styles.fullNote}>
@@ -109,10 +130,10 @@ export function FullNote({
         accessToken && userData?.id === author?.id ?
           <div className={styles.noteTools}>
             <div className={styles.editNote} onClick={() => openModal()}>
-              <AiOutlineEdit size={20} color={"#ffffff"}/>
+              <AiOutlineEdit size={20} color={"#ffffff"} />
             </div>
             <div className={styles.deleteNote} onClick={() => deleteNote()}>
-              <AiOutlineDelete size={20} color={"#ffffff"}/>
+              <AiOutlineDelete size={20} color={"#ffffff"} />
             </div>
           </div>
           :
@@ -126,32 +147,32 @@ export function FullNote({
         </Link>
       </p>
       <p className={styles.lastUpdate}>Última atualização - {lastUpdate}</p>
-      <p className={styles.content}>
-        {content}
-      </p>
 
-      {
-          accessToken ? 
-            <>
-              <EditNoteModal
-                entity={{
-                  id, 
-                  title, 
-                  content, 
-                  author, 
-                  privacyStatus, 
-                  createdAt, 
-                  updatedAt, 
-                  noteSlug,
-                }}
-                isModalOpen={isModalOpen}
-                closeModal={closeModal}
-                onUpdateData={onUpdateData}
-              />
-            </>
-            :
-            null
+      <div className={styles.divisionLine} />
+
+      <div className={styles.contentBox}>
+        {
+          splitedContent.map((paragraph) => {
+            if (paragraph.length === 0) {
+              return <br />
+            }
+            return <p className={styles.content}>{paragraph}</p>
+          })
         }
+      </div>
+      {
+        accessToken ?
+          <>
+            <EditNoteModal
+              entity={initialUpdateDataModal}
+              isModalOpen={isModalOpen}
+              closeModal={closeModal}
+              onUpdateData={onUpdateData}
+            />
+          </>
+          :
+          null
+      }
     </main>
   )
 }

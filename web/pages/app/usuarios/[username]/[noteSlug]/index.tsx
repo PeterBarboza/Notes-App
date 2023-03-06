@@ -17,24 +17,24 @@ export async function getServerSideProps(context: any) {
 
 const notesService = new NotesServiceFactory().handle()
 
-export default function({ username, noteSlug }: any) {
+export default function ({ username, noteSlug }: any) {
   const { accessToken, setAuthContextData } = useContext(AuthContext)
   const router = useRouter()
 
   const getNote = useCallback(async () => {
     notesService.accessToken = accessToken
     try {
-      
+
       const result = await withRefreshTokenAuth(
-        notesService.getOne, 
-        { 
+        notesService.getOne,
+        {
           setAuthContextData: setAuthContextData!,
-          routerInstance: router 
-        }, 
+          routerInstance: router
+        },
         { optional: true, thisArg: notesService }
       )([noteSlug])
 
-      if(result?.data?.id) return result.data
+      if (result?.data?.id) return result.data
 
       return null
     } catch (error) {
@@ -45,16 +45,12 @@ export default function({ username, noteSlug }: any) {
   const { data, error, isLoading, mutate } = useSWR(`/api/notes/${noteSlug || "single-note"}`, getNote)
 
   return (
-    <SingleNote 
-      isLoadingNote={isLoading} 
-      note={data!} 
-      onUpdateData={async (newNoteTitle) => {
-        if(newNoteTitle) {
-          router.push(`/app/usuarios/${username}/${newNoteTitle}`)
-          return
-        }
+    <SingleNote
+      isLoadingNote={isLoading}
+      note={data!}
+      onUpdateData={async () => {
         mutate()
-      }} 
+      }}
     />
   )
 }
