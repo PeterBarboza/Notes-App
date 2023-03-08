@@ -12,13 +12,22 @@ type props = {
   buttonText: string
   isModalOpen: boolean
   closeModal: () => void
+  type?: "dangerous" | "info"
 }
 
-export function WarnActionModal({ heading, bodyText, buttonText, action, closeModal, isModalOpen }: props) {
+export function WarnActionModal({
+  heading,
+  bodyText,
+  buttonText,
+  action,
+  closeModal,
+  isModalOpen,
+  type
+}: props) {
   const handleAction = useCallback(async () => {
     try {
-      if(action) await action()
-    } catch (error) {}
+      if (action) await action()
+    } catch (error) { }
     finally {
       closeModal()
     }
@@ -32,7 +41,7 @@ export function WarnActionModal({ heading, bodyText, buttonText, action, closeMo
     >
       <div className={styles.modalBox}>
         <div className={styles.modalHeading}>
-          <AiOutlineInfoCircle size={25}/>
+          <AiOutlineInfoCircle size={25} />
           <h2>{heading}</h2>
         </div>
 
@@ -41,6 +50,7 @@ export function WarnActionModal({ heading, bodyText, buttonText, action, closeMo
         <button
           className={styles.actionButton}
           onClick={handleAction}
+          style={type === "dangerous" ? { backgroundColor: "#e60101" } : {}}
         >
           {buttonText}
         </button>

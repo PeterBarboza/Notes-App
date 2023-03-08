@@ -147,5 +147,24 @@
         filter: none;
       }
     }
+
+    .deleteAccount {
+      transition-duration: 0.1s;
+      width: fit-content;
+      height: fit-content;
+    
+      // padding: 0.625rem 1.25rem;
+      padding: 0.625rem 0.625rem;
+    
+      border-radius: 0.125rem;
+    
+      color: #ffffff;
+      font-weight: 400;
+      font-size: 0.875rem;
+      font-family: "Roboto", sans-serif;
+    
+      background-color: #e60101;
+      cursor: pointer;
+    }
   }
 }
