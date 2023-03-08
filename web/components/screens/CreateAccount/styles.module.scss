@@ -41,6 +41,36 @@
       justify-content: flex-start;
       align-items: flex-start;
       gap: 1.25rem;
+
+      .inputWrapper {
+        width: 100%;
+        height: fit-content;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 0.5rem;
+
+        .errorsBox {
+          width: 100%;
+          height: fit-content;
+  
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: flex-start;
+  
+          font-size: 0.85rem;
+          font-weight: 400;
+          color: #ff3e3e;
+          list-style: none;
+  
+          .passwordInstructionPassed {
+            color: #00b600;
+          }
+        }
+      }
     }
 
     .redirectLinksBox {
