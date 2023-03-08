@@ -1,15 +1,15 @@
 import { hash, compareSync } from "bcryptjs"
 import { v4 as uuid } from "uuid"
-import { sign } from "jsonwebtoken"
 
 import { User } from "../entities/User"
 import { isValidPassword } from "../../infrastructure/shared/utils/isValidPassword"
-import { AmmountAffectedError,
+import { 
+  AmmountAffectedError,
   NotFoundError,
   UnauthorizedError,
   GenericError
 } from "../../errors"
-import { CONFIG } from "../../configs"
+import { isValidUsername } from "../../infrastructure/shared/utils/isValidUsername"
 
 import { 
   deleteOneResponse, 
@@ -18,7 +18,6 @@ import {
   IUsersRepository, 
   updateOneResponse
  } from "../../infrastructure/shared/interface"
-import { isValidUsername } from "../../infrastructure/shared/utils/isValidUsername"
 
 type updateUserParams = {
   username: string
@@ -31,14 +30,11 @@ type updatePasswordParams = {
   newPassword: string
   oldPassword: string
 }
-type authUserparams = {
-  email: string
+
+type deleteAccountParams = {
   password: string
 }
 
-//TODO: Adicionar filtro na função getOneByusername() para conseguir trazer
-//uma nota específica através de seu slug junto do usuário.
-//PROVALVEMENTE vou fazer o lance acima através dos serviços de notas
 export class UserServices {
   private repository: IUsersRepository<User>
 
@@ -206,10 +202,16 @@ export class UserServices {
     }
   }
 
-  async deleteOne(id: string): Promise<deleteOneResponse>  {
-    const hasUser = await this.repository.getOneById(id)
+  async deleteOne(id: string, entity: deleteAccountParams): Promise<deleteOneResponse>  {
+    const user = await this.repository.getOneByIdWithEmailAndPassword(id)
+    if(!user) throw new NotFoundError({ entityName: "User" })
 
-    if(!hasUser) throw new NotFoundError({ entityName: "User" })
+    const passwordMatch = compareSync(entity.password!, user.password)
+    if(!passwordMatch) {
+      throw new UnauthorizedError({ 
+        substituteMessage: "Incorrect password" 
+      })
+    }
 
     const { deletedCount } = await this.repository.deleteOne(id)
 
