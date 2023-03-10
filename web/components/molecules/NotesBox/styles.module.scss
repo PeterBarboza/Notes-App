@@ -3,14 +3,14 @@
   height: fit-content;
 
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(11.375rem, calc(1fr / 3)));
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 0.625rem;
 }
 
 @media (max-width: 810px) {
   .notesBox {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(11.375rem, calc(1fr / 2)));
+    grid-template-columns: 1fr 1fr;
     gap: 0.625rem;
   }
 }
@@ -18,7 +18,7 @@
 @media (max-width: 600px) {
   .notesBox {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(9.375rem, 1fr));
+    grid-template-columns: 1fr;
     gap: 0.625rem;
   }
 }
