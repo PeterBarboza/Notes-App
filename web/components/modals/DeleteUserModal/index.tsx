@@ -13,6 +13,7 @@ import styles from "./styles.module.scss"
 import { useRouter } from "next/router"
 import { UsersServiceFactory } from "../../../services/factories/usersServiceFactory"
 import { parseErrorsArray } from "../../../shared/utils/parseErrorsArray"
+import { AuthPasswordInput } from "../../atoms/AuthPasswordInput"
 
 type props = {
   isModalOpen: boolean
@@ -36,7 +37,7 @@ export function DeleteUserModal({ isModalOpen, closeModal }: props) {
   const usersService = useMemo(() => new UsersServiceFactory().handle(accessToken), [accessToken])
 
   const onSubmit = useCallback(async (updateData: deleteAccountParams) => {
-    const toastId = toast.loading("Editando perfil...")
+    const toastId = toast.loading("Excluindo conta...")
 
     const redirectFunction = () => {
       toast.update(toastId, {
@@ -96,7 +97,7 @@ export function DeleteUserModal({ isModalOpen, closeModal }: props) {
       }
 
       toast.update(toastId, {
-        render: "Erro ao atualizar dados",
+        render: "Erro ao excluir conta",
         type: "error",
         isLoading: false,
         autoClose: 5000,
@@ -105,7 +106,7 @@ export function DeleteUserModal({ isModalOpen, closeModal }: props) {
       });
     } catch (error) {
       toast.update(toastId, {
-        render: "Erro ao atualizar dados",
+        render: "Erro ao excluir conta",
         type: "error",
         isLoading: false,
         autoClose: 5000,
@@ -122,7 +123,7 @@ export function DeleteUserModal({ isModalOpen, closeModal }: props) {
       closeModal={closeModal}
     >
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-        <ModalTextInput
+        <AuthPasswordInput
           inputProps={{
             ...register("password", {
               required: true,
@@ -134,6 +135,7 @@ export function DeleteUserModal({ isModalOpen, closeModal }: props) {
           inputId="delete-user-password-input"
           inputLabel="Senha"
         />
+
         <ModalSubmitInput
           inputDisplayText="Deletar perfil"
           style={{ backgroundColor: "#e60101" }}
