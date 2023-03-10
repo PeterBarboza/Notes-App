@@ -345,6 +345,7 @@ export function UpdateAcessData() {
           buttonText={"Excluir conta"}
           action={() => setIsDeleteModalOpen(true)}
           type="dangerous"
+          forceAction={false}
         />
         <DeleteUserModal
           closeModal={() => setIsDeleteModalOpen(false)}

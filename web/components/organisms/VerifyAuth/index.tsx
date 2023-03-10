@@ -79,6 +79,8 @@ export function VerifyAuth({ children }: props) {
             isModalOpen={isModalOpen}
             closeModal={handleCloseModal}
             buttonText={`Ok (${handleRedirect()})`}
+            type="info"
+            forceAction={true}
           />
           :
           null
