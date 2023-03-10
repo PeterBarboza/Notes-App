@@ -45,12 +45,12 @@ export function ModalSelectInput({
     }
     return noOptionSelectedOption
   }, [initialValue, noOptionSelectedOption])
-    
+
   const [selectedOption, setSelectedOption] = useState<option>(InitialValue)
   const [isFocused, setIsFocused] = useState(false)
 
   const parsedoptions = useMemo(() => {
-    if(required) {
+    if (required) {
       return options
     }
     return [
@@ -80,34 +80,34 @@ export function ModalSelectInput({
         onBlur={() => {
           setTimeout(() => {
             setIsFocused(false)
-          }, 100)
+          }, 250)
         }}
         value={selectedOption?.label || ""}
         readOnly={true}
       />
       {
         isFocused ?
-        <div className={styles.selectOptionsBox}>
-          {
-            parsedoptions
-            .map((option) => {
-              return (
-                <div 
-                  key={option.id}
-                  className={styles.option} 
-                  onClick={() => {
-                    setSelectedOption(option)
-                    onChange(option.value)
-                  }}
-                >
-                  {option.label}
-                </div>
-              )
-            })
-          }
-        </div>
-        :
-        null
+          <div className={styles.selectOptionsBox}>
+            {
+              parsedoptions
+                .map((option) => {
+                  return (
+                    <div
+                      key={option.id}
+                      className={styles.option}
+                      onClick={() => {
+                        setSelectedOption(option)
+                        onChange(option.value)
+                      }}
+                    >
+                      {option.label}
+                    </div>
+                  )
+                })
+            }
+          </div>
+          :
+          null
       }
     </div>
   )
