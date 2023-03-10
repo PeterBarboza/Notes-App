@@ -197,7 +197,7 @@ export function CreateAccount() {
             </Link>
           </div>
           <div className={styles.redirectButton}>
-            <Link href="/app">
+            <Link href="/app/notas-publicas">
               <p>Continuar sem login</p>
             </Link>
           </div>

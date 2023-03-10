@@ -48,7 +48,7 @@ export function VerifyAuth({ children }: props) {
       router?.asPath === "/app"
 
     if (shouldRedirect) {
-      router.push("/app")
+      router.push("/app/notas-publicas")
       return
     }
   }, [router])
