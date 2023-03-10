@@ -40,7 +40,7 @@ usersRouter.patch(
   "/:id/password",
   notesController.updatePassword.bind(notesController)
 )
-usersRouter.delete(
+usersRouter.post(
   "/:id",
   notesController.deleteOne.bind(notesController)
 )
