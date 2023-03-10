@@ -33,6 +33,10 @@ export interface updatePasswordParams {
   oldPassword: string
 }
 
+export interface deleteAccountParams {
+  password: string
+}
+
 export interface createNoteData {
   title: string
   content: string

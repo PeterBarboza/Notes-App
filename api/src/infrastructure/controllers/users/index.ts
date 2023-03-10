@@ -11,6 +11,7 @@ import { UpdateEmailDTO } from "./dto/UpdateEmailDTO"
 import { UpdatePasswordDTO } from "./dto/UpdatePasswordDTO"
 import { EnsureAuthenticated } from "../../middlewares/ensureAuthenticated"
 import { OptionalAuthenticated } from "../../middlewares/optionalAuthenticated"
+import { DeleteUserDTO } from "./dto/DeleteUserDTO"
 
 export class UsersController {
   services: UserServices
@@ -138,11 +139,15 @@ export class UsersController {
   @ExceptionsWrapper()
   async deleteOne(req: Request, res: Response): Promise<Response> {
     const { id } = req.params
+    const entity = plainToInstance(DeleteUserDTO, req.body)
+    
+    const errors = await validate(entity)
+    if (errors.length > 0) throw new ValidationError(errors)
 
     const isAValidOperation = req.userdata?.id && (req.userdata?.id === id)
     if(!isAValidOperation) throw new UnauthorizedError({})
 
-    const { deletedCount } = await this.services.deleteOne(id)
+    const { deletedCount } = await this.services.deleteOne(id, { password: entity.password })
 
     return res.json({ deletedCount })
   }

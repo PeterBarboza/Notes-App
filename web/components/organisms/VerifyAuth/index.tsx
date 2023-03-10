@@ -48,7 +48,7 @@ export function VerifyAuth({ children }: props) {
       router?.asPath === "/app"
 
     if (shouldRedirect) {
-      router.push("/app")
+      router.push("/app/notas-publicas")
       return
     }
   }, [router])
@@ -79,6 +79,8 @@ export function VerifyAuth({ children }: props) {
             isModalOpen={isModalOpen}
             closeModal={handleCloseModal}
             buttonText={`Ok (${handleRedirect()})`}
+            type="info"
+            forceAction={true}
           />
           :
           null

@@ -39,7 +39,7 @@ export function UserNotes({
           : notes === null ?
             <NoDataFound
               messages={[
-                "Nenhuma nota foi encontrada em:",
+                "Nenhum usuário encontrada em:",
                 router.asPath
               ]}
             />
@@ -52,11 +52,21 @@ export function UserNotes({
                 />
                 <p>{username}</p>
               </div>
-              <NotesBoard
-                notes={notes}
-                pagination={pagination}
-                setPagination={setPagination}
-              />
+              {
+                notes?.length === 0 ?
+                  <NoDataFound
+                    messages={[
+                      "Esse usuário não possui nenhuma nota",
+                    ]}
+                  />
+                  :
+                  <NotesBoard
+                    notes={notes}
+                    pagination={pagination}
+                    setPagination={setPagination}
+                  />
+              }
+
             </>
       }
     </BaseLayout>

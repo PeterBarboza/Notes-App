@@ -15,14 +15,14 @@ import { authWithEmailAndPasswordParams } from "../../services/shared/interface/
 
 import styles from "./login.module.scss"
 
-export function Login() {  
+export function Login() {
   const { accessToken, setAuthContextData } = useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const { 
-    register, 
-    handleSubmit, 
-    formState: { errors } 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
   } = useForm<authWithEmailAndPasswordParams>()
 
   const onSubmit = useCallback(async ({ email, password }: authWithEmailAndPasswordParams) => {
@@ -33,12 +33,12 @@ export function Login() {
 
       const result: any = await authService.authWithEmailAndPassword(email, password)
 
-      if(result.status != 200) {
+      if (result.status != 200) {
 
-        if(result?.data?.message) {
-          toast.update(toastId, { 
+        if (result?.data?.message) {
+          toast.update(toastId, {
             render: result?.data?.message,
-            type: "error", 
+            type: "error",
             isLoading: false,
             autoClose: 2000,
             closeOnClick: true,
@@ -47,9 +47,9 @@ export function Login() {
           return
         }
 
-        toast.update(toastId, { 
-          render: "Erro ao fazer login", 
-          type: "error", 
+        toast.update(toastId, {
+          render: "Erro ao fazer login",
+          type: "error",
           isLoading: false,
           autoClose: 5000,
           closeOnClick: true,
@@ -57,7 +57,7 @@ export function Login() {
         });
         return
       }
-      
+
       localStorage.setItem(
         SHARED_CONSTANTS.localStorage.refreshTokenLabel,
         result.data.refreshToken
@@ -67,25 +67,25 @@ export function Login() {
         accessToken: result.data.accessToken,
         userData: result.data.user
       })
-      
-      toast.update(toastId, { 
-        render: "Autenticado com sucesso", 
-        type: "success", 
+
+      toast.update(toastId, {
+        render: "Autenticado com sucesso",
+        type: "success",
         isLoading: false,
         autoClose: 2000,
         closeOnClick: true,
         closeButton: true,
       })
 
-      router.push("/app")
-    } catch (error) {}
+      router.push("/app/notas-publicas")
+    } catch (error) { }
     finally {
       setIsLoading(false)
     }
   }, [])
 
   useEffect(() => {
-    if(accessToken) router.push("/app")
+    if (accessToken) router.push("/app/notas-publicas")
   }, [])
 
   return (
@@ -97,7 +97,7 @@ export function Login() {
             inputId="login-form-email"
             inputLabel="Email"
             inputErrors={errors.email?.message}
-            inputProps={{ 
+            inputProps={{
               ...register("email", { required: true }),
               required: true
             }}
@@ -106,7 +106,7 @@ export function Login() {
             inputId="login-form-password"
             inputLabel="Senha"
             inputErrors={errors.password?.message}
-            inputProps={{ 
+            inputProps={{
               ...register("password", { required: true }),
               required: true
             }}
@@ -123,7 +123,7 @@ export function Login() {
             </Link>
           </div>
           <div className={styles.redirectButton}>
-            <Link href="/app">
+            <Link href="/app/notas-publicas">
               <p>Continuar sem login</p>
             </Link>
           </div>

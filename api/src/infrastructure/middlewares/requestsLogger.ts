@@ -19,7 +19,7 @@ export function requestsLogger(req: Request, res: Response, next: NextFunction):
     const duration = finishedAt - startedAt
     const statusCode = res.statusCode
 
-    const formatedStartedAt = format(startedAt, "dd/MM/yyyy - hh:mm", {
+    const formatedStartedAt = format(startedAt, "dd/MM/yyyy - HH:mm", {
 		  locale: ptBR
 	  })
 
