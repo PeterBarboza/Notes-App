@@ -13,6 +13,7 @@ import { EditNoteModal } from "../../modals/EditNoteModal"
 import { Note } from "../../../interface/schemas"
 
 import styles from "./styles.module.scss"
+import { WarnActionModal } from "../../modals/WarnActionModal"
 
 interface props extends Note {
   onUpdateData?: (...args: any) => Promise<any>
@@ -30,6 +31,7 @@ export function FullNote({
   onUpdateData
 }: props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const { accessToken, userData } = useContext(AuthContext)
   const router = useRouter()
   const lastUpdate = useMemo(() => {
@@ -131,7 +133,7 @@ export function FullNote({
             <div className={styles.editNote} onClick={() => openModal()}>
               <AiOutlineEdit size={20} color={"#ffffff"} />
             </div>
-            <div className={styles.deleteNote} onClick={() => deleteNote()}>
+            <div className={styles.deleteNote} onClick={() => setIsDeleteModalOpen(true)}>
               <AiOutlineDelete size={20} color={"#ffffff"} />
             </div>
           </div>
@@ -167,6 +169,16 @@ export function FullNote({
               isModalOpen={isModalOpen}
               closeModal={closeModal}
               onUpdateData={onUpdateData}
+            />
+            <WarnActionModal
+              heading="Deletar nota"
+              bodyText="Você perderá a sua nota. Essa ação não pode ser revertida."
+              isModalOpen={isDeleteModalOpen}
+              closeModal={() => setIsDeleteModalOpen(false)}
+              buttonText={"Confirmar"}
+              action={async () => await deleteNote()}
+              type="dangerous"
+              forceAction={false}
             />
           </>
           :
