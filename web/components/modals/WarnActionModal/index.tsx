@@ -12,7 +12,8 @@ type props = {
   buttonText: string
   isModalOpen: boolean
   closeModal: () => void
-  type?: "dangerous" | "info"
+  type?: "dangerous" | "info",
+  forceAction?: boolean
 }
 
 export function WarnActionModal({
@@ -21,6 +22,7 @@ export function WarnActionModal({
   buttonText,
   action,
   closeModal,
+  forceAction,
   isModalOpen,
   type
 }: props) {
@@ -37,7 +39,13 @@ export function WarnActionModal({
     <BaseModal
       // heading={heading}
       isOpen={isModalOpen}
-      closeModal={handleAction}
+      closeModal={async () => {
+        if (forceAction) {
+          await handleAction()
+          return
+        }
+        closeModal()
+      }}
     >
       <div className={styles.modalBox}>
         <div className={styles.modalHeading}>
