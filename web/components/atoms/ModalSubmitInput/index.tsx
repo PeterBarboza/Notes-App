@@ -14,19 +14,18 @@ export function ModalSubmitInput({
   return (
     <div className={styles.modalSubmitInput}>
       <input
+        {...inputProps}
         type="submit"
         className={`${styles.submitInput} ${inputProps?.disabled || isLoading ? styles.disabledInput : ""}`}
         value={inputDisplayText}
         disabled={inputProps?.disabled || isLoading}
-        style={
-          inputProps?.disabled ?
-            { cursor: "not-allowed" }
-            : isLoading ?
-              { cursor: "progress" }
-              :
-              {}
+        style={inputProps?.disabled ?
+          { cursor: "not-allowed", ...inputProps.style }
+          : isLoading ?
+            { cursor: "progress", ...inputProps.style }
+            :
+            { ...inputProps.style }
         }
-        {...inputProps}
       />
     </div>
   )
