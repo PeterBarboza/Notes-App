@@ -152,7 +152,7 @@ export function CreateAccount() {
               }}
             />
             <ul className={styles.errorsBox}>
-              <li className={usernameCharsLength ? styles.passwordInstructionPassed : ""}>* A senha deve conter no mínimo 2 caracteres;</li>
+              <li className={usernameCharsLength ? styles.passwordInstructionPassed : ""}>* O nome de usuário deve conter no mínimo 2 caracteres;</li>
               <li className={usernameLetters ? styles.passwordInstructionPassed : ""}>* Duas letras;</li>
               <li className={usernameSpecialChars ? styles.passwordInstructionPassed : ""}>* Caracteres especiais: Apenas hifens(-), underlines(_), e pontos(.) são permitidos</li>
             </ul>
