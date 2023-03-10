@@ -3,12 +3,9 @@ import { AxiosResponse } from "axios"
 import { ApiFactory } from "./api"
 
 import { User } from "../interface/schemas"
-import { GetOneResponse, UpdateResponse } from "./shared/interface/responses"
-import { createAccountParams, updateEmailParams, updatePasswordParams, updateProfileParams } from "./shared/interface/requestParams"
+import { DeleteResponse, GetOneResponse, UpdateResponse } from "./shared/interface/responses"
+import { createAccountParams, deleteAccountParams, updateEmailParams, updatePasswordParams, updateProfileParams } from "./shared/interface/requestParams"
 
-//TODO: Trocar o retorno dos métodos para retornar toda a resposta do Axios
-//pois isso sera usado nos middlewares/decorators que verificaram a validade
-//do token do usuário para realizar o refreshToken caso necessário. 
 export class UsersService {
   private api: ApiFactory
   private basePath: string
@@ -39,14 +36,14 @@ export class UsersService {
     return result
   }
 
-  async getOneById(id: string): Promise<GetOneResponse<User>> {
+  async getOneById(id: string): Promise<AxiosResponse<GetOneResponse<User>>> {
     const apiCaller = this.api.getApiCaller(this.accessToken)
 
     const result = await apiCaller.get<User>(
       `${this.basePath}/id/${id}`
     )
 
-    return result.data
+    return result
   }
 
   async create(userData: createAccountParams): Promise<AxiosResponse<GetOneResponse<User>>> {
@@ -106,6 +103,23 @@ export class UsersService {
     (
       `${this.basePath}/${id}/password`,
       userData
+    )
+
+    return result
+  }
+
+  async deleteAccount(id: string, authData: deleteAccountParams): Promise<AxiosResponse<DeleteResponse>> {
+    const apiCaller = this.api.getApiCaller(this.accessToken)
+
+    const result = await apiCaller.post
+      <
+        DeleteResponse, 
+        AxiosResponse<DeleteResponse>, 
+        deleteAccountParams
+      >
+    (
+      `${this.basePath}/${id}`,
+      authData
     )
 
     return result

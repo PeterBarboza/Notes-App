@@ -1,5 +1,4 @@
-import { useRouter } from "next/router"
-import { useCallback, useContext, useEffect, useMemo, useState } from "react"
+import { useCallback, useContext, useMemo, useState } from "react"
 import { toast } from "react-toastify"
 
 import { UsersServiceFactory } from "../../../services/factories/usersServiceFactory"
@@ -14,6 +13,7 @@ import styles from "./styles.module.scss"
 import { useVerifyPasswordFormat } from "../../../shared/hooks/useVerifyPasswordFormat"
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { WarnActionModal } from "../../modals/WarnActionModal"
+import { DeleteUserModal } from "../../modals/DeleteUserModal"
 
 export function UpdateAcessData() {
   const [newEmail, setNewEmail] = useState("")
@@ -25,6 +25,7 @@ export function UpdateAcessData() {
   const [isOldPasswordVisible, setIsOldPasswordVisible] = useState(false)
   const { accessToken, userData } = useContext(AuthContext)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   const usersService = useMemo(() => new UsersServiceFactory().handle(accessToken), [accessToken])
 
@@ -98,69 +99,6 @@ export function UpdateAcessData() {
       if (result?.data?.updatedCount === 1) {
         toast.update(toastId, {
           render: "Dados atualizados com sucesso",
-          type: "success",
-          isLoading: false,
-          autoClose: 5000,
-          closeOnClick: true,
-          closeButton: true,
-        });
-
-        return
-      }
-
-      if (result.data?.message) {
-        toast.update(toastId, {
-          render: result.data?.message,
-          type: "error",
-          isLoading: false,
-          autoClose: 5000,
-          closeOnClick: true,
-          closeButton: true,
-        })
-        return
-      }
-
-      if (result.data?.errors) {
-        toast.update(toastId, {
-          render: parseErrorsArray(result.data?.errors),
-          type: "error",
-          isLoading: false,
-          autoClose: 5000,
-          closeOnClick: true,
-          closeButton: true,
-        })
-        return
-      }
-
-      toast.update(toastId, {
-        render: "Erro ao atualizar dados",
-        type: "error",
-        isLoading: false,
-        autoClose: 5000,
-        closeOnClick: true,
-        closeButton: true,
-      });
-    } catch (error) {
-      toast.update(toastId, {
-        render: "Erro ao atualizar dados",
-        type: "error",
-        isLoading: false,
-        autoClose: 5000,
-        closeOnClick: true,
-        closeButton: true,
-      });
-    }
-  }, [userData])
-
-  const deleteAccount = useCallback(async (updateData: updatePasswordParams) => {
-    const toastId = toast.loading("Editando perfil...")
-
-    try {
-      const result: any = await usersService.updatePassword(userData?.id!, updateData)
-
-      if (result?.data?.deletedCount === 1) {
-        toast.update(toastId, {
-          render: "Conta excluída",
           type: "success",
           isLoading: false,
           autoClose: 5000,
@@ -405,8 +343,12 @@ export function UpdateAcessData() {
           isModalOpen={isModalOpen}
           closeModal={() => setIsModalOpen(false)}
           buttonText={"Excluir conta"}
-          action={() => { }}
+          action={() => setIsDeleteModalOpen(true)}
           type="dangerous"
+        />
+        <DeleteUserModal
+          closeModal={() => setIsDeleteModalOpen(false)}
+          isModalOpen={isDeleteModalOpen}
         />
       </div>
     </BaseLayout>
