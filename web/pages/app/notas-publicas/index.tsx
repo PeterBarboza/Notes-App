@@ -9,6 +9,19 @@ import { GetManyResponse } from "../../../services/shared/interface/responses"
 
 const notesService = new NotesServiceFactory().handle()
 
+//TODO: O padrão a ser implementado nas lógicas de requisição de dados será
+  //o seguinte: <DADO_RETORNADO> ou <NULO>
+
+//Dentro dos componentes SCREENS, será feita a verificação desses valores
+  //que serão recebidos via propriedades e baseado nisso será renderizado o
+  //componente de exibição dos dados ou então um componente que indique ao usuário
+  // a ausência de dados.
+
+//Também serão criados um componente contendo a lógica de usuários logados
+  //e outro contendo a lógica de usuários não logados.
+
+//P.S: Aplicar o padrão descrito acima em toda a aplicação.
+//P.S: Criar componente de paginação
 export default function() {  
   const [isLoadingNotes, setIsLoadingNotes] = useState<boolean>(false)
   const [notes, setNotes] = useState<GetManyResponse<Note>>({

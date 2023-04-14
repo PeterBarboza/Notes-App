@@ -16,6 +16,10 @@ export function Feed({ isLoadingNotes, notes }: props) {
         isLoadingNotes ? 
           <Loading />
         :
+        //IF notes === null ? 
+          //<Renderizar componente de "dados não encontrados"> 
+          //:
+          //<Renderizar "Notesboard" normalmente>
           <NotesBoard
             notes={notes}      
           />

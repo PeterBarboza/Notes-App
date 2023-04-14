@@ -10,11 +10,8 @@ import { SHARED_CONSTANTS } from "../../configs"
 import { authWithEmailAndPasswordParams } from "../../services/shared/interface/requestParams"
 
 import styles from "./login.module.scss"
-
-export type userLoginData = {
-  email: string
-  password: string
-}
+import { AuthTextInput } from "../atoms/AuthTextInput"
+import { ModalSubmitInput } from "../atoms/ModalSubmitInput"
 
 export function Login() {  
   const { accessToken, setAuthContextData } = useContext(AuthContext)
@@ -56,35 +53,41 @@ export function Login() {
   return (
     <div className={styles.loginWrapper}>
       <div className={styles.loginBox}>
+        <h1>Acessar sua conta</h1>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-          <div className={styles.formField}>
-            <label htmlFor="login-form-email">Email</label>
-            <input 
-              id="login-form-email"
-              { ...register("email", { required: true }) }
-              required
-            />
-          </div>
-
-          <div className={styles.formField}>
-            <label htmlFor="login-form-password">Password</label>
-            <input
-              id="login-form-password"
-              { ...register("password", { required: true }) }
-              required
-            />
-          </div>
-
-          <input
-            type="submit"
-            value="Fazer Login"
-            className={styles.inputSubmit}
+          <AuthTextInput
+            inputId="login-form-email"
+            inputLabel="Email"
+            inputErrors={errors.email?.message}
+            inputProps={{ 
+              ...register("email", { required: true }),
+              required: true
+            }}
+          />
+          <AuthTextInput
+            inputId="login-form-password"
+            inputLabel="Senha"
+            inputErrors={errors.password?.message}
+            inputProps={{ 
+              ...register("password", { required: true }) ,
+              required: true
+            }}
+          />
+          <ModalSubmitInput
+            inputDisplayText="Fazer login"
           />
         </form>
-        <div className={styles.continueWithoutLogin}>
-          <Link href="/app">
-            <p>Continuar sem login</p>
-          </Link>
+        <div className={styles.redirectLinksBox}>
+          <div className={styles.redirectButton}>
+            <Link href="/criar-conta">
+              <p>Criar conta</p>
+            </Link>
+          </div>
+          <div className={styles.redirectButton}>
+            <Link href="/app">
+              <p>Continuar sem login</p>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

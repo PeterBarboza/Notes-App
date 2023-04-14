@@ -11,6 +11,12 @@ export interface authWithEmailAndPasswordParams {
   password: string
 }
 
+export interface createAccountParams {
+  email: string
+  username: string
+  password: string
+}
+
 export interface createNoteData {
   title: string
   content: string
