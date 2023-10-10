@@ -10,7 +10,7 @@ import {
   getManyOptions, 
   getManyResponse, 
   updateOneResponse, 
-  deleteOneResponse
+  deleteOneResponse,
  } from "../../infrastructure/shared/interface"
 
 export class NoteServices {
@@ -20,8 +20,15 @@ export class NoteServices {
     this.repository = repository
   }
 
-  async getMany(options: getManyOptions): Promise<getManyResponse<Note>> {
-    return await this.repository.getMany(options)
+  async getPublicFeed({ limit, skip, filters }: getManyOptions): Promise<any> {
+    return await this.repository.getMany({
+      limit, 
+      skip, 
+      filters: {
+        ...filters,
+        privacyStatus: "public"
+      }
+    })
   }
 
   async getOneBySlug(noteSlug: string): Promise<Note> {

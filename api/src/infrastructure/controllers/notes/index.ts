@@ -17,12 +17,12 @@ export class NotesController {
   }
 
   @ExceptionsWrapper()
-  async getMany(req: Request, res: Response): Promise<Response> {
+  async getPublicFeed(req: Request, res: Response): Promise<Response> {
     const { pagination, filters = {} } = req.query
     const limit = pagination?.limit as number
     const skip = pagination?.skip as number
 
-    const { results, total } = await this.services.getMany({ limit, skip, filters })
+    const { results, total } = await this.services.getPublicFeed({ limit, skip, filters })
 
     return res.json({
       pagination: {

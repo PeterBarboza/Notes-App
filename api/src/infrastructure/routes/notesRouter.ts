@@ -10,7 +10,7 @@ const notesController = new NotesControllerFactory().handle()
 notesRouter.get(
   "/",
   paginationMiddleware,
-  notesController.getMany.bind(notesController)
+  notesController.getPublicFeed.bind(notesController)
 )
 notesRouter.get(
   "/:noteSlug",

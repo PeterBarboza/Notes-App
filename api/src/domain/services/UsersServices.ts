@@ -58,6 +58,14 @@ export class UserServices {
     return user
   }
 
+  async getOneByUsernameWithNotes(username: string, privacyStatus: string): Promise<User> {
+    const user = await this.repository.getOneByUsernameWithNotes(username, privacyStatus)
+
+    if(!user) throw new NotFoundError({ entityName: "User" })
+
+    return user
+  }
+
   async create(entity: User): Promise<User> {
     const { password } = entity
 
@@ -119,7 +127,7 @@ export class UserServices {
   }
 
   async updateEmail(id: string, entity: updateEmailParams): Promise<updateOneResponse> {
-    const user = await this.repository.getOneByIdWithPassword(id)
+    const user = await this.repository.getOneByIdWithEmailAndPassword(id)
     if(!user) throw new NotFoundError({ entityName: "User" })
     
     const passwordMatch = compareSync(entity.password!, user.password)
@@ -152,7 +160,7 @@ export class UserServices {
   }
 
   async updatePassword(id: string, entity: updatePasswordParams): Promise<updateOneResponse> {
-    const user = await this.repository.getOneByIdWithPassword(id)
+    const user = await this.repository.getOneByIdWithEmailAndPassword(id)
     if(!user) throw new NotFoundError({ entityName: "User" })
     
     const passwordMatch = compareSync(entity.oldPassword!, user.password)

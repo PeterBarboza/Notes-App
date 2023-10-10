@@ -21,7 +21,7 @@ export class AuthUserServices {
   }
 
   async authUserWithEmailAndPassword({ email, password }: authUserWithEmailAndPasswordParams) {
-    const user = await this.repository.getOneByEmailWithPassword(email)
+    const user = await this.repository.getOneByEmailWithEmailAndPassword(email)
     if(!user) throw new UnauthorizedError({ substituteMessage: "Email or password incorrect" })
 
     const passwordMatch = compareSync(password, user.password)

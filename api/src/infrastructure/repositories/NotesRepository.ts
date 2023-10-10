@@ -32,6 +32,9 @@ export class NotesRepository extends TypeORMBaseRepository implements INotesRepo
       const searchFilters = [
         ...conditions.map((condition) => ({ title: condition })),
         ...conditions.map((condition) => ({ content: condition })),
+        {
+          privacyStatus: "public"
+        }
       ]
 
       const [results, total] = await repository

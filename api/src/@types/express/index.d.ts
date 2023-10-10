@@ -24,6 +24,7 @@ export interface query extends ParsedQs {
 
 export interface userData {
   id?: string
+  username?: string
 }
 
 declare module 'express' {

@@ -12,7 +12,7 @@ export class UserModel implements User {
   @Column({ type: "varchar", unique: true })
   username!: string
 
-  @Column({ type: "varchar", unique: true })
+  @Column({ type: "varchar", unique: true, select: false })
   email!: string
 
   @Column({ type: "varchar", select: false })

@@ -37,10 +37,11 @@ export interface INotesRepository<Entity> {
 export interface IUsersRepository<Entity> {
   getMany(options: getManyOptions): Promise<getManyResponse<Entity>>
   getOneByUsername(username: string): Promise<Entity>
+  getOneByUsernameWithNotes(username: string, privacyStatus: string): Promise<Entity>
   getOneByEmail(email: string): Promise<Entity>
   getOneById(id: string): Promise<Entity>
-  getOneByIdWithPassword(id: string): Promise<Entity>
-  getOneByEmailWithPassword(email: string): Promise<Entity>
+  getOneByIdWithEmailAndPassword(id: string): Promise<Entity>
+  getOneByEmailWithEmailAndPassword(email: string): Promise<Entity>
   create(data: Entity): Promise<Entity>
   updateOne(id: string, entity: Partial<Entity>): Promise<updateOneResponse>
   deleteOne(id: string): Promise<deleteOneResponse>

@@ -16,6 +16,10 @@ usersRouter.get(
   "/:username",
   notesController.getOne.bind(notesController)
 )
+usersRouter.get(
+  "/:username/notes",
+  notesController.getOneWithNotes.bind(notesController)
+)
 usersRouter.post(
   "/",
   notesController.create.bind(notesController)

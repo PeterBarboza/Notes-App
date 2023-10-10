@@ -10,6 +10,7 @@ import { ExceptionsWrapper } from "../../middlewares/errorHandler"
 import { UpdateEmailDTO } from "./dto/UpdateEmailDTO"
 import { UpdatePasswordDTO } from "./dto/UpdatePasswordDTO"
 import { EnsureAuthenticated } from "../../middlewares/ensureAuthenticated"
+import { OptionalAuthenticated } from "../../middlewares/optionalAuthenticated"
 
 export class UsersController {
   services: UserServices
@@ -41,6 +42,22 @@ export class UsersController {
     const { username } = req.params
 
     const response = await this.services.getOne(username)
+
+    return res.json(response)
+  }
+
+  @OptionalAuthenticated()
+  @ExceptionsWrapper()
+  async getOneWithNotes(req: Request, res: Response): Promise<Response> {
+    const { username } = req.params
+
+    if(req.userdata?.username && (req.userdata.username === username)) {
+      const response = await this.services.getOneByUsernameWithNotes(username, "private")
+  
+      return res.json(response)
+    }
+
+    const response = await this.services.getOneByUsernameWithNotes(username, "public")
 
     return res.json(response)
   }
