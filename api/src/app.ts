@@ -1,5 +1,6 @@
 import express from "express"
 import logger from "debug"
+import cors from "cors"
 
 import { router } from "./infrastructure/routes"
 import { requestsLogger } from "./infrastructure/middlewares/requestsLogger"
@@ -10,6 +11,8 @@ const apiMainLogger = logger("api:main")
 
 const app = express()
 
+//TODO: Configurar o cors corretamente antes do deploy
+app.use(cors())
 app.use(requestsLogger)
 
 app.use(express.urlencoded({ extended: true }))

@@ -6,7 +6,6 @@ import { Header } from "../../molecules/Header"
 import { HeadMetaTags } from "../../atoms/HeadMetaTags"
 
 import styles from "./styles.module.scss"
-import { ModalTextInput } from "../../atoms/ModalTextInput"
 import { CreateNoteModal } from "../../modals/CreateNoteModal"
 
 type props = {

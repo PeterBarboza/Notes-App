@@ -1,13 +1,9 @@
 import Link from "next/link"
-import { useState, useCallback, LegacyRef } from "react"
-
-import { NotesService } from "../../../services/api/notes"
+import { useState } from "react"
 
 import { Note } from "../../../interface"
 
 import styles from "./styles.module.scss"
-
-const notesService = new NotesService()
 
 interface props extends Partial<HTMLInputElement> {
   setIsInputFocused: (value: boolean) => void
@@ -18,17 +14,7 @@ export function SearchBarInputAndPreview({
 }: props) {
   const [notes, setNotes] = useState<Note[]>([])
   const [inputValue, setInputValue] = useState<string>("")
-  const search = useCallback(async (searchInputValue: string) => {
-    const result = await notesService.search({
-      keyWords: searchInputValue,
-      paginationParams: {
-        limit: 999,
-        skip: 999
-      }
-    })
-
-    setNotes(result.results)
-  }, [])
+  const search = (...args: any) => {}
 
   return (
     <div className={styles.inputAndPreviewWrap}>
