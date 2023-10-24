@@ -12,17 +12,28 @@ import { updateEmailParams, updatePasswordParams } from "../../../services/share
 
 import styles from "./styles.module.scss"
 import { useVerifyPasswordFormat } from "../../../shared/hooks/useVerifyPasswordFormat"
-import { AiFillEye } from "react-icons/ai"
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 
 export function UpdateAcessData() {
   const [newEmail, setNewEmail] = useState("")
   const [password, setPassword] = useState("")
   const [oldPassword, setOldPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false)
+  const [isOldPasswordVisible, setIsOldPasswordVisible] = useState(false)
   const { accessToken, userData } = useContext(AuthContext)
-  const router = useRouter()
+
   const usersService = useMemo(() => new UsersServiceFactory().handle(accessToken), [accessToken])
-  const { isValid, charsLength, lowerCase, numbers, specialChars, upperCase } = useVerifyPasswordFormat(newPassword)
+
+  const { 
+    isValid, 
+    charsLength, 
+    lowerCase, 
+    numbers, 
+    specialChars, 
+    upperCase 
+  } = useVerifyPasswordFormat(newPassword)
 
   const updateEmail = useCallback(async (updateData: updateEmailParams) => {
     const toastId = toast.loading("Editando perfil...")
@@ -162,6 +173,7 @@ export function UpdateAcessData() {
             <div className={styles.inputWrapper}>
               <input 
                 id="update-email-password-field"
+                type={isPasswordVisible ? "text" : "password"}
                 value={password} 
                 className={styles.input}
                 onChange={(event) => {
@@ -169,7 +181,20 @@ export function UpdateAcessData() {
                 }}
               />
               <div className={styles.passwordVisibilityIcon}>
-                <AiFillEye size={17} color="#bbbbbb"/>
+                {
+                  isPasswordVisible ? 
+                    <AiFillEye 
+                      size={20} 
+                      color="#bbbbbb" 
+                      onClick={() => setIsPasswordVisible(false)}
+                    /> 
+                    : 
+                    <AiFillEyeInvisible 
+                      size={20} 
+                      color="#bbbbbb" 
+                      onClick={() => setIsPasswordVisible(true)}
+                    />
+                }
               </div>
             </div>
           </div>
@@ -201,18 +226,33 @@ export function UpdateAcessData() {
           updatePassword({ newPassword, oldPassword })
         }}>
           <div className={styles.fieldWrapper}>
-            <label className={styles.label} htmlFor="update-password-new-password">Senha atual</label>
+            <label className={styles.label} htmlFor="update-password-old-password">Senha atual</label>
             <div className={styles.inputWrapper}>
               <input 
-                id="update-password-new-password"
+                id="update-password-old-password"
+                type={isOldPasswordVisible ? "text" : "password"}
                 value={oldPassword} 
                 className={styles.input}
                 onChange={(event) => {
                   setOldPassword(event?.target?.value)
                 }}
               />
-              <div className={styles.passwordVisibilityIcon}>
-                <AiFillEye size={17} color="#bbbbbb"/>
+              <div 
+                className={styles.passwordVisibilityIcon}
+                onClick={() => setIsOldPasswordVisible(prev => !prev)}
+              >
+                {
+                  isOldPasswordVisible ? 
+                    <AiFillEye 
+                      size={20} 
+                      color="#bbbbbb" 
+                    /> 
+                    : 
+                    <AiFillEyeInvisible 
+                      size={20} 
+                      color="#bbbbbb" 
+                    />
+                }
               </div>
             </div>
           </div>
@@ -227,18 +267,33 @@ export function UpdateAcessData() {
             null
           }
           <div className={styles.fieldWrapper}>
-            <label className={styles.label} htmlFor="update-password-old-password">Nova senha</label>
+            <label className={styles.label} htmlFor="update-password-new-password">Nova senha</label>
             <div className={styles.inputWrapper}>
               <input 
-                id="update-password-old-password"
+                id="update-password-new-password"
+                type={isNewPasswordVisible ? "text" : "password"}
                 value={newPassword} 
                 className={styles.input}
                 onChange={(event) => {
                   setNewPassword(event?.target?.value)
                 }}
               />
-              <div className={styles.passwordVisibilityIcon}>
-                <AiFillEye size={17} color="#bbbbbb"/>
+              <div
+                className={styles.passwordVisibilityIcon} 
+                onClick={() => setIsNewPasswordVisible(prev => !prev)}
+              >
+                {
+                  isNewPasswordVisible ? 
+                    <AiFillEye 
+                      size={20} 
+                      color="#bbbbbb" 
+                    /> 
+                    : 
+                    <AiFillEyeInvisible 
+                      size={20} 
+                      color="#bbbbbb" 
+                    />
+                }
               </div>
             </div>
           </div>

@@ -85,7 +85,6 @@ export function useVerifyPasswordFormat(password: string) {
     verifyPasswordFormat(password)
   }, [password])
   
-
   return {
     isValid,
     charsLength,
