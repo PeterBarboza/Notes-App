@@ -2,17 +2,18 @@ import { useCallback, useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import Link from "next/link"
+import { toast } from "react-toastify"
 
 import { AuthContext } from "../../contexts/authContext"
 import { AuthServiceFactory } from "../../services/factories/authServiceFactory"
 import { SHARED_CONSTANTS } from "../../configs"
+import { AuthPasswordInput } from "../atoms/AuthPasswordInput"
+import { AuthTextInput } from "../atoms/AuthTextInput"
+import { ModalSubmitInput } from "../atoms/ModalSubmitInput"
 
 import { authWithEmailAndPasswordParams } from "../../services/shared/interface/requestParams"
 
 import styles from "./login.module.scss"
-import { AuthTextInput } from "../atoms/AuthTextInput"
-import { ModalSubmitInput } from "../atoms/ModalSubmitInput"
-import { toast } from "react-toastify"
 
 export function Login() {  
   const { accessToken, setAuthContextData } = useContext(AuthContext)
@@ -101,12 +102,12 @@ export function Login() {
               required: true
             }}
           />
-          <AuthTextInput
+          <AuthPasswordInput
             inputId="login-form-password"
             inputLabel="Senha"
             inputErrors={errors.password?.message}
             inputProps={{ 
-              ...register("password", { required: true }) ,
+              ...register("password", { required: true }),
               required: true
             }}
           />

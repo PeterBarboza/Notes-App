@@ -2,17 +2,17 @@ import { useCallback, useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import Link from "next/link"
+import { toast } from "react-toastify"
 
 import { AuthContext } from "../../../contexts/authContext"
 import { UsersServiceFactory } from "../../../services/factories/usersServiceFactory"
-import { SHARED_CONSTANTS } from "../../../configs"
 import { AuthTextInput } from "../../atoms/AuthTextInput"
 import { ModalSubmitInput } from "../../atoms/ModalSubmitInput"
+import { AuthPasswordInput } from "../../atoms/AuthPasswordInput"
 
 import { createAccountParams } from "../../../services/shared/interface/requestParams"
 
 import styles from "./styles.module.scss"
-import { toast } from "react-toastify"
 
 export function CreateAccount() {  
   const { accessToken, setAuthContextData } = useContext(AuthContext)
@@ -105,7 +105,7 @@ export function CreateAccount() {
               required: true
             }}
           />
-          <AuthTextInput
+          <AuthPasswordInput
             inputId="login-form-password"
             inputLabel="Senha"
             inputErrors={errors.password?.message}
