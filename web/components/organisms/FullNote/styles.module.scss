@@ -2,13 +2,13 @@
   width: 100%;
   height: fit-content;
 
-  padding: 20px 0;
+  padding: 1.25rem 0;
 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 10px;
+  gap: 0.625rem;
 
   color: #616161;
 
@@ -20,25 +20,25 @@
     justify-content: flex-end;
     align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 0.625rem;
 
     div {
       width: fit-content;
       height: fit-content;
       
-      padding: 5px;
-      border-radius: 5px;
+      padding: 0.3125rem;
+      border-radius: 0.3125rem;
 
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 10px;
+      gap: 0.625rem;
       justify-self: flex-end;
 
       color: #ffffff;
       cursor: pointer;
 
-      font-size: 1.2rem;
+      font-size: 0.75rem;
     }
 
     .editNote {
@@ -58,12 +58,12 @@
   }
 
   h1 {
-    font-size: 3rem;
+    font-size: 1.875rem;
 
   }
 
   .author {
-    font-size: 1.5rem;
+    font-size: 0.9375rem;
 
     span {
       font-weight: 500;
@@ -72,9 +72,9 @@
     }
   }
   .lastUpdate {
-    font-size: 1.5rem;
+    font-size: 0.9375rem
   }
   .content {
-    font-size: 1.5rem;
+    font-size: 0.9375rem
   }
 }

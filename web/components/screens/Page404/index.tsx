@@ -11,7 +11,6 @@ export function Page404() {
 
   const handleRedirect = useCallback(() => {
     if(counter > 0) {
-      console.log("Countou", counter)
       setTimeout(() => {
         setCounter(counter - 1)
       }, 1000)
@@ -30,7 +29,7 @@ export function Page404() {
   }, [counter, setCounter])
 
   return (
-    <BaseLayout>
+    <BaseLayout createNoteButtonEnabled={false}>
       <NoDataFound 
         messages={[
           "Essa página não existe em nosso site.",

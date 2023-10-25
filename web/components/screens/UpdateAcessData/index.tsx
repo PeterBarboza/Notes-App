@@ -149,14 +149,16 @@ export function UpdateAcessData() {
         }}>
           <div className={styles.fieldWrapper}>
             <label className={styles.label} htmlFor="update-email-new-email">Novo email</label>
-            <input 
-              id="update-email-new-email"
-              value={newEmail} 
-              className={styles.input}
-              onChange={(event) => {
-                setNewEmail(event?.target?.value)
-              }}
-            />
+            <div className={styles.inputWrapper}>
+              <input 
+                id="update-email-new-email"
+                value={newEmail} 
+                className={styles.input}
+                onChange={(event) => {
+                  setNewEmail(event?.target?.value)
+                }}
+              />
+            </div>
           </div>
             {
               newEmail.length < 1 ?

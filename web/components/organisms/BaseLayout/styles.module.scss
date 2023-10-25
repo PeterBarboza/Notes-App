@@ -10,10 +10,10 @@
 
   .layoutBox {
     width: 100%;
-    max-width: 800px;
+    max-width: 50rem;
     height: fit-content;
 
-    padding: 10px 0;
+    padding: 0.625rem 0;
 
     display: flex;
     flex-direction: column;
@@ -24,23 +24,23 @@
   .composeNote {
     transition-duration: 0.2s;
     
-    width: 100px;
-    height: 40px;
+    width: 6.25rem;
+    height: 2.5rem;
 
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 0.5rem;
 
     background-color: #ffffff;
-    border: 2px solid #0084ff;
-    border-radius: 100px;
+    border: 0.125rem solid #0084ff;
+    border-radius: 6.25rem;
 
     cursor: pointer;
 
     position: fixed;
-    left: calc(100% - 111px);
-    top: calc(100% - 51px);
+    left: calc(100% - 6.9375rem);
+    top: calc(100% - 3.1875rem);
     z-index: 11;
 
     .composeNoteIcon {
@@ -57,9 +57,9 @@
     }
   }
 
-  @media (max-width: 810px) {
-    .layoutBox {    
-      padding: 10px;
+  @media (max-width: 50.625rem) {
+    .layoutBox {
+      padding: 0.625rem;
     }
   }
 }

@@ -7,7 +7,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 1.25rem;
 
   .icon {
     min-width: fit-content;
@@ -19,7 +19,7 @@
     p {
       width: 100%;
 
-      font-size: 1.8rem;
+      font-size: 1.125rem;
       font-weight: 600;
       color: #858585;
       text-align: center;
@@ -27,9 +27,6 @@
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-
-      // word-break: break-all;
-      // word-wrap: break-word;
     }
   }
 }

@@ -3,7 +3,7 @@
   min-height: 100vh;
   height: fit-content;
 
-  padding: 10px;
+  padding: 0.625rem;
 
   display: flex;
   justify-content: center;
@@ -13,23 +13,23 @@
 
   .loginBox {
     width: 100%;
-    max-width: 500px;
+    max-width: 31.25rem;
 
-    padding: 20px;
+    padding: 1.25rem;
 
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    gap: 10px;
+    gap: 0.625rem;
 
-    border-radius: 5px;
+    border-radius: 0.3125rem;
 
     background-color: #ffffff;
     color: #616161;
 
     h1 {
-      font-size: 1.8rem;
+      font-size: 1.1rem;
     }
 
     .form {
@@ -40,7 +40,7 @@
       flex-direction: column;
       justify-content: flex-start;
       align-items: flex-start;
-      gap: 20px;
+      gap: 1.25rem;
     }
 
     .redirectLinksBox {
@@ -51,7 +51,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 10px;
+      gap: 0.625rem;
 
       .redirectButton {
         width: fit-content;
@@ -61,7 +61,7 @@
         text-align: center;
   
         p {
-          font-size: 1.6rem;
+          font-size: 1rem;
           color: #0084FF;
           text-decoration: underline;
           cursor: pointer;

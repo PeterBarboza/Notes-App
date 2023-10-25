@@ -6,15 +6,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  gap: 5px;
+  gap: 0.3125rem;
 
   label {
-    font-size: 1.4rem;
+    font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
   }
   .errorsBox {
-    font-size: 1.4rem;
+    font-size: 0.875rem;
     font-weight: 500;
     color: #ff3e3e
   }
@@ -22,13 +22,13 @@
   .textArea {
     min-width: 100%;
     max-width: 100%;
-    min-height: 60px;
+    min-height: 3.75rem;
     max-height: 80vh;
 
-    padding: 7px 10px;
+    padding: 0.4375rem 0.625rem;
 
-    border: 1px solid #b8b8b8;
-    border-radius: 2px;
+    border: 0.0625rem solid #b8b8b8;
+    border-radius: 0.125rem;
 
     background-color: #f7f7f7;
   }

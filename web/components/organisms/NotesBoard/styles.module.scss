@@ -6,11 +6,11 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 40px;
+  gap: 2.5rem;
 
   .paginationComp {
     width: 100%;
-    min-height: 50px;
+    min-height: 3.125rem;
     height: fit-content;
     
     display: flex;
@@ -18,10 +18,10 @@
     justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 0.625rem;
 
     color: #575757;
-    font-size: 1.4rem;
+    font-size: 0.875rem;
     font-weight: 600;
 
     .paginationActions {
@@ -32,7 +32,7 @@
       justify-content: flex-start;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 0.625rem;
 
       .navigateButton {
         cursor: pointer;
@@ -57,10 +57,10 @@
         .listItem {
           transition-duration: 0.1s;
 
-          min-width: 50px;
+          min-width: 3.125rem;
           width: 100%;
           height: 100%;
-          padding: 10px;
+          padding: 0.625rem;
 
           display: flex;
           justify-content: center;
@@ -70,7 +70,7 @@
           justify-self: center;
           text-align: center;
 
-          border-right: 2px solid #818181;
+          border-right: 0.125rem solid #818181;
           cursor: pointer;
         }
         .listItem:hover {
