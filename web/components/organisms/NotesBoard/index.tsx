@@ -53,7 +53,7 @@ export function NotesBoard({ notes, pagination = null, setPagination }: props) {
   const generateList = useCallback(() => {
     if (!pagination) return null
 
-    return pagination.pagesList.map((item) => {
+    return pagination.pagesList.map((item, index) => {
       return (
         <li 
           className={`
@@ -61,6 +61,7 @@ export function NotesBoard({ notes, pagination = null, setPagination }: props) {
             ${item.pageNumber === pagination.currentPage ? styles.activeListItem : ""}
           `}
           onClick={() => {changePage(item)}}
+          key={`pagination-button-${item.pageNumber}-${index}`}
         >
           {item.pageNumber}
         </li>
