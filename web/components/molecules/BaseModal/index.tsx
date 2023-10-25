@@ -3,7 +3,7 @@ import styles from "./styles.module.scss"
 
 
 type props = {
-  heading: string
+  heading?: string
   isOpen: boolean
   closeModal: () => void
   children: ReactNode
@@ -48,7 +48,12 @@ export function BaseModal({
           className={styles.baseModal}
           ref={baseModalRef}
         >
-          <h2>{heading}</h2>
+          {
+            heading ?
+              <h2>{heading}</h2>
+              :
+              null
+          }
           {children}
         </div>
       </>
