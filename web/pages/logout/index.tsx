@@ -4,16 +4,9 @@ import { useEffect } from "react";
 
 import { AuthContext } from "../../contexts/authContext";
 import { SHARED_CONSTANTS } from "../../configs";
+import { Redirecting } from "../../components/screens/Redirecting";
 
-export async function getServerSideProps(context: any) {
-  return { 
-    props: { 
-      redirectURL: context.query.href || null 
-    } 
-  }
-}
-
-export default function({ redirectURL }: any) {
+export default function() {
   const router = useRouter()
   const { setAuthContextData } = useContext(AuthContext)
 
@@ -29,6 +22,6 @@ export default function({ redirectURL }: any) {
   }, [])
 
   return (
-    <div style={{fontSize: "1.8rem"}}>Saindo...</div>
+    <Redirecting substituteMessage="Desconectando..." />
   )
 }
