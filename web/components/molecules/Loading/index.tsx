@@ -1,10 +1,14 @@
 import styles from "./styles.module.scss"
 
-export function Loading() {
+type props = {
+  substituteMessage?: string
+}
+
+export function Loading({ substituteMessage }: props) {
   return (
     <div className={styles.loadingBox}>
       <div className={styles.circle} />
-      <p>Carregando...</p>
+      <p>{substituteMessage ? substituteMessage : "Carregando..."}</p>
     </div>
   )
 }
