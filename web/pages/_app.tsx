@@ -14,7 +14,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />      
         <ToastContainer
           style={{
-            fontSize: "1.4rem"
+            fontSize: "1rem"
           }}
         />
       </VerifyAuth>
