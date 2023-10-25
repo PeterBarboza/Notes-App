@@ -1,6 +1,7 @@
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 
+import { Redirecting } from "../../components/screens/Redirecting"
 
 export default function() {
   const router = useRouter()
@@ -10,6 +11,6 @@ export default function() {
   }, [])
 
   return (
-    <div style={{fontSize: "1.8rem"}}>Redirecting...</div>
+    <Redirecting />
   )
 }
