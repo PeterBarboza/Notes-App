@@ -16,11 +16,11 @@
 }
 
 .baseModal {
-  width: 100%;
-  max-width: 650px;
+  width: calc(100% - 1.25rem);
+  max-width: 40.625rem;
   height: fit-content;
   
-  padding: 20px;
+  padding: 1.25rem;
 
   position: fixed;
   top: 0;
@@ -30,7 +30,7 @@
   z-index: 13;
   margin: auto;
 
-  border-radius: 5px;
+  border-radius: 0.3125rem;
 
   background-color: #ffffff;
 
@@ -38,9 +38,9 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 10px;
+  gap: 0.625rem;
 
-  border-radius: 5px;
+  border-radius: 0.3125rem;
 
   font-family: "Roboto", sans-serif;
 
