@@ -6,7 +6,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  gap: 5px;
+  gap: 0.3125rem;
 
   .inputDisplayName {
     width: 100%;
@@ -21,12 +21,12 @@
     width: 100%;
     height: fit-content;
 
-    padding: 0 0 0 10px;
+    padding: 0 0 0 0.625rem;
 
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: 5px;
+    gap: 0.3125rem;
 
     label {
       font-size: 0.875rem;
@@ -34,8 +34,8 @@
     }
     
     .radioInput {
-      width: 15px;
-      height: 15px;
+      width: 0.9375rem;
+      height: 0.9375rem;
   
       cursor: pointer;
 
@@ -43,8 +43,8 @@
       justify-content: center;
       align-items: center;
 
-      border: 1px solid #b8b8b8;
-      border-radius: 2px;
+      border: 0.625rem solid #b8b8b8;
+      border-radius: 0.125rem;
   
       background-color: #f7f7f7;
     }
