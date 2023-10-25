@@ -77,10 +77,10 @@
     max-width: 37.5rem;
     height: 100%;
 
-    visibility: hidden;
-
+    display: none;
+    
     @media (min-width: 50rem) {
-      visibility: visible;
+      display: block;
     }
   }
 
