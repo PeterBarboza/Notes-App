@@ -84,10 +84,10 @@ export class UserServices {
     }
 
     const isUsernameAlreadyInUse = await this.repository.getOneByUsername(entity.username)
-    if(isUsernameAlreadyInUse) throw new GenericError({ message: "Email already in use" })
+    if(isUsernameAlreadyInUse) throw new GenericError({ message: "Username already in use" })
 
     const isEmailAlreadyInUse = await this.repository.getOneByEmail(entity.email)
-    if(isEmailAlreadyInUse) throw new GenericError({ message: "Username already in use" })
+    if(isEmailAlreadyInUse) throw new GenericError({ message: "Email already in use" })
     
     if(!isValidPassword(entity.password)) {
       throw new GenericError({

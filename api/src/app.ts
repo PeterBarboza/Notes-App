@@ -11,6 +11,19 @@ const apiMainLogger = logger("api:main")
 
 const app = express()
 
+//TODO: Adicionar lógica para enviar mensagens de erro em português
+//ou inglês. 
+    //A requisição terá um header onde vira as siglas do país
+    //e do idioma (EX: "ptBR", "enUS", etc);
+    //Um novo objeto personalizado será criado dentro de "req", assim
+    //como foi feito para os dados do usuário e dentro desse objeto
+    //ficaram contidas todas as mensagens que serão lançadas para o cliente
+    //no seguinte formato "req.errorMessages.<IDIOMA>.<MENSAGEM>".
+    //EX: req.errorMessages.ptBR.usernameAlreadyinUse
+    //O valor desse header será usado para preencher o campo <IDIOMA>.
+    //Caso o valor seja indefinido ou um valor não esperado, o valor padrão
+    //será "enUS"
+
 //TODO: Configurar o cors corretamente antes do deploy
 app.use(cors({
     origin: "*",
