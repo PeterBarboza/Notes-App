@@ -1,5 +1,6 @@
 import { compareSync } from "bcryptjs"
 import { sign } from "jsonwebtoken"
+import { pick } from "lodash"
 
 import { CONFIG } from "../../configs"
 import { User } from "../entities/User"
@@ -42,7 +43,14 @@ export class AuthUserServices {
       }
     )
 
-    return { user, accessToken, refreshToken }
+    const userData = pick(user, [
+      "id",
+      "username",
+      "createdAt",
+      "updatedAt",
+    ])
+
+    return { user: userData, accessToken, refreshToken }
   }
 
   async authUserWithRefreshtoken(refreshToken: string) {
@@ -70,6 +78,13 @@ export class AuthUserServices {
       }
     )
 
-    return { user, accessToken, refreshToken: newRefreshToken }
+    const userData = pick(user, [
+      "id",
+      "username",
+      "createdAt",
+      "updatedAt",
+    ])
+
+    return { user: userData, accessToken, refreshToken: newRefreshToken }
   }
 }
