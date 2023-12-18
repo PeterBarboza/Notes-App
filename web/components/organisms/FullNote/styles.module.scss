@@ -48,6 +48,13 @@
     .deleteNote {
       background-color: #ff1717;
     }
+
+    .deleteNote, .editNote {
+      transition-duration: 0.1s;
+    }
+    .deleteNote:hover, .editNote:hover {
+      filter: brightness(90%);
+    }
   }
 
   h1 {
