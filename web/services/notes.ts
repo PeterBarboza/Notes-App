@@ -1,10 +1,10 @@
+import { AxiosResponse } from "axios"
+
 import { ApiFactory } from "./api"
 
 import { GetManyResponse, GetOneResponse } from "./shared/interface/responses"
 import type { createNoteData, fullUpdateNoteData, getManyParams } from "./shared/interface/requestParams"
 import { Note } from "../interface/schemas"
-import { withRefreshTokenAuth } from "./shared/decorators/withRefreshTokenAuth"
-import { AxiosResponse } from "axios"
 
 export class NotesService {
   private api: ApiFactory
@@ -24,9 +24,7 @@ export class NotesService {
       {
         params: {
           pagination: params?.pagination,
-          filters: {
-            search: params?.search
-          }
+          filters: params?.filters
         }
       }
     )
@@ -63,6 +61,17 @@ export class NotesService {
     const result = await apiCaller.patch<GetOneResponse<Note>>(
       `${this.basePath}/${noteId}`,
       noteData
+    )
+
+    return result
+  }
+
+  async delete(noteId: string)
+    : Promise<AxiosResponse<GetOneResponse<Note>>> {
+    const apiCaller = this.api.getApiCaller(this.accessToken)
+
+    const result = await apiCaller.delete<GetOneResponse<Note>>(
+      `${this.basePath}/${noteId}`,
     )
 
     return result
