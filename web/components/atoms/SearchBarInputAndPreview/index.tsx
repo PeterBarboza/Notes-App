@@ -37,7 +37,9 @@ export function SearchBarInputAndPreview({
     setTimeout(async () => {
       try {
         const result = await notesService.getMany({
-          search: searchWords
+          filters: {
+            search: searchWords
+          }
         })
         setNotes(result.data)
       } catch (error) {
