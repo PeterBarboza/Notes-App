@@ -116,7 +116,7 @@ export function Header() {
                 <li>Minhas notas</li>
               </Link>
               <Link 
-                href="#"
+                href="/app/editar-perfil"
                 className={styles.optionLinkWrap}
               >
                 <li>Editar perfil</li>

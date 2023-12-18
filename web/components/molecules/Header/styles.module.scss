@@ -123,7 +123,6 @@
 
 .sideBar {
   transition-duration: 0.2s;
-  min-width: fit-content;
   width: 100%;
   @media (min-width: 450px) {
     width: 300px;
@@ -152,26 +151,48 @@
 
     padding: 10px;
 
+    position: relative;
+
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+    gap: 10px;
 
     background-color: #0084ff;
 
     .arrowLeft {
+      min-width: fit-content;
+      min-height: fit-content;
       cursor: pointer;
     }
 
     .sideBarHeaderEnd {
+      width: 70%;
+      max-width: fit-content;
+
       display: flex;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       gap: 10px;
-
+      
       p {
+        width: 100%;
+        // max-width: 70%;
         font-size: 1.5rem;
         font-weight: 500;
         color: #ffffff;
+        
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .profile {
+        min-width: fit-content;
+        min-height: fit-content;
+
+        position: absolute;
+        right: 10px;
       }
     }
   }
