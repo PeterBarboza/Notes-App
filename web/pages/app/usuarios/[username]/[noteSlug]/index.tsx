@@ -37,7 +37,7 @@ export default function({ username, noteSlug }: any) {
           routerInstance: router 
         }, 
         { optional: true, thisArg: notesService }
-      )(noteSlug)
+      )([noteSlug])
       if(result?.data) setNote(result.data)
     } catch (error) {
       console.log(error)
