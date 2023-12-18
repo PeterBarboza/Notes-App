@@ -3,7 +3,10 @@ export interface getManyParams {
     skip?: number
     limit?: number
   },
-  search?: string
+  filters?: {
+    search?: string
+    [key: string]: any
+  }
 }
 
 export interface authWithEmailAndPasswordParams {
@@ -15,6 +18,10 @@ export interface createAccountParams {
   email: string
   username: string
   password: string
+}
+
+export interface updateProfileParams {
+  username: string
 }
 
 export interface createNoteData {
