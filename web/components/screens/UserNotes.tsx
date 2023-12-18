@@ -4,16 +4,19 @@ import { NotesBoard } from "../organisms/NotesBoard"
 import { BaseLayout } from "../organisms/BaseLayout"
 import { Loading } from "../molecules/Loading"
 
-import { User } from "../../interface/schemas"
+import { Note } from "../../interface/schemas"
 
 import styles from "./userNotes.module.scss"
 
 type props = {
   isLoadingNotes: boolean,
-  userData: User
+  data: {
+    username: string
+    notes: Note[] | null
+  }
 }
 
-export function UserNotes({ isLoadingNotes, userData }: props) {  
+export function UserNotes({ isLoadingNotes, data }: props) {  
   return (
     <BaseLayout>
       {
@@ -26,10 +29,10 @@ export function UserNotes({ isLoadingNotes, userData }: props) {
                 size={40}
                 color="#616161"
               />
-              <p>{userData?.username}</p>
+              <p>{data?.username}</p>
             </div>
               <NotesBoard
-                notes={userData?.notes || []}
+                notes={data?.notes}
               />
           </>
       }

@@ -55,7 +55,7 @@ export default function() {
   return (
     <Feed 
       isLoadingNotes={isLoadingNotes} 
-      notes={notes.results}
+      notes={notes.results.length > 0 ? notes.results : null}
     />  
   )
 }

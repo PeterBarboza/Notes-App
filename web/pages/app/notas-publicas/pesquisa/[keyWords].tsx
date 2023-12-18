@@ -38,7 +38,9 @@ export default function({ search }: any) {
       setIsLoadingNotes(true)
       
       const result = await notesService.getMany({
-        search: search
+        filters: {
+          search: search
+        }
       })
       setNotes(result.data)
     } catch (error) {
@@ -55,7 +57,7 @@ export default function({ search }: any) {
   return (
     <Feed 
       isLoadingNotes={isLoadingNotes} 
-      notes={notes.results}
+      notes={notes.results.length > 0 ? notes.results : null}
     />  
   )
 }

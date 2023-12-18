@@ -6,7 +6,7 @@ import { Note } from "../../interface/schemas"
 
 type props = {
   isLoadingNotes: boolean,
-  notes: Note[]
+  notes: Note[] | null
 }
 
 export function Feed({ isLoadingNotes, notes }: props) {  
