@@ -34,7 +34,7 @@ export function CreateAccount() {
       //TODO: Adicionar mensagens na validação dos inputs
       if(result.status !== 200) {
 
-        //TODO: Traduzir mensagens que o usuário precisa ver
+        //TODO: Traduzir mensagens que o usuário precisa ver (Aviso adicionado no backend)
         if(result.data?.message) {
           toast.update(toastId, { 
             render: result.data?.message, 
@@ -62,7 +62,7 @@ export function CreateAccount() {
         render: "Conta criada com sucesso", 
         type: "success", 
         isLoading: false,
-        autoClose: 2000,
+        autoClose: 1000,
         closeOnClick: true,
         closeButton: true,
       });
@@ -76,9 +76,9 @@ export function CreateAccount() {
           closeOnClick: true,
           closeButton: true,
         });
-      }, 2200)
+      }, 1000)
 
-      setTimeout(() => router.push("login"), 2500)
+      setTimeout(() => router.push("login"), 2000)
     } catch (error) {}
   }, [])
 
