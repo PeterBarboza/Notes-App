@@ -1,13 +1,12 @@
 import { useState, useContext, useCallback, useEffect } from "react"
+import { useRouter } from "next/router"
 
 import { AuthContext } from "../../../../contexts/authContext"
-import { UsersServiceFactory } from "../../../../services/factories/usersServiceFactory"
-
-import { User } from "../../../../interface/schemas"
-
 import { UserNotes } from "../../../../components/screens/UserNotes"
 import { withRefreshTokenAuth } from "../../../../services/shared/decorators/withRefreshTokenAuth"
-import { useRouter } from "next/router"
+import { NotesServiceFactory } from "../../../../services/factories/notesServiceFactory"
+
+import { Note, User } from "../../../../interface/schemas"
 
 export async function getServerSideProps(context: any) {
   const slugs = {
@@ -16,52 +15,69 @@ export async function getServerSideProps(context: any) {
   return { props: { ...slugs } }
 }
 
-const usersService = new UsersServiceFactory().handle()
+type userData = {
+  username: string
+  notes: Note[] | null
+}
 
 export default function({ username }: any) {
   const [isLoadingNotes, setIsLoadingNotes] = useState<boolean>(false)
-  const [userData, setUserData] = useState<User>()
+  const [userData, setUserData] = useState<userData>({ username: username, notes: null })
   const { accessToken, setAuthContextData } = useContext(AuthContext)
   const router = useRouter()  
 
   const getNotes = useCallback(async () => {
-    usersService.accessToken = accessToken
+    const notesService = new NotesServiceFactory().handle()
+    
+    notesService.accessToken = accessToken
     try {  
       setIsLoadingNotes(true)
       
       const result = await withRefreshTokenAuth(
-        usersService.getOneWithNotes.bind(usersService), 
+        notesService.getMany.bind(notesService),
         { 
           setAuthContextData: setAuthContextData!,
           routerInstance: router 
         }, 
         { optional: true }
-      )(username)
+      )([{ filters: { author: { username: username } } }])
 
       if(result?.data) {
-        result.data.notes = result.data.notes.map((note) => {
-          return {
-            ...note,
-            author: {
-              ...result.data!,
-              notes: []
+        const notes = result.data.results.length < 1 ? 
+          null
+          :
+          result.data.results.map((note) => {
+            return {
+              ...note,
+              author: {
+                username: username
+              }
             }
-          }
-        })
-        setUserData(result.data)
+          }) as Note[]
+        
+        setUserData({ username: username, notes: notes })
       }
     } catch (error) {
       console.log(error)
     } finally {
       setIsLoadingNotes(false)
     }
-  }, [])
+  }, [
+    setIsLoadingNotes, 
+    setAuthContextData, 
+    setUserData, 
+    accessToken, 
+    router
+  ])
 
   useEffect(() => {
     getNotes()
   }, [getNotes])
 
   return (
-    <UserNotes userData={userData!} isLoadingNotes={isLoadingNotes} />
+    <UserNotes 
+      data={{ username: userData?.username!, notes: userData?.notes }} 
+      isLoadingNotes={isLoadingNotes} 
+    />
   )
 }
