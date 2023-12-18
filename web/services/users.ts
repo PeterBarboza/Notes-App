@@ -4,7 +4,7 @@ import { ApiFactory } from "./api"
 
 import { User } from "../interface/schemas"
 import { GetOneResponse } from "./shared/interface/responses"
-import { createAccountParams } from "./shared/interface/requestParams"
+import { createAccountParams, updateProfileParams } from "./shared/interface/requestParams"
 
 //TODO: Trocar o retorno dos métodos para retornar toda a resposta do Axios
 //pois isso sera usado nos middlewares/decorators que verificaram a validade
@@ -54,6 +54,17 @@ export class UsersService {
 
     const result = await apiCaller.post<User, any, createAccountParams>(
       `${this.basePath}`,
+      userData
+    )
+
+    return result
+  }
+
+  async updateOne(id: string, userData: Partial<updateProfileParams>): Promise<AxiosResponse<GetOneResponse<User>>> {
+    const apiCaller = this.api.getApiCaller(this.accessToken)
+
+    const result = await apiCaller.patch<User, any, Partial<updateProfileParams>>(
+      `${this.basePath}/${id}`,
       userData
     )
 
